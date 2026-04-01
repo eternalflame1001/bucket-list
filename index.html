@@ -1,0 +1,1699 @@
+bash
+
+cat /mnt/user-data/outputs/bucket-list-firebase.html
+出力
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バケットリスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --paper: #f5f0e8;
+    --aged: #e8dfc8;
+    --accent: #8b2c0a;
+    --gold: #c9a227;
+    --sage: #5a7a5a;
+    --faded: #9a8f7a;
+    --shadow: rgba(26,18,9,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,44,10,0.06) 0%, transparent 60%);
+    padding: 0 0 60px;
+  }
+
+  /* Header */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.02) 30px,
+      rgba(255,255,255,0.02) 31px
+    );
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+  }
+  .header-sub {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    position: relative;
+  }
+  .header-desc {
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.55);
+    letter-spacing: 0.05em;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(201,162,39,0.3);
+  }
+  .stat {
+    text-align: center;
+    color: var(--paper);
+  }
+  .stat-num {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 22px;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.5);
+    margin-top: 3px;
+  }
+
+  /* Main */
+  main { max-width: 680px; margin: 0 auto; padding: 32px 16px 0; }
+
+  /* ヘッダーカテゴリー別達成率 */
+  .header-cat-stats {
+    background: var(--paper);
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    border-radius: 0;
+    padding: 6px 16px 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 8px rgba(26,18,9,0.08);
+    position: sticky;
+    top: 47px;
+    z-index: 99;
+  }
+  .header-cat-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+  .header-cat-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-right: 1px solid var(--aged);
+    white-space: nowrap;
+  }
+  .header-cat-item:last-child { border-right: none; }
+  .header-cat-total {
+    border-left: 2px solid var(--aged);
+    background: rgba(90,122,90,0.08);
+  }
+  .header-cat-total .header-cat-fraction { color: #5a7a5a; }
+  .header-cat-total .header-cat-pct { color: #5a7a5a; }
+  .header-cat-top { display: contents; }
+  .header-cat-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .header-cat-name { display: none; }
+  .header-cat-fraction {
+    font-size: 13px;
+    color: var(--ink);
+    font-family: 'Shippori Mincho', serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .header-cat-pct {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'Shippori Mincho', serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .header-cat-bar-wrap { display: none; }
+  .header-cat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* Add form */
+  .add-section {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 12px 16px 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px var(--shadow);
+    position: relative;
+  }
+  .add-section::before {
+    content: '+ 新しい夢を追加';
+    position: absolute;
+    top: -11px; left: 16px;
+    background: white;
+    padding: 0 8px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+  }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  input[type="text"] {
+    flex: 1;
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    background: transparent;
+    padding: 4px 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-bottom-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--faded); font-size: 13px; }
+
+  .add-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  select {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 4px 8px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    flex: 1;
+  }
+  .priority-btns { display: flex; gap: 4px; }
+  .prio-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+  }
+  .prio-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  .add-meta-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 5px;
+  }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+    white-space: nowrap;
+  }
+  .urg-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+  }
+  .urg-btn.active { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+
+  .add-btn {
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    padding: 5px 16px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--accent); color: white; }
+
+  /* Filter tabs */
+  .filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 1.5px solid var(--aged);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 100;
+    padding-top: 6px;
+    box-shadow: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 10px 16px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--faded);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    transition: all 0.2s;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+  .tab:hover:not(.active) { color: var(--ink); }
+  .tab-trash { color: #9a8f7a; }
+  .tab-trash.active { color: #8b2c0a; border-bottom-color: #8b2c0a; }
+
+  /* ゴミ箱を空にするボタン */
+  .trash-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+  .empty-trash-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 5px 14px;
+    font-size: 12px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .empty-trash-btn:hover { background: var(--accent); color: white; }
+  .restore-btn {
+    background: none;
+    border: none;
+    color: var(--sage);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .restore-btn:hover { color: #2a5a2a; }
+  .item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
+
+  /* Items */
+  .items-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .item {
+    background: white;
+    border: 1px solid var(--aged);
+    border-left: 3px solid var(--aged);
+    border-radius: 2px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px var(--shadow);
+    transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
+  }
+  .item.just-added { animation: slideIn 0.4s ease; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* FLIPアニメーション用 */
+  .item.is-moving {
+    transition: transform 1.0s cubic-bezier(0.34, 1.5, 0.64, 1), opacity 0.6s ease, box-shadow 0.3s, background 0.5s;
+  }
+  .item.is-moving:hover {
+    transform: translateY(0) !important;
+  }
+  .item:hover { box-shadow: 0 3px 12px var(--shadow); transform: translateY(-1px); }
+  .item.done {
+    background: var(--paper);
+    border-left-color: var(--sage);
+    opacity: 0.75;
+  }
+  .item.done .item-text { color: var(--faded); }
+
+  .item[data-cat="海外旅行"] { border-left-color: #5b8db8; }
+  .item[data-cat="国内旅行"] { border-left-color: #3a9e7a; }
+  .item[data-cat="食・グルメ"] { border-left-color: #c87941; }
+  .item[data-cat="スキル・学習"] { border-left-color: #7a5bb8; }
+  .item[data-cat="人生の目標"] { border-left-color: var(--accent); }
+  .item.done { border-left-color: var(--sage) !important; }
+
+  .check-btn {
+    width: 24px; height: 24px;
+    border: 1.5px solid var(--aged);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: transparent;
+    font-size: 12px;
+  }
+  .item.done .check-btn {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+  }
+  .check-btn:hover { border-color: var(--sage); }
+
+  .item-body { flex: 1; min-width: 0; }
+  .item-text {
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+  }
+  .item-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .cat-tag {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+  }
+  .prio-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .prio-dot.高 { background: var(--accent); }
+  .prio-dot.中 { background: var(--gold); }
+  .prio-dot.低 { background: var(--faded); }
+
+  .prio-change-btns {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+  }
+  .prio-change-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 2px 7px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+    letter-spacing: 0.05em;
+  }
+  .prio-change-btn:hover { background: var(--aged); color: var(--ink); }
+  .prio-change-btn.active-高 { background: var(--accent); color: white; border-color: var(--accent); }
+  .prio-change-btn.active-中 { background: var(--gold); color: white; border-color: var(--gold); }
+  .prio-change-btn.active-低 { background: var(--faded); color: white; border-color: var(--faded); }
+
+  .urg-change-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 2px 7px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+    letter-spacing: 0.05em;
+  }
+  .urg-change-btn:hover { background: var(--aged); color: var(--ink); }
+  .urg-change-btn.active-高 { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+  .urg-change-btn.active-中 { background: #b84a20; color: white; border-color: #b84a20; }
+  .urg-change-btn.active-低 { background: #c8907a; color: white; border-color: #c8907a; }
+
+  .item-badges {
+    display: flex;
+    gap: 5px;
+    margin-top: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .badge-prio-高 { background: rgba(139,44,10,0.12); color: var(--accent); }
+  .badge-prio-中 { background: rgba(201,162,39,0.15); color: #a07a10; }
+  .badge-prio-低 { background: rgba(154,143,122,0.15); color: var(--faded); }
+  .badge-urg-高  { background: rgba(139,44,10,0.15); color: #8b2c0a; }
+  .badge-urg-中  { background: rgba(200,100,60,0.13); color: #b84a20; }
+  .badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
+
+  /* スコアバッジ：9点が最高、1点が最低 */
+  .badge-score { font-weight: 700; letter-spacing: 0.05em; }
+  .score-9 { background: rgba(139,44,10,0.18); color: #8b2c0a; border: 1px solid rgba(139,44,10,0.3); }
+  .score-6 { background: rgba(201,162,39,0.18); color: #9a7010; border: 1px solid rgba(201,162,39,0.3); }
+  .score-4 { background: rgba(90,122,90,0.15); color: #3d6e3d; border: 1px solid rgba(90,122,90,0.25); }
+  .score-3 { background: rgba(106,156,191,0.15); color: #3a6ea5; border: 1px solid rgba(106,156,191,0.25); }
+  .score-2 { background: rgba(154,143,122,0.12); color: var(--faded); border: 1px solid rgba(154,143,122,0.2); }
+  .score-1 { background: rgba(154,143,122,0.08); color: #bbb; border: 1px solid rgba(154,143,122,0.15); }
+
+  .change-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .change-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .change-group-label {
+    font-size: 10px;
+    color: var(--faded);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--aged);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .delete-btn:hover { color: var(--accent); }
+
+  .edit-btn {
+    background: none;
+    border: none;
+    color: var(--aged);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .edit-btn:hover { color: var(--gold); }
+
+  .item-edit-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .item-edit-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1.5px solid var(--gold);
+    background: transparent;
+    padding: 4px 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+  }
+  .item-edit-save {
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .item-edit-save:hover { background: var(--sage); color: white; }
+  .item-edit-cancel {
+    background: none;
+    border: 1px solid var(--aged);
+    color: var(--faded);
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .item-edit-cancel:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* Progress */
+  .progress-section { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--aged);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--faded);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-text { font-family: 'Shippori Mincho', serif; font-size: 16px; }
+  .empty-sub { font-size: 12px; margin-top: 6px; letter-spacing: 0.05em; }
+
+  /* カテゴリー別達成率 */
+  .cat-stats {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .cat-stats-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    margin-bottom: 10px;
+  }
+  .cat-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .cat-stat-row:last-child { margin-bottom: 0; }
+  .cat-stat-label {
+    font-size: 11px;
+    color: var(--ink);
+    width: 90px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cat-stat-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--aged);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .cat-stat-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .cat-stat-count {
+    font-size: 11px;
+    color: var(--faded);
+    white-space: nowrap;
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .cat-stat-pct {
+    font-size: 11px;
+    font-family: 'Shippori Mincho', serif;
+    color: var(--ink);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 8px;
+    pointer-events: none;
+    animation: confettiFall 1.5s ease-in forwards;
+    z-index: 9999;
+    border-radius: 1px;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* 同期ステータス */
+  #syncStatus {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: syncPulse 2s infinite;
+  }
+  .sync-dot.saving { background: var(--sage); animation: none; }
+  .sync-dot.error  { background: var(--accent); animation: none; }
+  @keyframes syncPulse {
+    0%,100% { opacity:1; } 50% { opacity:0.3; }
+  }
+</style>
+</head>
+<body>
+<div id="syncStatus">
+  <span class="sync-dot" id="syncDot"></span>
+  <span id="syncText">接続中…</span>
+</div>
+
+<header>
+  <div class="header-sub">My Bucket List</div>
+  <h1>バケットリスト</h1>
+  <div class="header-desc">死ぬまでにやりたいこと、行きたい場所、なりたい自分</div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num" id="totalCount">0</span>
+    <div class="stat-label">合 計</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num" id="doneCount">0</span>
+    <div class="stat-label">達 成</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num" id="remainCount">0</span>
+    <div class="stat-label">残 り</div>
+  </div>
+</div>
+
+
+
+<main>
+  <!-- Progress -->
+  <!-- Add form -->
+  <div class="add-section">
+    <div class="add-row">
+      <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
+      <button class="add-btn" onclick="addItem()">追加</button>
+    </div>
+    <div class="add-meta-row">
+      <select id="catSelect">
+        <option value="海外旅行">✈️ 海外旅行</option>
+        <option value="国内旅行">🗾 国内旅行</option>
+        <option value="食・グルメ">🍜 食・グルメ</option>
+        <option value="スキル・学習">📚 スキル・学習</option>
+        <option value="人生の目標">⭐ 人生の目標</option>
+      </select>
+    </div>
+    <div class="add-meta-row">
+      <span class="meta-label">緊急度</span>
+      <div class="priority-btns">
+        <button class="urg-btn active" data-urg="高" onclick="setUrg(this)">高</button>
+        <button class="urg-btn" data-urg="中" onclick="setUrg(this)">中</button>
+        <button class="urg-btn" data-urg="低" onclick="setUrg(this)">低</button>
+      </div>
+      <span class="meta-label" style="margin-left:8px;">重要度</span>
+      <div class="priority-btns">
+        <button class="prio-btn active" data-prio="高" onclick="setPrio(this)">高</button>
+        <button class="prio-btn" data-prio="中" onclick="setPrio(this)">中</button>
+        <button class="prio-btn" data-prio="低" onclick="setPrio(this)">低</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <button class="tab active" onclick="setFilter('全て', this)">全て</button>
+    <button class="tab" onclick="setFilter('海外旅行', this)">✈️ 海外</button>
+    <button class="tab" onclick="setFilter('国内旅行', this)">🗾 国内</button>
+    <button class="tab" onclick="setFilter('食・グルメ', this)">🍜 グルメ</button>
+    <button class="tab" onclick="setFilter('スキル・学習', this)">📚 学習</button>
+    <button class="tab" onclick="setFilter('人生の目標', this)">⭐ 目標</button>
+    <button class="tab" onclick="setFilter('達成済み', this)">✅ 達成</button>
+    <button class="tab tab-trash" onclick="setFilter('ゴミ箱', this)">🗑️ <span id="trashCount"></span></button>
+  </div>
+
+  <!-- Items -->
+  <div class="header-cat-stats" id="headerCatStats"></div>
+  <div class="items-list" id="itemsList"></div>
+</main>
+
+<script>
+const DEFAULT_ITEMS = [
+  // 海外旅行
+  { text: 'オーロラをフィンランドで見る', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'カミーノ・デ・サンティアゴを歩く', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'ヴェネツィアのゴンドラに乗る', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ニュージーランドでバンジージャンプ', cat: '海外旅行', prio: '低', urg: '中', done: false },
+  { text: 'サハラ砂漠で星空を見る', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'アイスランドの大地を走る', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ペルーのマチュピチュを訪れる', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'インドのタージ・マハルを見る', cat: '海外旅行', prio: '中', urg: '中', done: false },
+  { text: 'アンコールワットで朝日を見る', cat: '海外旅行', prio: '高', urg: '低', done: false },
+  { text: 'スイスのアルプスをトレッキング', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'アフリカでサファリ体験をする', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'ガラパゴス諸島を訪れる', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'グランドキャニオンの縁を歩く', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ギリシャのサントリーニ島に泊まる', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'ノルウェーのフィヨルドをクルーズ', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ポルトガルのリスボンを歩き回る', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'チェコのプラハ旧市街を散策', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'モロッコのマラケシュを旅する', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'パリのルーヴル美術館を丸一日過ごす', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'タスマニアの原生林を歩く', cat: '海外旅行', prio: '低', urg: '中', done: false },
+  { text: 'カナディアンロッキーでカヌー', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ブータンを旅して幸福とは何かを考える', cat: '海外旅行', prio: '高', urg: '中', done: false },
+  { text: 'ニューヨークのブロードウェイで観劇', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'キューバのハバナでクラシックカーに乗る', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'モンゴルの草原でゲルに泊まる', cat: '海外旅行', prio: '中', urg: '低', done: false },
+  { text: 'エジプトでピラミッドの内部に入る', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'バリ島で一ヶ月過ごす', cat: '海外旅行', prio: '低', urg: '低', done: false },
+  { text: 'ウユニ塩湖の鏡張りを見る', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'バンクーバーでホエールウォッチング', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'スコットランドのハイランドをドライブ', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ロシアのシベリア鉄道に乗る', cat: '海外旅行', prio: '低', urg: '中', done: false },
+  { text: 'ハワイ島のキラウエア火山を見る', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'パタゴニアのトレス・デル・パイネを歩く', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'チリのアタカマ砂漠を訪れる', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: '台湾を鉄道で縦断する', cat: '海外旅行', prio: '中', urg: '低', done: false },
+  { text: 'スリランカの仏教遺跡を巡る', cat: '海外旅行', prio: '低', urg: '中', done: false },
+  { text: 'ロンドンのナショナルギャラリーを訪れる', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'トルコの気球でカッパドキア上空を飛ぶ', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'コスタリカでジップラインを体験', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'メキシコのグアナファトを歩く', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'ミャンマーのバガン遺跡を見る', cat: '海外旅行', prio: '低', urg: '低', done: false },
+  { text: 'パプアニューギニアの秘境を訪れる', cat: '海外旅行', prio: '低', urg: '中', done: false },
+  { text: 'コペンハーゲンで自転車生活を体験', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'マダガスカルのバオバブ並木を歩く', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'オーストラリアのエアーズロック（ウルル）を見る', cat: '海外旅行', prio: '中', urg: '中', done: false },
+  { text: '南米のイグアスの滝を両国から見る', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'アムステルダムの運河沿いを自転車で走る', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: '南極クルーズに参加する', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: 'バルセロナのサグラダファミリアを見る', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'ローマのコロッセオを訪れる', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ニュージーランドで満天の星空を見る', cat: '海外旅行', prio: '中', urg: '中', done: false },
+  { text: 'ウィーンでオペラを鑑賞する', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  // 国内旅行
+  { text: '富士山に登る', cat: '国内旅行', prio: '高', urg: '低', done: false },
+  { text: '京都の全世界遺産を制覇する', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '四国八十八ヶ所お遍路を歩く', cat: '国内旅行', prio: '高', urg: '中', done: false },
+  { text: '屋久島で縄文杉に会いに行く', cat: '国内旅行', prio: '高', urg: '高', done: false },
+  { text: '熊野古道を全行程歩く', cat: '国内旅行', prio: '高', urg: '中', done: false },
+  { text: '東北の秘湯を一人旅で巡る', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '長野・松本の城下町に一週間滞在する', cat: '国内旅行', prio: '低', urg: '低', done: false },
+  { text: '沖縄の全離島を巡る', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '北海道を車で一周する', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '奄美大島でウミガメと泳ぐ', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '五島列島を自転車で一周する', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '礼文島でレブンアツモリソウを見る', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '出雲大社に大晦日に参拝する', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '能登半島の海岸線をドライブする', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '東海道五十三次を歩き通す', cat: '国内旅行', prio: '高', urg: '低', done: false },
+  { text: '黒部峡谷トロッコに乗る', cat: '国内旅行', prio: '中', urg: '低', done: false },
+  { text: '知床半島でヒグマを見る', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '石垣島でシュノーケリングを楽しむ', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '奥入瀬渓流を紅葉の時期に歩く', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '長崎・軍艦島を見学する', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '伊勢神宮にお礼参りをする', cat: '国内旅行', prio: '高', urg: '中', done: false },
+  { text: '与那国島の断崖絶壁の前に立つ', cat: '国内旅行', prio: '低', urg: '高', done: false },
+  { text: '山形の蔵王温泉スキー場でスキー', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '鳥取砂丘で砂の美術館を見る', cat: '国内旅行', prio: '低', urg: '中', done: false },
+  { text: '志賀高原で早朝の静けさを体感する', cat: '国内旅行', prio: '低', urg: '低', done: false },
+  { text: '釧路湿原でタンチョウを見る', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '旅先で地元の人と友達になる', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  // 食・グルメ
+  { text: '全国47都道府県の名物料理を食べる', cat: '食・グルメ', prio: '高', done: false },
+  { text: 'ミシュラン三ツ星レストランで食事', cat: '食・グルメ', prio: '高', done: false },
+  { text: '本場フランスでブルゴーニュワインを飲む', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'ラーメン全国制覇（各地の名店100杯）', cat: '食・グルメ', prio: '中', done: false },
+  { text: '利き酒師の資格を取る', cat: '食・グルメ', prio: '中', done: false },
+  { text: '築地・豊洲市場でマグロの競りを見る', cat: '食・グルメ', prio: '中', done: false },
+  { text: '本場ナポリでピッツァを食べる', cat: '食・グルメ', prio: '中', done: false },
+  { text: '京料理の懐石を料亭で食べる', cat: '食・グルメ', prio: '高', done: false },
+  { text: '自分でそばを打てるようになる', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'スペインのバスク地方でピンチョスを食べ歩く', cat: '食・グルメ', prio: '中', done: false },
+  { text: '熟成肉の名店でリブロースを食べる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '自家製味噌を仕込んで1年熟成させる', cat: '食・グルメ', prio: '中', done: false },
+  { text: '本場の讃岐うどんを本場で食べる', cat: '食・グルメ', prio: '中', done: false },
+  { text: '山形のさくらんぼ狩りで食べ放題', cat: '食・グルメ', prio: '低', done: false },
+  { text: '北海道の毛ガニを産地で食べる', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'フランス料理のコース調理を習う', cat: '食・グルメ', prio: '低', done: false },
+  { text: '長崎のカステラを老舗で食べ比べる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '松阪牛・神戸牛・近江牛を食べ比べる', cat: '食・グルメ', prio: '高', done: false },
+  { text: 'ベトナム・ホーチミンでフォーを朝食に', cat: '食・グルメ', prio: '低', done: false },
+  { text: 'タイ料理の本格レシピを10品マスター', cat: '食・グルメ', prio: '低', done: false },
+  { text: '函館の朝市でイクラ丼を食べる', cat: '食・グルメ', prio: '中', done: false },
+  { text: '自分で梅酒を漬ける', cat: '食・グルメ', prio: '中', done: false },
+  { text: '世界一予約が取れないレストランを目指す', cat: '食・グルメ', prio: '低', done: false },
+  { text: '石川の輪島朝市を歩いて食材を探す', cat: '食・グルメ', prio: '低', done: false },
+  { text: '日本酒の蔵元を3つ見学する', cat: '食・グルメ', prio: '中', done: false },
+  { text: '京都の老舗和菓子屋で茶道体験', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'ウィスキーの本場スコットランドで蒸留所見学', cat: '食・グルメ', prio: '中', done: false },
+  { text: '自分だけのオリジナルカレーレシピを完成させる', cat: '食・グルメ', prio: '低', done: false },
+  { text: 'トリュフを丸ごと使った料理を食べる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '牡蠣の産地・三陸で牡蠣小屋を体験', cat: '食・グルメ', prio: '中', done: false },
+  { text: '奈良の柿の葉寿司を本場で食べる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '台湾の夜市を全力で楽しむ', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'メキシコでタコスとテキーラを堪能', cat: '食・グルメ', prio: '低', done: false },
+  { text: '日本各地の地ビールを飲み歩く', cat: '食・グルメ', prio: '低', done: false },
+  { text: '天然のアワビを産地で食べる', cat: '食・グルメ', prio: '中', done: false },
+  { text: 'ペルー料理・セビーチェを本場で食べる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '佐賀・伊万里焼の器で食事をする', cat: '食・グルメ', prio: '低', done: false },
+  { text: '一人でカウンターの鮨屋に座れるようになる', cat: '食・グルメ', prio: '高', done: false },
+  // スキル・学習
+  { text: '英語でビジネス会話ができるようになる', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'ギターを弾けるようになる（10曲マスター）', cat: 'スキル・学習', prio: '高', done: false },
+  { text: '油絵を一枚仕上げる', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '囲碁で初段になる', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '茶道の資格を取る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '写真の個展を開く', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'ゴルフのスコアを90以下にする', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'ピアノで好きな曲を弾けるようになる', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '俳句を100句詠む', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '薪割りを覚える', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '陶芸で自分用の茶碗を作る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '書道で師範の資格を目指す', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '登山の技術を磨いて北アルプスを縦走', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'フランス語の日常会話をマスター', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'スキューバダイビングのライセンスを取る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '株式投資で安定収益を得るスキルを身につける', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'ヨガを毎日続けて体の柔軟性を取り戻す', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '木工でベンチを自作する', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '家庭菜園で1年間自給自足に挑戦', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '映像編集を学んで旅行動画を作る', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '読書習慣をつけて年間50冊読む', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'マインドフルネス瞑想を習慣化する', cat: 'スキル・学習', prio: '高', done: false },
+  { text: '日本刀の鑑定知識を身につける', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '天体望遠鏡で土星の輪を見る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '自転車で日本縦断（長期休暇を使って）', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '水墨画を習い始める', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'クラシック音楽を深く学びコンサートを楽しむ', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '鉄道模型のジオラマを本格的に作る', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '蕎麦打ちをマスターして人に振る舞う', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'プログラミングを学んでアプリを作る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '居合道を始めて形の美しさを習得', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'スペイン語の基礎を学ぶ', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'ワインエキスパートの試験を受ける', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'バイクの免許を取り直してツーリングを楽しむ', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '囲炉裏のある暮らしを1週間体験する', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'フライフィッシングを覚える', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '日本史を改めて体系的に学ぶ', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '折り紙で鶴以外の複雑な作品を作る', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'バードウォッチングで100種類を記録する', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '俳句の結社に入って句会に参加する', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '麻雀の点数計算を完璧にマスターする', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '弓道を習って的に当てられるようになる', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '写真家のワークショップに参加する', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'クロスワードパズルを毎日解く習慣', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '古典文学（源氏物語）を原文で読む', cat: 'スキル・学習', prio: '低', done: false },
+  // 人生の目標
+  { text: '子供・孫に自分の半生を語れる機会を作る', cat: '人生の目標', prio: '高', done: false },
+  { text: '10kg減量して理想の体重を維持する', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分の仕事の後継者を育てる', cat: '人生の目標', prio: '高', done: false },
+  { text: '60歳までにローンを完済する', cat: '人生の目標', prio: '高', done: false },
+  { text: '老後の資金2000万円を貯める', cat: '人生の目標', prio: '高', done: false },
+  { text: 'フルマラソンを完走する（サブ5を目標）', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分の名前で本を一冊出版する', cat: '人生の目標', prio: '中', done: false },
+  { text: '長年の友人と毎年必ず会う約束をする', cat: '人生の目標', prio: '高', done: false },
+  { text: '親孝行の旅行を企画する', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '地域のボランティア活動に参加する', cat: '人生の目標', prio: '中', done: false },
+  { text: '健康診断でオールAをもらう', cat: '人生の目標', prio: '高', done: false },
+  { text: '歯の定期検診を年2回欠かさず行く', cat: '人生の目標', prio: '高', done: false },
+  { text: '週3回の運動習慣を1年間続ける', cat: '人生の目標', prio: '高', done: false },
+  { text: '禁煙に成功して5年間続ける', cat: '人生の目標', prio: '高', done: false },
+  { text: '夫婦で記念日旅行を毎年続ける', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分のルーツをたどって先祖の出身地を訪れる', cat: '人生の目標', prio: '中', done: false },
+  { text: '自分が生まれた病院を訪れる', cat: '人生の目標', prio: '低', done: false },
+  { text: '地元の小学校で特別授業を行う', cat: '人生の目標', prio: '中', done: false },
+  { text: '人生で一度、長期の単独旅をする', cat: '人生の目標', prio: '中', done: false },
+  { text: '50代のうちに副業を始める', cat: '人生の目標', prio: '高', done: false },
+  { text: '60歳の誕生日に家族で食事会を開く', cat: '人生の目標', prio: '高', done: false },
+  { text: 'エンディングノートを書いておく', cat: '人生の目標', prio: '中', done: false },
+  { text: '若者に何か一つ技術を伝える', cat: '人生の目標', prio: '中', done: false },
+  { text: '今の会社より良い条件で転職する', cat: '人生の目標', prio: '高', done: false },
+  { text: '空き家をリノベーションして週末の拠点にする', cat: '人生の目標', prio: '中', done: false },
+  { text: '庭のある家に住む', cat: '人生の目標', prio: '高', done: false },
+  { text: '孫に絵本を読み聞かせる', cat: '人生の目標', prio: '高', done: false },
+  { text: '二拠点生活を実現させる', cat: '人生の目標', prio: '中', done: false },
+  { text: '60歳で早期退職してやりたいことをやる', cat: '人生の目標', prio: '高', done: false },
+  { text: '老後は海の見える家に住む', cat: '人生の目標', prio: '中', done: false },
+  { text: '社会人になった子供と酒を飲む', cat: '人生の目標', prio: '高', done: false },
+  { text: '父の形見の時計を修理してまた使う', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '一度でいいから豪華客船に乗る', cat: '人生の目標', prio: '中', done: false },
+  { text: '人生の大切なことを書いたノートを子に残す', cat: '人生の目標', prio: '高', done: false },
+  { text: '毎年桜の花見を家族でする', cat: '人生の目標', prio: '中', done: false },
+  { text: '年に一度、自分へのご褒美旅行をする', cat: '人生の目標', prio: '中', done: false },
+  { text: '断捨離して本当に好きなものだけに囲まれる', cat: '人生の目標', prio: '高', done: false },
+  { text: '毎日日記をつける習慣を5年続ける', cat: '人生の目標', prio: '中', done: false },
+  { text: '「ありがとう」を言える人生にする', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分の好きな音楽のライブに毎年行く', cat: '人生の目標', prio: '中', done: false },
+  { text: '若い頃の夢をもう一度だけ追いかけてみる', cat: '人生の目標', prio: '高', done: false },
+  { text: '旧友に手紙を書いて送る', cat: '人生の目標', prio: '中', done: false },
+  { text: 'ペットとの最後を穏やかに看取る', cat: '人生の目標', prio: '高', done: false },
+  { text: '骨格を活かした自分なりのファッションを確立', cat: '人生の目標', prio: '中', done: false },
+  { text: '睡眠の質を上げて毎朝すっきり目覚める', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分が大切にしている価値観を言葉にする', cat: '人生の目標', prio: '高', done: false },
+  { text: '100歳まで自分の足で歩けるよう今から体を鍛える', cat: '人生の目標', prio: '高', done: false },
+  { text: '人生で一度だけ「わがまま」な選択をしてみる', cat: '人生の目標', prio: '中', done: false },
+  { text: '夕日を見ながら一人でビールを飲む時間を持つ', cat: '人生の目標', prio: '中', done: false },
+  { text: '妻に「ありがとう」と手紙で伝える', cat: '人生の目標', prio: '高', done: false },
+  // 追加：食
+  { text: '自家製パンを焼いて朝食にする', cat: '食・グルメ', prio: '中', done: false },
+  { text: '鰻の名店で白焼きを食べる', cat: '食・グルメ', prio: '高', done: false },
+  { text: 'お気に入りの日本酒を10本見つける', cat: '食・グルメ', prio: '中', done: false },
+  { text: '家族で鍋を囲む夜を月一続ける', cat: '食・グルメ', prio: '高', done: false },
+  { text: '地元の老舗喫茶店に通いつめる', cat: '食・グルメ', prio: '低', done: false },
+  { text: '海外の市場で食材を買って自炊する', cat: '食・グルメ', prio: '低', done: false },
+  { text: 'ブルーチーズとポートワインを合わせる', cat: '食・グルメ', prio: '低', done: false },
+  // 追加：スキル
+  { text: '腕立て伏せ100回連続でできるようになる', cat: 'スキル・学習', prio: '高', done: false },
+  { text: 'ジャズピアノの基礎を習得する', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '短編小説を書いてネットで公開する', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'ソロキャンプを楽しめるようになる', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'テニスを始めてダブルスの試合に出る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: 'ランニングを週3回の習慣にする', cat: 'スキル・学習', prio: '高', done: false },
+  { text: '一眼レフで夜景を美しく撮れるようになる', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '自転車でビワイチ（琵琶湖一周）を走る', cat: 'スキル・学習', prio: '中', done: false },
+  { text: '将棋を覚えて子供と対局できるようになる', cat: 'スキル・学習', prio: '低', done: false },
+  { text: '川柳を100句作る', cat: 'スキル・学習', prio: '低', done: false },
+  // 追加：人生
+  { text: '毎月両親に電話する習慣を作る', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '古い写真を整理してアルバムを作る', cat: '人生の目標', prio: '中', done: false },
+  { text: '定年後の暮らしを夫婦でじっくり話し合う', cat: '人生の目標', prio: '高', done: false },
+  { text: '子供の成長を振り返るビデオを作る', cat: '人生の目標', prio: '高', done: false },
+  { text: '70代でも仕事ができる専門性を磨く', cat: '人生の目標', prio: '高', done: false },
+  { text: '健康寿命を延ばすために生活習慣を見直す', cat: '人生の目標', prio: '高', done: false },
+  { text: 'お世話になった恩師に連絡を取る', cat: '人生の目標', prio: '高', done: false },
+  { text: '家族全員で旅行する機会を年一作る', cat: '人生の目標', prio: '高', done: false },
+  { text: '「やらなかった後悔」をゼロにする', cat: '人生の目標', prio: '高', done: false },
+  { text: '自分の「好きなこと」を100個書き出す', cat: '人生の目標', prio: '中', done: false },
+  { text: '地元の祭りに積極的に参加する', cat: '人生の目標', prio: '低', done: false },
+  { text: '会社の後輩にメンタリングをする', cat: '人生の目標', prio: '中', done: false },
+  { text: '自分の「人生のテーマ」を一言で表現する', cat: '人生の目標', prio: '高', done: false },
+  { text: '好きだった音楽を子供と一緒に聴く', cat: '人生の目標', prio: '中', done: false },
+  { text: '月に一度、昔の自分を振り返る時間を持つ', cat: '人生の目標', prio: '中', done: false },
+  { text: '同期と50代同窓会を企画する', cat: '人生の目標', prio: '中', done: false },
+  { text: '自分の弱点を一つ克服して強みに変える', cat: '人生の目標', prio: '高', done: false },
+  { text: 'スペイン語で旅行できる基礎力をつける', cat: 'スキル・学習', prio: '低', done: false },
+  { text: 'ブルゴーニュの白ワインを産地で飲む', cat: '食・グルメ', prio: '低', urg: '高', done: false },
+  { text: '生涯現役でいられる体と心を作る', cat: '人生の目標', prio: '高', done: false },
+  { text: '箱根の美術館巡りをゆっくり楽しむ', cat: '国内旅行', prio: '低', urg: '低', done: false },
+  // 新規追加23件
+  { text: 'ヨルダンのペトラ遺跡を歩く', cat: '海外旅行', prio: '高', urg: '高', done: false },
+  { text: 'クロアチアのドブロブニク旧市街を歩く', cat: '海外旅行', prio: '中', urg: '高', done: false },
+  { text: 'ベトナムのハロン湾をクルーズする', cat: '海外旅行', prio: '中', urg: '低', done: false },
+  { text: 'ナミビアの赤い砂漠を訪れる', cat: '海外旅行', prio: '低', urg: '高', done: false },
+  { text: '東北三大祭り（ねぶた・竿燈・七夕）を見る', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '宮古島で海の青さに感動する', cat: '国内旅行', prio: '中', urg: '高', done: false },
+  { text: '高野山に一泊して朝のお勤めに参加する', cat: '国内旅行', prio: '中', urg: '中', done: false },
+  { text: '白川郷の合掌造りを雪の日に見る', cat: '国内旅行', prio: '中', urg: '低', done: false },
+  { text: '利尻島でウニ丼を食べる', cat: '食・グルメ', prio: '高', urg: '高', done: false },
+  { text: '京都の老舗で鯖寿司を食べる', cat: '食・グルメ', prio: '中', urg: '中', done: false },
+  { text: '能登の岩牡蠣を産地で食べる', cat: '食・グルメ', prio: '中', urg: '中', done: false },
+  { text: '自分でだし巻き卵を完璧に作れるようになる', cat: '食・グルメ', prio: '低', urg: '低', done: false },
+  { text: '謡曲（能）の鑑賞と基礎を学ぶ', cat: 'スキル・学習', prio: '低', urg: '低', done: false },
+  { text: '漢詩を10首暗唱できるようになる', cat: 'スキル・学習', prio: '低', urg: '低', done: false },
+  { text: '自分の家系図を5代前まで調べる', cat: 'スキル・学習', prio: '中', urg: '高', done: false },
+  { text: '囲碁か将棋の道場に一度通ってみる', cat: 'スキル・学習', prio: '低', urg: '低', done: false },
+  { text: '両親の生い立ちを聞いて記録に残す', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '子供に手紙を書いて渡す', cat: '人生の目標', prio: '高', urg: '中', done: false },
+  { text: '人生で一度だけ星付きホテルに泊まる', cat: '人生の目標', prio: '中', urg: '中', done: false },
+  { text: '60歳の自分への手紙を今書いておく', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '長年お世話になった人に改めてお礼を伝える', cat: '人生の目標', prio: '高', urg: '高', done: false },
+  { text: '週末農業を体験してみる', cat: '人生の目標', prio: '低', urg: '低', done: false },
+  { text: '離島でネット断ちの一週間を過ごす', cat: '人生の目標', prio: '中', urg: '中', done: false },
+];
+
+// バージョン管理でローカルストレージをリセット
+const DATA_VERSION = 'v7_new23';
+// ===== Firebase REST API =====
+const DB_URL = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+let items = [];
+let trash = [];
+let currentFilter = '全て';
+let currentPrio = '高';
+let currentUrg = '高';
+let isSyncing = false;
+let pollTimer = null;
+
+async function loadFromFirebase() {
+  try {
+    const [itemsRes, trashRes] = await Promise.all([
+      fetch(DB_URL + '/bucketList.json'),
+      fetch(DB_URL + '/trashList.json')
+    ]);
+    const itemsData = await itemsRes.json();
+    const trashData = await trashRes.json();
+    return {
+      items: (itemsData && Array.isArray(itemsData) && itemsData.length >= 10)
+        ? itemsData.map(i => ({...i, urg: i.urg || '中'}))
+        : null,
+      trash: (trashData && Array.isArray(trashData)) ? trashData : []
+    };
+  } catch(e) {
+    console.error('読み込みエラー:', e);
+    return null;
+  }
+}
+
+async function saveToFirebase() {
+  try {
+    await Promise.all([
+      fetch(DB_URL + '/bucketList.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(items)
+      }),
+      fetch(DB_URL + '/trashList.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(trash)
+      })
+    ]);
+    setSyncStatus('synced');
+  } catch(e) {
+    console.error('保存エラー:', e);
+    setSyncStatus('error');
+  }
+}
+
+function save() {
+  isSyncing = true;
+  setSyncStatus('saving');
+  saveToFirebase().then(() => { isSyncing = false; });
+}
+
+function setSyncStatus(state) {
+  const el  = document.getElementById('syncStatus');
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  el.style.display = 'flex';
+  if (state === 'saving') {
+    dot.className = 'sync-dot saving';
+    txt.textContent = '保存中…';
+  } else if (state === 'synced') {
+    dot.className = 'sync-dot';
+    txt.textContent = 'リアルタイム同期中';
+  } else {
+    dot.className = 'sync-dot error';
+    txt.textContent = '同期エラー';
+  }
+}
+
+function startPolling() {
+  pollTimer = setInterval(async () => {
+    if (isSyncing) return;
+    const data = await loadFromFirebase();
+    if (!data) return;
+    const newItems = JSON.stringify(data.items);
+    const newTrash = JSON.stringify(data.trash);
+    if (data.items && (newItems !== JSON.stringify(items) || newTrash !== JSON.stringify(trash))) {
+      items = data.items;
+      trash = data.trash;
+      render();
+      updateStats();
+      updateTrashCount();
+      setSyncStatus('synced');
+    }
+  }, 5000);
+}
+
+window.onload = async function() {
+  // まず先にデフォルトデータで画面を表示
+  items = DEFAULT_ITEMS.map(i => ({...i, urg: i.urg || '中'}));
+  trash = [];
+  render();
+  updateStats();
+  updateTrashCount();
+
+  // Firebaseから読み込み
+  try {
+    document.getElementById('syncStatus').style.display = 'flex';
+    document.getElementById('syncDot').className = 'sync-dot saving';
+    document.getElementById('syncText').textContent = '接続中…';
+
+    const data = await loadFromFirebase();
+    if (data && data.items) {
+      items = data.items;
+      trash = data.trash;
+      render();
+      updateStats();
+      updateTrashCount();
+      setSyncStatus('synced');
+      startPolling();
+    } else {
+      // 初回：デフォルトデータをFirebaseに書き込む
+      await saveToFirebase();
+      setSyncStatus('synced');
+      startPolling();
+    }
+  } catch(e) {
+    console.error('Firebase接続エラー:', e);
+    document.getElementById('syncStatus').style.display = 'flex';
+    document.getElementById('syncDot').className = 'sync-dot error';
+    document.getElementById('syncText').textContent = '同期エラー（オフライン動作中）';
+  }
+};
+
+function setPrio(btn) {
+  document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPrio = btn.dataset.prio;
+}
+
+function setUrg(btn) {
+  document.querySelectorAll('.urg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentUrg = btn.dataset.urg;
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function addItem() {
+  const input = document.getElementById('newItem');
+  const text = input.value.trim();
+  if (!text) { input.focus(); return; }
+  const cat = document.getElementById('catSelect').value;
+  items.unshift({ text, cat, prio: currentPrio, urg: currentUrg, done: false });
+  input.value = '';
+  save();
+  render();
+}
+
+function toggle(i) {
+  items[i].done = !items[i].done;
+  save();
+  if (items[i].done) celebrate();
+  renderAnimated();
+}
+
+function remove(i) {
+  // ゴミ箱に移動
+  trash.unshift({...items[i], trashedAt: Date.now()});
+  items.splice(i, 1);
+  save();
+  renderAnimated();
+  updateTrashCount();
+}
+
+function removeFromTrash(i) {
+  trash.splice(i, 1);
+  save();
+  render();
+  updateTrashCount();
+}
+
+function restoreFromTrash(i) {
+  const item = {...trash[i]};
+  delete item.trashedAt;
+  items.unshift(item);
+  trash.splice(i, 1);
+  save();
+  render();
+  updateTrashCount();
+}
+
+function emptyTrash() {
+  if (trash.length === 0) return;
+  trash = [];
+  save();
+  render();
+  updateTrashCount();
+}
+
+function updateTrashCount() {
+  const el = document.getElementById('trashCount');
+  if (el) el.textContent = trash.length > 0 ? `(${trash.length})` : '';
+}
+
+function celebrate() {
+  const colors = ['#c9a227', '#8b2c0a', '#5a7a5a', '#5b8db8', '#c87941'];
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top = '-10px';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.transform = `rotate(${Math.random()*360}deg)`;
+      el.style.animationDuration = (1 + Math.random()) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2500);
+    }, i * 40);
+  }
+}
+
+function changePrio(i, prio) {
+  items[i].prio = prio;
+  save();
+  renderAnimated();
+}
+
+function changeUrg(i, urg) {
+  items[i].urg = urg;
+  save();
+  renderAnimated();
+}
+
+// スコア計算
+function calcScore(item) {
+  const pts = { '高': 3, '中': 2, '低': 1 };
+  const urg = item.urg || '中';
+  return pts[item.prio] * pts[urg];
+}
+
+// 表示すべき順序を返す
+function getSortedItems() {
+  if (currentFilter === 'ゴミ箱') return { active: [], done: [] };
+  const pts = { '高': 3, '中': 2, '低': 1 };
+  const mapped = items.map((item, i) => ({
+    ...item, urg: item.urg || '中',
+    score: pts[item.prio] * pts[item.urg || '中'],
+    _i: i
+  }));
+  let active, done;
+  if (currentFilter === '達成済み') {
+    active = [];
+    done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
+  } else if (currentFilter === '全て') {
+    active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
+  } else {
+    active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
+  }
+  return { active, done };
+}
+
+// アイテム1件のHTML内容だけ更新（要素は再利用）
+function updateItemContent(el, item) {
+  // done状態
+  if (item.done) { el.classList.add('done'); } else { el.classList.remove('done'); }
+  el.dataset.cat = item.cat;
+  // バッジ更新
+  el.querySelector('.item-text').textContent = item.text;
+  el.querySelector('.badge-urg').className    = `badge badge-urg badge-urg-${item.urg}`;
+  el.querySelector('.badge-urg').textContent  = `緊急度 ${item.urg}`;
+  el.querySelector('.badge-prio').className   = `badge badge-prio badge-prio-${item.prio}`;
+  el.querySelector('.badge-prio').textContent = `重要度 ${item.prio}`;
+  el.querySelector('.badge-score').className  = `badge badge-score score-${item.score}`;
+  el.querySelector('.badge-score').textContent= `スコア ${item.score}`;
+  // 変更ボタンのactive状態
+  ['高','中','低'].forEach(v => {
+    const ub = el.querySelector(`.urg-change-btn[data-v="${v}"]`);
+    const pb = el.querySelector(`.prio-change-btn[data-v="${v}"]`);
+    if (ub) { ub.className = `urg-change-btn${item.urg  === v ? ' active-'+v : ''}`; }
+    if (pb) { pb.className = `prio-change-btn${item.prio === v ? ' active-'+v : ''}`; }
+  });
+  // change-row の表示切替
+  const cr = el.querySelector('.change-row');
+  if (cr) cr.style.display = item.done ? 'none' : '';
+}
+
+// DOM要素を保持したまま並び替え（FLIPアニメーション）
+function renderAnimated() {
+  const list = document.getElementById('itemsList');
+  const { active, done } = getSortedItems();
+  const ordered = [...active, ...done];
+
+  // stats更新
+  updateStats();
+
+  if (ordered.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
+    return;
+  }
+
+  // 既存のDOM要素をidxでマップ
+  const existingEls = {};
+  list.querySelectorAll('.item[data-idx]').forEach(el => {
+    existingEls[el.dataset.idx] = el;
+  });
+
+  // STEP1: First — 現在位置を記録
+  const beforePos = {};
+  Object.keys(existingEls).forEach(idx => {
+    beforePos[idx] = existingEls[idx].getBoundingClientRect().top;
+  });
+
+  // STEP2: セパレーターを除いて既存要素だけ取り出す
+  const sep = list.querySelector('.done-separator');
+
+  // STEP3: 新しい順序でDOMを並び替え（要素を移動・新規作成）
+  ordered.forEach((item, pos) => {
+    const idx = String(item._i);
+    let el = existingEls[idx];
+    if (!el) {
+      // 新規要素を作成
+      el = document.createElement('div');
+      el.innerHTML = buildItemHTML(item);
+      el = el.firstElementChild;
+      list.appendChild(el);
+      existingEls[idx] = el;
+      // 新規は下からスライドイン
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      requestAnimationFrame(() => {
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+    } else {
+      updateItemContent(el, item);
+    }
+  });
+
+  // セパレーターを正しい位置に挿入
+  if (active.length > 0 && done.length > 0) {
+    let sepEl = list.querySelector('.done-separator');
+    if (!sepEl) {
+      sepEl = document.createElement('div');
+      sepEl.className = 'done-separator';
+      sepEl.style.cssText = 'text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;';
+      sepEl.textContent = '✅ 達成済み';
+    }
+    // activeの最後の要素の後に挿入
+    const lastActiveEl = existingEls[String(active[active.length-1]._i)];
+    if (lastActiveEl && lastActiveEl.nextSibling !== sepEl) {
+      list.insertBefore(sepEl, lastActiveEl.nextSibling);
+    }
+  } else {
+    const sepEl = list.querySelector('.done-separator');
+    if (sepEl) sepEl.remove();
+  }
+
+  // 表示不要なアイテムを非表示・削除
+  const visibleIdxs = new Set(ordered.map(x => String(x._i)));
+  list.querySelectorAll('.item[data-idx]').forEach(el => {
+    if (!visibleIdxs.has(el.dataset.idx)) el.style.display = 'none';
+    else el.style.display = '';
+  });
+
+  // STEP4: DOMを正しい順序に並べ替え
+  const fragment = document.createDocumentFragment();
+  ordered.forEach(item => {
+    const el = existingEls[String(item._i)];
+    if (el) fragment.appendChild(el);
+    // activeの最後ならセパレーターを追加
+    if (active.length > 0 && done.length > 0 && item === active[active.length-1]) {
+      const sepEl = list.querySelector('.done-separator') || (() => {
+        const s = document.createElement('div');
+        s.className = 'done-separator';
+        return s;
+      })();
+      fragment.appendChild(sepEl);
+    }
+  });
+  list.appendChild(fragment);
+
+  // STEP5: Last→Invert→Play
+  requestAnimationFrame(() => {
+    const movers = [];
+    ordered.forEach(item => {
+      const idx = String(item._i);
+      const el = existingEls[idx];
+      if (!el || beforePos[idx] === undefined) return;
+      const afterPos = el.getBoundingClientRect().top;
+      const delta = beforePos[idx] - afterPos;
+      if (Math.abs(delta) < 3) return;
+      el.style.transition = 'none';
+      el.style.transform = `translateY(${delta}px)`;
+      movers.push({ el, delta });
+    });
+
+    requestAnimationFrame(() => {
+      movers.forEach(({ el }) => {
+        el.style.transition = 'transform 0.9s cubic-bezier(0.34, 1.5, 0.64, 1), opacity 0.5s ease';
+        el.style.transform = 'translateY(0)';
+        el.addEventListener('transitionend', (e) => {
+          if (e.propertyName === 'transform') {
+            el.style.transition = '';
+            el.style.transform = '';
+          }
+        }, { once: true });
+      });
+    });
+  });
+}
+
+function updateStats() {
+  const total = items.length;
+  const doneCount = items.filter(i => i.done).length;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('doneCount').textContent = doneCount;
+  document.getElementById('remainCount').textContent = total - doneCount;
+  const pct = total ? Math.round(doneCount / total * 100) : 0;
+
+  const cats = [
+    { key: '海外旅行',    label: '✈️ 海外旅行',    color: '#5b8db8' },
+    { key: '国内旅行',    label: '🗾 国内旅行',    color: '#3a9e7a' },
+    { key: '食・グルメ',  label: '🍜 食・グルメ',  color: '#c87941' },
+    { key: 'スキル・学習',label: '📚 スキル・学習', color: '#7a5bb8' },
+    { key: '人生の目標',  label: '⭐ 人生の目標',  color: '#8b2c0a' },
+  ];
+
+  // フィルタータブ下の一覧は削除済み
+
+  // ヘッダーのコンパクト版
+  const headerEl = document.getElementById('headerCatStats');
+  // アイコンだけ抽出（絵文字部分）
+  const icons = { '海外旅行':'✈️', '国内旅行':'🗾', '食・グルメ':'🍜', 'スキル・学習':'📚', '人生の目標':'⭐' };
+  headerEl.innerHTML = `<div class="header-cat-grid">` +
+    cats.map(c => {
+      const ci = items.filter(x => x.cat === c.key);
+      const ct = ci.length, cd = ci.filter(x => x.done).length;
+      const cp = ct ? Math.round(cd / ct * 100) : 0;
+      return `<div class="header-cat-item">
+        <span class="header-cat-icon">${icons[c.key]}</span>
+        <span class="header-cat-fraction">${cd}/${ct}</span>
+        <span class="header-cat-pct">${cp}%</span>
+      </div>`;
+    }).join('') +
+    `<div class="header-cat-item header-cat-total">
+      <span class="header-cat-icon" style="color:#5a7a5a;">✓</span>
+      <span class="header-cat-fraction">${items.filter(x=>x.done).length}/${items.length}</span>
+      <span class="header-cat-pct">${items.length ? Math.round(items.filter(x=>x.done).length/items.length*100) : 0}%</span>
+    </div>` +
+    `</div>`;
+}
+
+function buildItemHTML(item) {
+  return `<div class="item ${item.done ? 'done' : ''}" data-cat="${item.cat}" data-idx="${item._i}">
+    <button class="check-btn" onclick="toggle(${item._i})">✓</button>
+    <div class="item-body">
+      <div class="item-text" id="item-text-${item._i}">${item.text}</div>
+      <div class="item-edit-row" id="edit-row-${item._i}" style="display:none;">
+        <input class="item-edit-input" id="edit-input-${item._i}" type="text" maxlength="60"
+          onkeydown="if(event.key==='Enter')saveEdit(${item._i});if(event.key==='Escape')cancelEdit(${item._i})">
+        <button class="item-edit-save" onclick="saveEdit(${item._i})">保存</button>
+        <button class="item-edit-cancel" onclick="cancelEdit(${item._i})">取消</button>
+      </div>
+      <div class="item-badges">
+        <span class="cat-tag">${item.cat}</span>
+        <span class="badge badge-urg badge-urg-${item.urg}">緊急度 ${item.urg}</span>
+        <span class="badge badge-prio badge-prio-${item.prio}">重要度 ${item.prio}</span>
+        <span class="badge badge-score score-${item.score}" title="重要度×緊急度">スコア ${item.score}</span>
+      </div>
+      <div class="change-row" ${item.done ? 'style="display:none"' : ''}>
+        <div class="change-group">
+          <span class="change-group-label">緊急度</span>
+          <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高(3)</button>
+          <button class="urg-change-btn${item.urg==='中'?' active-中':''}" data-v="中" onclick="changeUrg(${item._i},'中')">中(2)</button>
+          <button class="urg-change-btn${item.urg==='低'?' active-低':''}" data-v="低" onclick="changeUrg(${item._i},'低')">低(1)</button>
+        </div>
+        <div class="change-group">
+          <span class="change-group-label">重要度</span>
+          <button class="prio-change-btn${item.prio==='高'?' active-高':''}" data-v="高" onclick="changePrio(${item._i},'高')">高(3)</button>
+          <button class="prio-change-btn${item.prio==='中'?' active-中':''}" data-v="中" onclick="changePrio(${item._i},'中')">中(2)</button>
+          <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低(1)</button>
+        </div>
+      </div>
+    </div>
+    <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
+    <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
+  </div>`;
+}
+
+function render() {
+  const list = document.getElementById('itemsList');
+
+  // ゴミ箱表示
+  if (currentFilter === 'ゴミ箱') {
+    updateStats();
+    updateTrashCount();
+    if (trash.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="empty-icon">🗑️</div><div class="empty-text">ゴミ箱は空です</div></div>`;
+      return;
+    }
+    const parts = [`<div class="trash-actions"><button class="empty-trash-btn" onclick="emptyTrash()">🗑️ ゴミ箱を空にする（${trash.length}件完全削除）</button></div>`];
+    parts.push(...trash.map((item, i) => {
+      const pts = { '高': 3, '中': 2, '低': 1 };
+      const urg = item.urg || '中';
+      const score = pts[item.prio] * pts[urg];
+      return `<div class="item trashed" data-cat="${item.cat}">
+        <div class="item-body">
+          <div class="item-text" style="color:var(--faded);">${item.text}</div>
+          <div class="item-badges">
+            <span class="cat-tag">${item.cat}</span>
+            <span class="badge badge-urg-${urg}">緊急度 ${urg}</span>
+            <span class="badge badge-prio-${item.prio}">重要度 ${item.prio}</span>
+            <span class="badge badge-score score-${score}">スコア ${score}</span>
+          </div>
+        </div>
+        <button class="restore-btn" onclick="restoreFromTrash(${i})" title="元に戻す">↩️</button>
+        <button class="delete-btn" onclick="removeFromTrash(${i})" title="完全削除">×</button>
+      </div>`;
+    }));
+    list.innerHTML = parts.join('');
+    return;
+  }
+
+  const pts = { '高': 3, '中': 2, '低': 1 };
+  const mapped = items.map((item, i) => ({
+    ...item, urg: item.urg || '中',
+    score: pts[item.prio] * pts[item.urg || '中'], _i: i
+  }));
+  let active, done;
+  if (currentFilter === '達成済み') {
+    active = [];
+    done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
+  } else if (currentFilter === '全て') {
+    active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
+  } else {
+    active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
+  }
+  updateStats();
+  updateTrashCount();
+  if ([...active,...done].length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
+    return;
+  }
+  const parts = [];
+  if (active.length > 0 && done.length > 0) {
+    parts.push(...active.map(item => buildItemHTML(item)));
+    parts.push(`<div class="done-separator" style="text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;">✅ 達成済み</div>`);
+    parts.push(...done.map(item => buildItemHTML(item)));
+  } else {
+    parts.push(...[...active,...done].map(item => buildItemHTML(item)));
+  }
+  list.innerHTML = parts.join('');
+}
+
+function editItem(i) {
+  const el = document.getElementById(`edit-row-${i}`);
+  const textEl = document.getElementById(`item-text-${i}`);
+  if (el.style.display === 'flex') {
+    cancelEdit(i);
+  } else {
+    el.style.display = 'flex';
+    const input = document.getElementById(`edit-input-${i}`);
+    input.value = items[i].text;
+    input.focus();
+    input.select();
+    textEl.style.opacity = '0.4';
+  }
+}
+
+function saveEdit(i) {
+  const input = document.getElementById(`edit-input-${i}`);
+  const val = input.value.trim();
+  if (val) { items[i].text = val; save(); }
+  render();
+}
+
+function cancelEdit(i) {
+  const el = document.getElementById(`edit-row-${i}`);
+  const textEl = document.getElementById(`item-text-${i}`);
+  el.style.display = 'none';
+  textEl.style.opacity = '1';
+}
+
+
+document.getElementById('newItem').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+// render() と updateTrashCount() は window.onload で呼ばれます
+</script>
+</body>
+</html>
