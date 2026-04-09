@@ -366,18 +366,7 @@
     box-shadow: 0 1px 4px var(--shadow);
     transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
   }
-  .item.just-added { animation: slideIn 0.4s ease; }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  /* FLIPアニメーション用 */
-  .item.is-moving {
-    transition: transform 1.0s cubic-bezier(0.34, 1.5, 0.64, 1), opacity 0.6s ease, box-shadow 0.3s, background 0.5s;
-  }
-  .item.is-moving:hover {
-    transform: translateY(0) !important;
-  }
+  /* アニメーションなし */
   .item:hover { box-shadow: 0 3px 12px var(--shadow); transform: translateY(-1px); }
   .item.done {
     background: var(--paper);
@@ -552,6 +541,67 @@
     flex-shrink: 0;
   }
   .edit-btn:hover { color: white; background: var(--gold); border-color: var(--gold); }
+ 
+  .detail-btn {
+    background: none;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 6px 10px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+  .detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+ 
+  .item-memo-row {
+    margin-top: 8px;
+    display: none;
+  }
+  .item-memo-row.open { display: block; }
+  .item-memo-textarea {
+    width: 100%;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    background: #f9f6f0;
+    padding: 8px 10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .item-memo-textarea:focus { border-color: #3a6ea5; }
+  .item-memo-textarea::placeholder { color: var(--faded); }
+  .item-memo-save {
+    background: #3a6ea5;
+    color: white;
+    border: none;
+    padding: 4px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 5px;
+    transition: all 0.15s;
+  }
+  .item-memo-save:hover { background: #2a5a8a; }
+  .item-memo-preview {
+    font-size: 12px;
+    color: #3a6ea5;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    background: #f0f4fa;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border-left: 3px solid #3a6ea5;
+  }
  
   .item-edit-row {
     display: flex;
@@ -737,8 +787,7 @@
 </div>
  
 <header>
-  <div class="header-sub">My Bucket List</div>
-  <h1>バケットリスト</h1>
+  <h1>Bucket List</h1>
   <div class="header-desc">死ぬまでにやりたいこと、行きたい場所、なりたい自分</div>
 </header>
  
@@ -1261,7 +1310,7 @@ function toggle(i) {
   items[i].done = !items[i].done;
   save();
   if (items[i].done) celebrate();
-  renderAnimated();
+  render();
 }
  
 function remove(i) {
@@ -1269,7 +1318,7 @@ function remove(i) {
   trash.unshift({...items[i], trashedAt: Date.now()});
   items.splice(i, 1);
   save();
-  renderAnimated();
+  render();
   updateTrashCount();
 }
  
@@ -1323,13 +1372,13 @@ function celebrate() {
 function changePrio(i, prio) {
   items[i].prio = prio;
   save();
-  renderAnimated();
+  render();
 }
  
 function changeUrg(i, urg) {
   items[i].urg = urg;
   save();
-  renderAnimated();
+  render();
 }
  
 // スコア計算
@@ -1387,131 +1436,6 @@ function updateItemContent(el, item) {
   if (cr) cr.style.display = item.done ? 'none' : '';
 }
  
-// DOM要素を保持したまま並び替え（FLIPアニメーション）
-function renderAnimated() {
-  const list = document.getElementById('itemsList');
-  const { active, done } = getSortedItems();
-  const ordered = [...active, ...done];
- 
-  // stats更新
-  updateStats();
- 
-  if (ordered.length === 0) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
-    return;
-  }
- 
-  // 既存のDOM要素をidxでマップ
-  const existingEls = {};
-  list.querySelectorAll('.item[data-idx]').forEach(el => {
-    existingEls[el.dataset.idx] = el;
-  });
- 
-  // STEP1: First — 現在位置を記録
-  const beforePos = {};
-  Object.keys(existingEls).forEach(idx => {
-    beforePos[idx] = existingEls[idx].getBoundingClientRect().top;
-  });
- 
-  // STEP2: セパレーターを除いて既存要素だけ取り出す
-  const sep = list.querySelector('.done-separator');
- 
-  // STEP3: 新しい順序でDOMを並び替え（要素を移動・新規作成）
-  ordered.forEach((item, pos) => {
-    const idx = String(item._i);
-    let el = existingEls[idx];
-    if (!el) {
-      // 新規要素を作成
-      el = document.createElement('div');
-      el.innerHTML = buildItemHTML(item);
-      el = el.firstElementChild;
-      list.appendChild(el);
-      existingEls[idx] = el;
-      // 新規は下からスライドイン
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      requestAnimationFrame(() => {
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
-    } else {
-      updateItemContent(el, item);
-    }
-  });
- 
-  // セパレーターを正しい位置に挿入
-  if (active.length > 0 && done.length > 0) {
-    let sepEl = list.querySelector('.done-separator');
-    if (!sepEl) {
-      sepEl = document.createElement('div');
-      sepEl.className = 'done-separator';
-      sepEl.style.cssText = 'text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;';
-      sepEl.textContent = '✅ 達成済み';
-    }
-    // activeの最後の要素の後に挿入
-    const lastActiveEl = existingEls[String(active[active.length-1]._i)];
-    if (lastActiveEl && lastActiveEl.nextSibling !== sepEl) {
-      list.insertBefore(sepEl, lastActiveEl.nextSibling);
-    }
-  } else {
-    const sepEl = list.querySelector('.done-separator');
-    if (sepEl) sepEl.remove();
-  }
- 
-  // 表示不要なアイテムを非表示・削除
-  const visibleIdxs = new Set(ordered.map(x => String(x._i)));
-  list.querySelectorAll('.item[data-idx]').forEach(el => {
-    if (!visibleIdxs.has(el.dataset.idx)) el.style.display = 'none';
-    else el.style.display = '';
-  });
- 
-  // STEP4: DOMを正しい順序に並べ替え
-  const fragment = document.createDocumentFragment();
-  ordered.forEach(item => {
-    const el = existingEls[String(item._i)];
-    if (el) fragment.appendChild(el);
-    // activeの最後ならセパレーターを追加
-    if (active.length > 0 && done.length > 0 && item === active[active.length-1]) {
-      const sepEl = list.querySelector('.done-separator') || (() => {
-        const s = document.createElement('div');
-        s.className = 'done-separator';
-        return s;
-      })();
-      fragment.appendChild(sepEl);
-    }
-  });
-  list.appendChild(fragment);
- 
-  // STEP5: Last→Invert→Play
-  requestAnimationFrame(() => {
-    const movers = [];
-    ordered.forEach(item => {
-      const idx = String(item._i);
-      const el = existingEls[idx];
-      if (!el || beforePos[idx] === undefined) return;
-      const afterPos = el.getBoundingClientRect().top;
-      const delta = beforePos[idx] - afterPos;
-      if (Math.abs(delta) < 3) return;
-      el.style.transition = 'none';
-      el.style.transform = `translateY(${delta}px)`;
-      movers.push({ el, delta });
-    });
- 
-    requestAnimationFrame(() => {
-      movers.forEach(({ el }) => {
-        el.style.transition = 'transform 0.9s cubic-bezier(0.34, 1.5, 0.64, 1), opacity 0.5s ease';
-        el.style.transform = 'translateY(0)';
-        el.addEventListener('transitionend', (e) => {
-          if (e.propertyName === 'transform') {
-            el.style.transition = '';
-            el.style.transform = '';
-          }
-        }, { once: true });
-      });
-    });
-  });
-}
  
 function updateStats() {
   const total = items.length;
@@ -1585,7 +1509,12 @@ function buildItemHTML(item) {
           <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低(1)</button>
         </div>
       </div>
+      <div class="item-memo-row${item.memo ? ' open' : ''}" id="memo-row-${item._i}">
+        <textarea class="item-memo-textarea" id="memo-input-${item._i}" placeholder="詳細メモを入力…"
+          onblur="saveMemo(${item._i})">${item.memo || ''}</textarea>
+      </div>
     </div>
+    <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
     <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
     <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
   </div>`;
@@ -1656,6 +1585,28 @@ function render() {
     parts.push(...[...active,...done].map(item => buildItemHTML(item)));
   }
   list.innerHTML = parts.join('');
+}
+ 
+function toggleMemo(i) {
+  const row = document.getElementById(`memo-row-${i}`);
+  const btn = row ? row.closest('.item').querySelector('.detail-btn') : null;
+  if (!row) return;
+  const isOpen = row.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', isOpen);
+  if (isOpen) {
+    const ta = document.getElementById(`memo-input-${i}`);
+    if (ta) ta.focus();
+  }
+}
+ 
+function saveMemo(i) {
+  const ta = document.getElementById(`memo-input-${i}`);
+  if (!ta) return;
+  items[i].memo = ta.value;
+  // メモがあればボタンをactive状態に
+  const btn = ta.closest('.item').querySelector('.detail-btn');
+  if (btn) btn.classList.toggle('active', !!ta.value);
+  save();
 }
  
 function editItem(i) {
