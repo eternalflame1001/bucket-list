@@ -557,6 +557,13 @@
   .detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
   .detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
  
+  .item-btn-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+ 
   .item-memo-row {
     margin-top: 8px;
     display: none;
@@ -1491,8 +1498,6 @@ function buildItemHTML(item) {
       </div>
       <div class="item-badges">
         <span class="cat-tag">${item.cat}</span>
-        <span class="badge badge-urg badge-urg-${item.urg}">緊急度 ${item.urg}</span>
-        <span class="badge badge-prio badge-prio-${item.prio}">重要度 ${item.prio}</span>
         <span class="badge badge-score score-${item.score}" title="重要度×緊急度">スコア ${item.score}</span>
       </div>
       <div class="change-row" ${item.done ? 'style="display:none"' : ''}>
@@ -1514,9 +1519,11 @@ function buildItemHTML(item) {
           onblur="saveMemo(${item._i})">${item.memo || ''}</textarea>
       </div>
     </div>
-    <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
-    <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
-    <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
+    <div class="item-btn-col">
+      <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
+      <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
+      <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
+    </div>
   </div>`;
 }
  
