@@ -110,7 +110,7 @@
   }
  
   /* Main */
-  main { max-width: 680px; margin: 0 auto; padding: 16px 8px 0; }
+  main { max-width: 680px; margin: 0 auto; padding: 16px 0 0; }
  
   /* ヘッダーカテゴリー別達成率 */
   .header-cat-stats {
@@ -179,18 +179,18 @@
     background: white;
     border: 1px solid var(--aged);
     border-radius: 2px;
-    padding: 12px 16px 10px;
+    padding: 12px 8px 10px;
     box-shadow: 0 2px 12px var(--shadow);
     position: relative;
   }
   .add-section::before {
-    content: '+ 新しい夢を追加';
+    content: '+ 追加';
     position: absolute;
-    top: -11px; left: 16px;
+    top: -11px; left: 10px;
     background: white;
-    padding: 0 8px;
+    padding: 0 6px;
     font-size: 11px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     color: var(--faded);
   }
   .search-section {
@@ -426,7 +426,7 @@
   .item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
  
   /* Items */
-  .items-list { display: flex; flex-direction: column; gap: 10px; }
+  .items-list { display: flex; flex-direction: column; gap: 10px; padding: 0 4px; }
  
   .item {
     background: white;
@@ -975,6 +975,38 @@
     text-align: center;
     pointer-events: none;
   }
+  .visit-history {
+    margin: 0 8px 16px;
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    box-shadow: 0 1px 4px var(--shadow);
+    overflow: hidden;
+  }
+  .visit-history-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    padding: 8px 14px 4px;
+    border-bottom: 1px solid var(--aged);
+    font-weight: 700;
+  }
+  .visit-history-year {
+    padding: 6px 14px 2px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8b2c6a;
+    border-top: 1px solid var(--aged);
+    margin-top: 4px;
+  }
+  .visit-history-year:first-of-type { border-top: none; margin-top: 0; }
+  .visit-history-places {
+    padding: 2px 14px 6px;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.8;
+  }
  
   /* 年選択ダイアログ */
   .year-dialog-overlay {
@@ -1137,6 +1169,8 @@
     <div id="visitMap"></div>
     <div class="map-overlay" id="mapOverlay"></div>
   </div>
+  <!-- 訪問履歴 -->
+  <div class="visit-history" id="visitHistory"></div>
 </div>
  
  
@@ -1144,7 +1178,7 @@
 <main>
   <!-- Progress -->
   <!-- Add form + Search -->
-  <div style="display:flex; gap:8px; align-items:stretch; margin-bottom:16px;">
+  <div style="display:flex; gap:8px; align-items:stretch; margin-bottom:16px; padding: 0 0px;">
   <div class="add-section" style="margin-bottom:0; flex:1;">
     <div class="add-row">
       <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
@@ -2031,6 +2065,7 @@ function renderVisit(mode) {
     const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
     return `<div class="visit-item${isVisited ? ' visited' : ''}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
   }).join('');
+  renderVisitHistory(key);
 }
  
 function toggleVisitAndMap(key, name, el) {
@@ -2105,6 +2140,31 @@ function updateMapColor(key, name, opacity) {
   }
 }
  
+function renderVisitHistory(key) {
+  const historyEl = document.getElementById('visitHistory');
+  if (!historyEl) return;
+  const visited = visitData[key] || {};
+  const entries = Object.entries(visited);
+  if (entries.length === 0) {
+    historyEl.innerHTML = '';
+    return;
+  }
+  // 年ごとにグループ化して降順に並べる
+  const byYear = {};
+  entries.forEach(([name, year]) => {
+    const y = year || new Date().getFullYear();
+    if (!byYear[y]) byYear[y] = [];
+    byYear[y].push(name);
+  });
+  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+  let html = '<div class="visit-history-title">📅 訪問履歴</div>';
+  years.forEach(year => {
+    html += `<div class="visit-history-year">${year}年</div>`;
+    html += `<div class="visit-history-places">${byYear[year].join('　／　')}</div>`;
+  });
+  historyEl.innerHTML = html;
+}
+ 
 function updateVisitStats(key, el) {
   const visited = Object.keys(visitData[key] || {}).length;
   const grid = el.closest('.visit-grid');
@@ -2114,6 +2174,7 @@ function updateVisitStats(key, el) {
   document.getElementById('visitFill').style.width = pct + '%';
   const overlayEl = document.getElementById('mapOverlay');
   if (overlayEl) overlayEl.innerHTML = `${visited}/${total}<br>${pct}%`;
+  renderVisitHistory(key);
 }
  
 function toggleVisit(key, name, el) {
