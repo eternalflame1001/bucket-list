@@ -143,7 +143,7 @@
   .header-cat-item:last-child { border-right: none; }
   .header-cat-total {
     border-left: 2px solid var(--aged);
-    background: rgba(90,122,90,0.08);
+    background: rgba(139,44,100,0.08);
   }
   .header-cat-total .header-cat-fraction { color: #5a7a5a; }
   .header-cat-total .header-cat-pct { color: #5a7a5a; }
@@ -180,7 +180,6 @@
     border: 1px solid var(--aged);
     border-radius: 2px;
     padding: 12px 16px 10px;
-    margin-bottom: 16px;
     box-shadow: 0 2px 12px var(--shadow);
     position: relative;
   }
@@ -193,6 +192,52 @@
     font-size: 11px;
     letter-spacing: 0.2em;
     color: var(--faded);
+  }
+  .search-section {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 10px 10px;
+    box-shadow: 0 2px 12px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 64px;
+    position: relative;
+  }
+  .search-icon { font-size: 20px; }
+  .search-section input[type="text"] {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    background: transparent;
+    padding: 2px 2px;
+    font-size: 12px;
+    color: var(--ink);
+    outline: none;
+    text-align: center;
+  }
+  .search-section input[type="text"]:focus { border-bottom-color: var(--accent); }
+  .search-section input[type="text"]::placeholder { color: var(--faded); font-size: 11px; }
+  .search-clear {
+    background: none;
+    border: none;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+  }
+  .search-clear:hover { color: var(--accent); }
+  .search-count {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .search-highlight {
+    background: rgba(201,162,39,0.3);
+    border-radius: 2px;
   }
   .add-row {
     display: flex;
@@ -795,6 +840,213 @@
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
   }
  
+  /* モード切り替えバー */
+  .mode-bar {
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid rgba(201,162,39,0.2);
+  }
+  .mode-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 11px;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .mode-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    font-weight: 700;
+  }
+  .mode-btn:hover:not(.active) { color: var(--paper); }
+ 
+  /* 訪問記録パネル */
+  .visit-header {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 12px 16px;
+    margin: 12px 8px 8px;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .visit-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .visit-stats {
+    font-size: 12px;
+    color: var(--faded);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .visit-progress-bar {
+    height: 4px;
+    background: var(--aged);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .visit-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .visit-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+  }
+  .visit-item {
+    border: 1.5px solid var(--aged);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    color: var(--ink);
+    user-select: none;
+    font-weight: 700;
+  }
+  .visit-item.visited {
+    background: #8b2c6a;
+    border-color: #8b2c6a;
+    color: white;
+  }
+  .visit-item:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--shadow); }
+  .visit-year {
+    display: block;
+    font-size: 9px;
+    opacity: 0.85;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .visit-map-wrap {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    margin: 0 8px 8px;
+    padding: 8px;
+    box-shadow: 0 1px 4px var(--shadow);
+    overflow: hidden;
+  }
+  #visitMap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  #visitMap path {
+    fill: #e8dfc8;
+    stroke: #9a8f7a;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.2s;
+  }
+  #visitMap path.map-visited {
+    stroke: #6a1a4a;
+    stroke-width: 0.8;
+  }
+  #visitMap path:hover { opacity: 0.8; }
+  .map-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(26,18,9,0.75);
+    color: var(--gold);
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    line-height: 1.5;
+    text-align: center;
+    pointer-events: none;
+  }
+ 
+  /* 年選択ダイアログ */
+  .year-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .year-dialog {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .year-dialog-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .year-select-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .year-select {
+    font-size: 22px;
+    font-family: 'Shippori Mincho', serif;
+    border: 2px solid var(--aged);
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: var(--ink);
+    background: var(--paper);
+    text-align: center;
+    width: 120px;
+  }
+  .year-dialog-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .year-dialog-ok {
+    flex: 1;
+    background: #8b2c6a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .year-dialog-ok:hover { background: #6a1a4a; }
+  .year-dialog-cancel {
+    flex: 1;
+    background: none;
+    color: var(--faded);
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+  }
+  .year-dialog-cancel:hover { color: var(--ink); border-color: var(--ink); }
+ 
   /* 同期ステータス */
   #syncStatus {
     position: fixed;
@@ -830,6 +1082,20 @@
   <span id="syncText">接続中…</span>
 </div>
  
+<!-- 年選択ダイアログ -->
+<div class="year-dialog-overlay" id="yearDialog" style="display:none;">
+  <div class="year-dialog">
+    <div class="year-dialog-title" id="yearDialogTitle"></div>
+    <div class="year-select-wrap">
+      <select class="year-select" id="yearSelect"></select>
+    </div>
+    <div class="year-dialog-btns">
+      <button class="year-dialog-ok" onclick="confirmYear()">記録する</button>
+      <button class="year-dialog-cancel" onclick="cancelYear()">キャンセル</button>
+    </div>
+  </div>
+</div>
+ 
 <header>
   <h1>Bucket List</h1>
   <div class="header-desc">死ぬまでにやりたいこと、行きたい場所、なりたい自分</div>
@@ -850,12 +1116,36 @@
   </div>
 </div>
  
+<!-- モード切り替えバー -->
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('bucket')">📚 バケットリスト</button>
+  <button class="mode-btn" onclick="setMode('japan')">🗾 都道府県</button>
+  <button class="mode-btn" onclick="setMode('china')">🇨🇳 中国</button>
+  <button class="mode-btn" onclick="setMode('world')">🌍 世界</button>
+</div>
+ 
+<!-- 訪問記録パネル -->
+<div id="visitPanel" style="display:none;">
+  <div class="visit-header">
+    <div class="visit-title" id="visitTitle"></div>
+    <div class="visit-stats" id="visitStats"></div>
+    <div class="visit-progress-bar"><div class="visit-progress-fill" id="visitFill"></div></div>
+  </div>
+  <!-- ボタン上・地図下 -->
+  <div class="visit-grid" id="visitGrid"></div>
+  <div class="visit-map-wrap" style="position:relative;">
+    <div id="visitMap"></div>
+    <div class="map-overlay" id="mapOverlay"></div>
+  </div>
+</div>
+ 
  
  
 <main>
   <!-- Progress -->
-  <!-- Add form -->
-  <div class="add-section">
+  <!-- Add form + Search -->
+  <div style="display:flex; gap:8px; align-items:stretch; margin-bottom:16px;">
+  <div class="add-section" style="margin-bottom:0; flex:1;">
     <div class="add-row">
       <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
       <button class="add-btn" onclick="addItem()">追加</button>
@@ -883,6 +1173,14 @@
         <button class="prio-btn" data-prio="低" onclick="setPrio(this)">低</button>
       </div>
     </div>
+  </div>
+  <!-- Search box -->
+  <div class="search-section">
+    <div class="search-icon">🔍</div>
+    <input type="text" id="searchInput" placeholder="検索…" oninput="doSearch(this.value)">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+    <div id="searchCount" class="search-count"></div>
+  </div>
   </div>
  
   <!-- Filter tabs -->
@@ -1312,6 +1610,8 @@ window.onload = async function() {
       setSyncStatus('synced');
       startPolling();
     }
+    // 訪問記録をFirebaseから読み込み
+    await loadVisitFromFirebase();
   } catch(e) {
     console.error('Firebase接続エラー:', e);
     document.getElementById('syncStatus').style.display = 'flex';
@@ -1319,6 +1619,559 @@ window.onload = async function() {
     document.getElementById('syncText').textContent = '同期エラー（オフライン動作中）';
   }
 };
+ 
+// ===== 地図SVGデータ =====
+const MAP_SVG = {
+ 
+japan: `<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+<path data-name="北海道" d="M280,30 L320,25 L370,40 L400,60 L410,90 L390,120 L360,140 L320,150 L290,145 L260,130 L240,110 L245,80 L260,55 Z"/>
+<path data-name="青森" d="M270,155 L310,150 L330,160 L325,185 L300,195 L275,190 L260,175 Z"/>
+<path data-name="岩手" d="M295,195 L330,185 L345,200 L340,235 L315,250 L290,240 L280,220 Z"/>
+<path data-name="宮城" d="M280,240 L315,250 L320,270 L300,285 L275,280 L265,260 Z"/>
+<path data-name="秋田" d="M255,185 L280,190 L285,220 L275,245 L250,250 L232,230 L235,205 Z"/>
+<path data-name="山形" d="M250,250 L275,245 L280,270 L265,290 L242,290 L232,270 Z"/>
+<path data-name="福島" d="M265,285 L300,285 L315,300 L310,325 L280,330 L255,320 L250,300 Z"/>
+<path data-name="茨城" d="M310,310 L335,305 L345,325 L335,345 L310,345 L300,330 Z"/>
+<path data-name="栃木" d="M290,295 L315,290 L320,310 L310,330 L285,328 L278,310 Z"/>
+<path data-name="群馬" d="M268,290 L292,288 L295,310 L280,325 L258,318 L255,300 Z"/>
+<path data-name="埼玉" d="M285,325 L310,322 L315,340 L295,350 L275,345 L272,330 Z"/>
+<path data-name="千葉" d="M318,330 L345,325 L360,345 L355,370 L330,375 L312,355 Z"/>
+<path data-name="東京" d="M295,345 L318,340 L322,358 L305,365 L290,358 Z"/>
+<path data-name="神奈川" d="M278,358 L302,355 L308,372 L288,382 L268,375 Z"/>
+<path data-name="新潟" d="M220,220 L255,215 L265,250 L255,280 L225,285 L205,265 L208,238 Z"/>
+<path data-name="富山" d="M210,285 L238,282 L245,300 L228,315 L208,308 Z"/>
+<path data-name="石川" d="M192,285 L215,282 L218,308 L200,325 L180,315 L178,295 Z"/>
+<path data-name="福井" d="M185,320 L208,315 L215,335 L198,350 L178,342 Z"/>
+<path data-name="山梨" d="M262,345 L285,340 L290,360 L272,372 L252,365 Z"/>
+<path data-name="長野" d="M230,300 L262,295 L270,330 L258,355 L228,352 L215,328 Z"/>
+<path data-name="岐阜" d="M200,325 L232,320 L240,350 L225,372 L198,368 L188,348 Z"/>
+<path data-name="静岡" d="M248,368 L288,365 L298,385 L278,400 L248,395 L235,378 Z"/>
+<path data-name="愛知" d="M215,368 L248,365 L252,388 L230,402 L208,395 L205,375 Z"/>
+<path data-name="三重" d="M205,375 L232,370 L238,398 L222,418 L200,412 L192,392 Z"/>
+<path data-name="滋賀" d="M195,348 L222,342 L228,365 L210,378 L190,370 Z"/>
+<path data-name="京都" d="M175,342 L200,338 L205,362 L188,375 L168,368 Z"/>
+<path data-name="大阪" d="M178,368 L205,362 L210,382 L192,392 L172,385 Z"/>
+<path data-name="兵庫" d="M145,340 L180,335 L185,368 L165,382 L138,372 L132,350 Z"/>
+<path data-name="奈良" d="M192,370 L218,365 L222,388 L202,400 L182,392 Z"/>
+<path data-name="和歌山" d="M182,392 L208,388 L215,412 L195,428 L172,418 Z"/>
+<path data-name="鳥取" d="M128,330 L162,325 L168,345 L145,355 L122,348 Z"/>
+<path data-name="島根" d="M98,328 L135,322 L140,342 L115,352 L92,345 Z"/>
+<path data-name="岡山" d="M135,348 L168,342 L175,362 L152,375 L128,368 Z"/>
+<path data-name="広島" d="M105,348 L140,342 L145,365 L120,378 L98,370 Z"/>
+<path data-name="山口" d="M75,352 L112,345 L118,368 L92,382 L68,372 Z"/>
+<path data-name="徳島" d="M168,378 L200,372 L205,395 L182,408 L158,400 Z"/>
+<path data-name="香川" d="M148,362 L180,355 L185,375 L160,385 L138,378 Z"/>
+<path data-name="愛媛" d="M118,368 L152,362 L158,385 L132,398 L108,390 Z"/>
+<path data-name="高知" d="M128,395 L168,388 L175,412 L148,428 L118,420 Z"/>
+<path data-name="福岡" d="M52,355 L88,348 L92,372 L65,385 L42,375 Z"/>
+<path data-name="佐賀" d="M38,370 L68,362 L72,382 L48,392 L30,385 Z"/>
+<path data-name="長崎" d="M18,368 L48,358 L55,382 L32,398 L12,388 Z"/>
+<path data-name="熊本" d="M50,382 L85,375 L90,400 L62,415 L38,405 Z"/>
+<path data-name="大分" d="M82,362 L118,355 L122,378 L95,392 L68,382 Z"/>
+<path data-name="宮崎" d="M78,398 L115,390 L120,418 L90,435 L62,425 Z"/>
+<path data-name="鹿児島" d="M55,418 L92,410 L98,440 L68,458 L40,445 Z"/>
+<path data-name="沖縄" d="M85,520 L115,515 L118,535 L95,542 L78,535 Z"/>
+</svg>`,
+ 
+china: `<svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+<path data-name="北京市" d="M355,112 L372,108 L378,120 L368,130 L350,125 Z"/>
+<path data-name="天津市" d="M370,125 L388,120 L392,135 L378,142 L362,138 Z"/>
+<path data-name="河北省" d="M330,95 L390,88 L400,140 L370,158 L325,152 L308,120 Z"/>
+<path data-name="山西省" d="M305,120 L335,115 L342,170 L312,182 L288,165 L285,138 Z"/>
+<path data-name="内モンゴル自治区" d="M220,45 L450,30 L470,95 L400,108 L330,98 L260,105 L210,90 Z"/>
+<path data-name="遼寧省" d="M390,88 L445,80 L460,118 L420,135 L385,125 Z"/>
+<path data-name="吉林省" d="M418,60 L475,52 L488,90 L448,102 L415,90 Z"/>
+<path data-name="黒竜江省" d="M388,22 L500,15 L520,62 L475,75 L420,65 L385,45 Z"/>
+<path data-name="上海市" d="M415,215 L428,210 L432,222 L420,228 Z"/>
+<path data-name="江蘇省" d="M375,175 L420,168 L428,220 L395,230 L365,218 Z"/>
+<path data-name="浙江省" d="M378,218 L418,210 L425,255 L392,268 L362,252 Z"/>
+<path data-name="安徽省" d="M338,175 L378,168 L385,225 L350,238 L318,222 Z"/>
+<path data-name="福建省" d="M375,252 L418,242 L428,288 L395,302 L362,285 Z"/>
+<path data-name="江西省" d="M335,238 L375,228 L382,278 L348,292 L318,275 Z"/>
+<path data-name="山東省" d="M355,148 L408,140 L418,178 L378,188 L345,175 Z"/>
+<path data-name="河南省" d="M308,155 L358,148 L365,198 L328,210 L295,195 Z"/>
+<path data-name="湖北省" d="M295,198 L348,190 L355,238 L315,252 L280,238 Z"/>
+<path data-name="湖南省" d="M295,240 L340,230 L348,280 L312,295 L275,278 Z"/>
+<path data-name="広東省" d="M315,292 L370,282 L378,328 L340,342 L302,325 Z"/>
+<path data-name="海南省" d="M325,348 L355,342 L358,368 L332,375 L312,362 Z"/>
+<path data-name="四川省" d="M215,175 L295,165 L305,238 L252,258 L205,238 L198,200 Z"/>
+<path data-name="貴州省" d="M245,255 L305,242 L312,288 L268,305 L232,290 Z"/>
+<path data-name="雲南省" d="M198,278 L258,262 L272,322 L228,342 L185,318 Z"/>
+<path data-name="陝西省" d="M270,128 L320,120 L330,178 L295,195 L258,178 Z"/>
+<path data-name="甘粛省" d="M168,88 L288,72 L300,128 L265,142 L178,132 Z"/>
+<path data-name="青海省" d="M128,138 L235,118 L248,188 L195,212 L118,192 Z"/>
+<path data-name="チベット自治区" d="M68,175 L205,148 L218,255 L155,285 L58,258 Z"/>
+<path data-name="広西チワン族自治区" d="M268,295 L322,282 L332,328 L292,345 L252,328 Z"/>
+<path data-name="寧夏回族自治区" d="M262,128 L302,120 L308,158 L275,168 L255,152 Z"/>
+<path data-name="新疆ウイグル自治区" d="M35,48 L188,22 L215,130 L155,162 L42,148 Z"/>
+<path data-name="香港" d="M360,330 L372,326 L375,338 L362,342 Z"/>
+<path data-name="マカオ" d="M345,335 L355,330 L357,340 L347,344 Z"/>
+<path data-name="台湾" d="M442,235 L458,228 L465,265 L450,275 L435,258 Z"/>
+</svg>`,
+ 
+world: `<svg viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
+<!-- アジア -->
+<path data-name="日本" d="M748,130 L758,120 L768,132 L762,148 L750,150 Z"/>
+<path data-name="韓国" d="M728,140 L742,135 L748,148 L738,158 L724,152 Z"/>
+<path data-name="中国" d="M620,100 L740,90 L755,170 L700,200 L620,195 L590,160 Z"/>
+<path data-name="台湾" d="M745,175 L755,170 L760,185 L750,192 Z"/>
+<path data-name="香港" d="M718,185 L728,182 L730,190 Z"/>
+<path data-name="モンゴル" d="M620,72 L742,60 L748,100 L622,108 Z"/>
+<path data-name="ベトナム" d="M688,185 L705,178 L715,220 L698,228 L682,210 Z"/>
+<path data-name="タイ" d="M665,185 L690,178 L698,218 L678,230 L658,215 Z"/>
+<path data-name="カンボジア" d="M682,210 L700,205 L705,225 L685,232 Z"/>
+<path data-name="ラオス" d="M672,178 L692,172 L698,205 L675,212 Z"/>
+<path data-name="ミャンマー" d="M645,165 L678,158 L685,200 L658,215 L638,195 Z"/>
+<path data-name="マレーシア" d="M668,228 L710,220 L715,242 L672,248 Z"/>
+<path data-name="シンガポール" d="M690,245 L698,242 L700,250 L692,252 Z"/>
+<path data-name="インドネシア" d="M680,252 L780,242 L788,272 L682,278 Z"/>
+<path data-name="フィリピン" d="M718,185 L738,178 L745,218 L722,228 Z"/>
+<path data-name="ブルネイ" d="M712,235 L722,230 L725,242 Z"/>
+<path data-name="東ティモール" d="M748,258 L762,252 L765,265 L750,268 Z"/>
+<path data-name="インド" d="M570,148 L640,138 L652,215 L608,242 L562,218 L548,175 Z"/>
+<path data-name="パキスタン" d="M530,128 L578,118 L588,165 L545,178 L518,158 Z"/>
+<path data-name="バングラデシュ" d="M638,175 L655,170 L658,192 L640,198 Z"/>
+<path data-name="スリランカ" d="M608,238 L620,232 L622,248 L610,252 Z"/>
+<path data-name="ネパール" d="M588,148 L638,140 L642,158 L590,165 Z"/>
+<path data-name="ブータン" d="M638,148 L655,144 L658,158 L640,162 Z"/>
+<path data-name="モルディブ" d="M590,252 L598,248 L600,260 Z"/>
+<path data-name="アフガニスタン" d="M505,115 L558,105 L565,142 L515,152 Z"/>
+<path data-name="イラン" d="M455,118 L515,108 L525,158 L472,172 L440,148 Z"/>
+<path data-name="イラク" d="M428,118 L465,112 L472,155 L435,165 L415,142 Z"/>
+<path data-name="サウジアラビア" d="M415,148 L485,138 L492,195 L445,212 L405,188 Z"/>
+<path data-name="UAE" d="M490,168 L515,162 L520,182 L495,188 Z"/>
+<path data-name="カタール" d="M480,168 L492,164 L495,178 L482,182 Z"/>
+<path data-name="クウェート" d="M460,148 L475,144 L478,158 L462,162 Z"/>
+<path data-name="バーレーン" d="M472,165 L480,162 L482,172 Z"/>
+<path data-name="オマーン" d="M498,162 L528,155 L535,195 L505,208 L488,185 Z"/>
+<path data-name="イエメン" d="M432,195 L498,182 L505,215 L440,225 Z"/>
+<path data-name="ヨルダン" d="M405,128 L432,122 L438,152 L408,160 Z"/>
+<path data-name="レバノン" d="M395,118 L410,114 L412,128 L397,132 Z"/>
+<path data-name="シリア" d="M395,108 L438,100 L442,128 L398,135 Z"/>
+<path data-name="イスラエル" d="M390,122 L402,118 L405,135 L392,138 Z"/>
+<path data-name="トルコ" d="M345,98 L425,88 L432,122 L350,132 Z"/>
+<path data-name="カザフスタン" d="M480,65 L618,52 L625,108 L485,118 Z"/>
+<path data-name="ウズベキスタン" d="M490,108 L545,100 L550,128 L495,135 Z"/>
+<path data-name="キルギス" d="M548,95 L595,88 L600,112 L552,118 Z"/>
+<path data-name="タジキスタン" d="M542,112 L578,105 L582,128 L545,135 Z"/>
+<path data-name="トルクメニスタン" d="M468,112 L518,105 L522,135 L472,142 Z"/>
+<path data-name="アゼルバイジャン" d="M435,98 L462,92 L465,115 L438,120 Z"/>
+<path data-name="グルジア" d="M395,88 L438,82 L440,100 L398,106 Z"/>
+<path data-name="アルメニア" d="M425,100 L445,95 L448,112 L428,118 Z"/>
+<!-- ヨーロッパ -->
+<path data-name="ロシア" d="M295,18 L720,8 L732,72 L488,82 L298,75 Z"/>
+<path data-name="ウクライナ" d="M345,88 L415,80 L420,112 L348,120 Z"/>
+<path data-name="ベラルーシ" d="M335,72 L380,65 L385,92 L338,98 Z"/>
+<path data-name="モルドバ" d="M368,108 L385,104 L388,120 L370,124 Z"/>
+<path data-name="ポーランド" d="M310,68 L355,62 L360,92 L312,98 Z"/>
+<path data-name="チェコ" d="M305,82 L340,76 L342,96 L308,102 Z"/>
+<path data-name="スロバキア" d="M328,88 L362,82 L365,100 L330,106 Z"/>
+<path data-name="ハンガリー" d="M318,98 L358,92 L360,115 L320,120 Z"/>
+<path data-name="オーストリア" d="M295,88 L330,82 L335,105 L298,110 Z"/>
+<path data-name="ドイツ" d="M278,62 L318,55 L322,95 L280,100 Z"/>
+<path data-name="スイス" d="M275,92 L305,86 L308,108 L278,112 Z"/>
+<path data-name="リヒテンシュタイン" d="M289,98 L295,95 L296,104 Z"/>
+<path data-name="フランス" d="M248,82 L292,75 L298,118 L252,125 Z"/>
+<path data-name="ベルギー" d="M255,68 L280,62 L282,82 L258,86 Z"/>
+<path data-name="オランダ" d="M255,58 L278,52 L280,72 L258,76 Z"/>
+<path data-name="ルクセンブルク" d="M268,78 L280,74 L282,86 L270,90 Z"/>
+<path data-name="デンマーク" d="M275,45 L300,38 L305,62 L278,66 Z"/>
+<path data-name="スウェーデン" d="M292,18 L328,12 L335,62 L295,68 Z"/>
+<path data-name="ノルウェー" d="M255,12 L300,5 L308,50 L258,55 Z"/>
+<path data-name="フィンランド" d="M318,15 L368,8 L372,65 L320,70 Z"/>
+<path data-name="アイスランド" d="M172,18 L215,12 L218,42 L175,48 Z"/>
+<path data-name="英国" d="M222,48 L252,42 L258,82 L225,88 Z"/>
+<path data-name="アイルランド" d="M208,52 L228,46 L232,78 L210,82 Z"/>
+<path data-name="スペイン" d="M218,108 L278,98 L285,138 L222,145 Z"/>
+<path data-name="ポルトガル" d="M205,112 L228,106 L232,142 L208,148 Z"/>
+<path data-name="イタリア" d="M285,102 L320,95 L332,148 L295,158 L278,132 Z"/>
+<path data-name="バチカン" d="M297,128 L303,125 L304,132 Z"/>
+<path data-name="サンマリノ" d="M305,118 L312,114 L313,122 Z"/>
+<path data-name="モナコ" d="M272,118 L278,114 L279,122 Z"/>
+<path data-name="ギリシャ" d="M325,118 L358,112 L365,148 L328,155 Z"/>
+<path data-name="マルタ" d="M305,158 L315,154 L317,165 L307,168 Z"/>
+<path data-name="スロベニア" d="M298,105 L318,100 L320,115 L300,120 Z"/>
+<path data-name="クロアチア" d="M308,108 L338,102 L342,128 L312,135 Z"/>
+<path data-name="ボスニア・ヘルツェゴビナ" d="M318,118 L345,112 L348,135 L320,142 Z"/>
+<path data-name="セルビア" d="M328,112 L360,106 L364,138 L330,145 Z"/>
+<path data-name="モンテネグロ" d="M322,135 L342,130 L345,148 L325,152 Z"/>
+<path data-name="北マケドニア" d="M338,138 L362,132 L365,152 L340,158 Z"/>
+<path data-name="アルバニア" d="M322,148 L342,142 L345,162 L325,168 Z"/>
+<path data-name="コソボ" d="M332,130 L348,126 L350,142 L334,146 Z"/>
+<path data-name="ルーマニア" d="M335,98 L378,90 L382,125 L338,132 Z"/>
+<path data-name="ブルガリア" d="M338,125 L380,118 L384,145 L340,152 Z"/>
+<path data-name="エストニア" d="M322,48 L355,42 L358,62 L325,68 Z"/>
+<path data-name="ラトビア" d="M320,58 L358,52 L362,72 L322,78 Z"/>
+<path data-name="リトアニア" d="M318,68 L355,62 L358,82 L320,88 Z"/>
+<path data-name="アンドラ" d="M245,118 L258,114 L260,126 Z"/>
+<!-- アフリカ -->
+<path data-name="モロッコ" d="M218,148 L268,140 L275,188 L222,198 Z"/>
+<path data-name="アルジェリア" d="M222,188 L310,175 L318,242 L225,252 Z"/>
+<path data-name="チュニジア" d="M295,148 L322,142 L328,178 L298,185 Z"/>
+<path data-name="リビア" d="M295,178 L378,168 L385,238 L298,248 Z"/>
+<path data-name="エジプト" d="M362,158 L415,150 L420,205 L365,215 Z"/>
+<path data-name="スーダン" d="M362,205 L430,195 L438,262 L365,275 Z"/>
+<path data-name="南スーダン" d="M365,262 L438,252 L445,298 L368,308 Z"/>
+<path data-name="エチオピア" d="M400,252 L468,240 L475,298 L405,312 Z"/>
+<path data-name="エリトリア" d="M410,232 L445,225 L448,252 L412,258 Z"/>
+<path data-name="ジブチ" d="M448,252 L462,248 L465,262 L450,266 Z"/>
+<path data-name="ソマリア" d="M445,248 L498,235 L505,295 L448,308 Z"/>
+<path data-name="ケニア" d="M415,295 L468,282 L475,338 L418,352 Z"/>
+<path data-name="タンザニア" d="M402,335 L465,320 L472,378 L405,392 Z"/>
+<path data-name="ウガンダ" d="M402,295 L438,285 L442,322 L405,332 Z"/>
+<path data-name="ルワンダ" d="M395,318 L412,312 L415,332 L398,336 Z"/>
+<path data-name="ブルンジ" d="M392,330 L410,324 L412,345 L395,350 Z"/>
+<path data-name="コンゴ民主共和国" d="M335,275 L415,258 L425,355 L338,368 Z"/>
+<path data-name="コンゴ共和国" d="M305,262 L345,252 L350,308 L308,318 Z"/>
+<path data-name="中央アフリカ" d="M330,228 L415,215 L420,262 L332,272 Z"/>
+<path data-name="カメルーン" d="M295,218 L338,208 L342,262 L298,272 Z"/>
+<path data-name="ナイジェリア" d="M258,205 L312,195 L318,252 L262,262 Z"/>
+<path data-name="ガーナ" d="M228,218 L262,210 L268,258 L232,268 Z"/>
+<path data-name="コートジボワール" d="M205,215 L242,208 L248,252 L208,262 Z"/>
+<path data-name="セネガル" d="M182,185 L222,178 L225,212 L185,218 Z"/>
+<path data-name="マリ" d="M198,165 L278,155 L285,215 L202,225 Z"/>
+<path data-name="ブルキナファソ" d="M228,195 L278,188 L282,218 L230,225 Z"/>
+<path data-name="ニジェール" d="M268,168 L358,158 L365,218 L270,228 Z"/>
+<path data-name="チャド" d="M330,178 L395,168 L400,245 L332,255 Z"/>
+<path data-name="ガボン" d="M295,272 L330,262 L335,308 L298,318 Z"/>
+<path data-name="赤道ギニア" d="M282,268 L302,262 L305,282 L285,288 Z"/>
+<path data-name="サントメ・プリンシペ" d="M270,278 L280,274 L282,286 Z"/>
+<path data-name="カーボベルデ" d="M165,188 L180,182 L182,200 L168,205 Z"/>
+<path data-name="モーリタニア" d="M168,168 L228,158 L232,205 L172,215 Z"/>
+<path data-name="ギニア" d="M178,205 L215,198 L218,232 L182,238 Z"/>
+<path data-name="ギニアビサウ" d="M172,205 L192,200 L195,218 L175,222 Z"/>
+<path data-name="シエラレオネ" d="M182,225 L208,218 L212,242 L185,248 Z"/>
+<path data-name="リベリア" d="M192,238 L222,230 L228,258 L195,265 Z"/>
+<path data-name="トーゴ" d="M248,205 L262,200 L265,242 L250,248 Z"/>
+<path data-name="ベナン" d="M255,198 L278,192 L282,235 L258,242 Z"/>
+<path data-name="ガンビア" d="M172,198 L198,192 L200,205 L175,208 Z"/>
+<path data-name="南アフリカ" d="M318,368 L408,355 L415,418 L322,428 Z"/>
+<path data-name="ナミビア" d="M290,342 L345,330 L350,385 L295,395 Z"/>
+<path data-name="ボツワナ" d="M322,345 L375,335 L380,385 L325,395 Z"/>
+<path data-name="ジンバブエ" d="M360,322 L412,310 L418,358 L362,368 Z"/>
+<path data-name="ザンビア" d="M340,295 L415,280 L420,335 L342,348 Z"/>
+<path data-name="モザンビーク" d="M390,318 L432,305 L440,385 L392,398 Z"/>
+<path data-name="マラウイ" d="M405,305 L422,298 L428,345 L408,352 Z"/>
+<path data-name="アンゴラ" d="M292,295 L358,280 L365,345 L295,358 Z"/>
+<path data-name="マダガスカル" d="M428,325 L448,318 L452,385 L432,392 Z"/>
+<path data-name="コモロ" d="M438,308 L450,302 L452,315 L440,320 Z"/>
+<path data-name="セーシェル" d="M475,278 L485,274 L487,285 Z"/>
+<path data-name="モーリシャス" d="M462,368 L472,362 L475,375 L464,380 Z"/>
+<path data-name="レソト" d="M348,388 L362,382 L365,398 L350,402 Z"/>
+<path data-name="エスワティニ" d="M372,375 L385,370 L388,385 L374,390 Z"/>
+<!-- 南北アメリカ -->
+<path data-name="カナダ" d="M28,18 L195,8 L205,85 L32,92 Z"/>
+<path data-name="アメリカ" d="M32,88 L205,78 L215,148 L35,158 Z"/>
+<path data-name="メキシコ" d="M35,155 L128,145 L138,195 L42,205 Z"/>
+<path data-name="グアテマラ" d="M62,192 L98,185 L102,212 L65,218 Z"/>
+<path data-name="ベリーズ" d="M90,185 L105,180 L108,205 L92,210 Z"/>
+<path data-name="ホンジュラス" d="M68,208 L108,200 L112,225 L72,232 Z"/>
+<path data-name="エルサルバドル" d="M62,218 L88,212 L92,232 L65,238 Z"/>
+<path data-name="ニカラグア" d="M72,228 L112,220 L118,252 L75,258 Z"/>
+<path data-name="コスタリカ" d="M78,252 L112,244 L118,268 L82,275 Z"/>
+<path data-name="パナマ" d="M88,268 L128,258 L135,282 L92,290 Z"/>
+<path data-name="キューバ" d="M88,175 L138,165 L145,188 L92,195 Z"/>
+<path data-name="ジャマイカ" d="M108,192 L128,186 L132,202 L112,208 Z"/>
+<path data-name="ハイチ" d="M128,185 L150,178 L155,202 L132,208 Z"/>
+<path data-name="ドミニカ共和国" d="M148,182 L172,175 L178,198 L152,205 Z"/>
+<path data-name="トリニダード・トバゴ" d="M155,215 L172,208 L175,225 L158,230 Z"/>
+<path data-name="バルバドス" d="M172,212 L182,208 L184,220 Z"/>
+<path data-name="コロンビア" d="M88,285 L155,272 L162,335 L92,345 Z"/>
+<path data-name="ベネズエラ" d="M112,258 L178,245 L185,295 L115,308 Z"/>
+<path data-name="ガイアナ" d="M162,258 L192,250 L198,295 L165,305 Z"/>
+<path data-name="スリナム" d="M182,255 L212,248 L218,292 L185,302 Z"/>
+<path data-name="ブラジル" d="M115,305 L232,285 L245,408 L118,422 Z"/>
+<path data-name="エクアドル" d="M72,318 L108,308 L115,348 L75,358 Z"/>
+<path data-name="ペルー" d="M68,340 L128,325 L138,408 L72,422 Z"/>
+<path data-name="ボリビア" d="M108,368 L165,352 L172,418 L112,432 Z"/>
+<path data-name="チリ" d="M75,388 L112,375 L125,448 L78,455 Z"/>
+<path data-name="アルゼンチン" d="M100,388 L162,372 L172,448 L105,462 Z"/>
+<path data-name="ウルグアイ" d="M142,408 L172,400 L178,428 L145,435 Z"/>
+<path data-name="パラグアイ" d="M128,375 L168,365 L175,405 L132,415 Z"/>
+<!-- オセアニア -->
+<path data-name="オーストラリア" d="M718,272 L828,258 L838,372 L722,385 Z"/>
+<path data-name="ニュージーランド" d="M818,355 L842,345 L850,398 L822,408 Z"/>
+<path data-name="パプアニューギニア" d="M748,248 L800,235 L808,275 L752,288 Z"/>
+<path data-name="フィジー" d="M828,295 L845,288 L848,308 L832,315 Z"/>
+<path data-name="ソロモン諸島" d="M798,268 L818,260 L822,282 L802,288 Z"/>
+<path data-name="バヌアツ" d="M812,298 L825,292 L828,315 L815,320 Z"/>
+<path data-name="サモア" d="M852,285 L865,278 L868,295 Z"/>
+<path data-name="トンガ" d="M858,305 L868,298 L870,315 Z"/>
+<path data-name="キリバス" d="M838,248 L858,240 L862,258 L842,265 Z"/>
+<path data-name="ミクロネシア" d="M778,218 L808,210 L812,232 L782,238 Z"/>
+<path data-name="マーシャル諸島" d="M818,212 L835,205 L838,222 L822,228 Z"/>
+<path data-name="パラオ" d="M758,225 L772,218 L775,235 L762,240 Z"/>
+<path data-name="ナウル" d="M828,248 L838,244 L840,255 Z"/>
+<path data-name="ツバル" d="M848,268 L858,262 L860,275 Z"/>
+</svg>`
+ 
+};
+// ===== 訪問記録 =====
+const JAPAN_PREFS = ['北海道','青森','岩手','宮城','秋田','山形','福島','茨城','栃木','群馬','埼玉','千葉','東京','神奈川','新潟','富山','石川','福井','山梨','長野','岐阜','静岡','愛知','三重','滋賀','京都','大阪','兵庫','奈良','和歌山','鳥取','島根','岡山','広島','山口','徳島','香川','愛媛','高知','福岡','佐賀','長崎','熊本','大分','宮崎','鹿児島','沖縄'];
+ 
+const CHINA_REGIONS = ['北京市','天津市','上海市','重慶市','河北省','山西省','遼寧省','吉林省','黒竜江省','江蘇省','浙江省','安徽省','福建省','江西省','山東省','河南省','湖北省','湖南省','広東省','海南省','四川省','貴州省','雲南省','陝西省','甘粛省','青海省','内モンゴル自治区','広西チワン族自治区','チベット自治区','寧夏回族自治区','新疆ウイグル自治区','香港','マカオ','台湾'];
+ 
+const WORLD_COUNTRIES = ['日本','韓国','中国','台湾','香港','モンゴル','ベトナム','タイ','カンボジア','ラオス','ミャンマー','マレーシア','シンガポール','インドネシア','フィリピン','ブルネイ','東ティモール','インド','パキスタン','バングラデシュ','スリランカ','ネパール','ブータン','モルディブ','アフガニスタン','イラン','イラク','サウジアラビア','UAE','カタール','クウェート','バーレーン','オマーン','イエメン','ヨルダン','レバノン','シリア','イスラエル','トルコ','カザフスタン','ウズベキスタン','キルギス','タジキスタン','トルクメニスタン','アゼルバイジャン','グルジア','アルメニア','ロシア','ウクライナ','ベラルーシ','モルドバ','ポーランド','チェコ','スロバキア','ハンガリー','オーストリア','ドイツ','スイス','リヒテンシュタイン','フランス','ベルギー','オランダ','ルクセンブルク','デンマーク','スウェーデン','ノルウェー','フィンランド','アイスランド','英国','アイルランド','スペイン','ポルトガル','イタリア','バチカン','サンマリノ','モナコ','ギリシャ','マルタ','スロベニア','クロアチア','ボスニア・ヘルツェゴビナ','セルビア','モンテネグロ','北マケドニア','アルバニア','コソボ','ルーマニア','ブルガリア','エストニア','ラトビア','リトアニア','アンドラ','モロッコ','アルジェリア','チュニジア','リビア','エジプト','スーダン','南スーダン','エチオピア','エリトリア','ジブチ','ソマリア','ケニア','タンザニア','ウガンダ','ルワンダ','ブルンジ','コンゴ民主共和国','コンゴ共和国','中央アフリカ','カメルーン','ナイジェリア','ガーナ','コートジボワール','セネガル','マリ','ブルキナファソ','ニジェール','チャド','ガボン','赤道ギニア','サントメ・プリンシペ','カーボベルデ','モーリタニア','ギニア','ギニアビサウ','シエラレオネ','リベリア','トーゴ','ベナン','ガンビア','南アフリカ','ナミビア','ボツワナ','ジンバブエ','ザンビア','モザンビーク','マラウイ','アンゴラ','マダガスカル','コモロ','セーシェル','モーリシャス','レソト','エスワティニ','カナダ','アメリカ','メキシコ','グアテマラ','ベリーズ','ホンジュラス','エルサルバドル','ニカラグア','コスタリカ','パナマ','キューバ','ジャマイカ','ハイチ','ドミニカ共和国','トリニダード・トバゴ','バルバドス','コロンビア','ベネズエラ','ガイアナ','スリナム','ブラジル','エクアドル','ペルー','ボリビア','チリ','アルゼンチン','ウルグアイ','パラグアイ','オーストラリア','ニュージーランド','パプアニューギニア','フィジー','ソロモン諸島','バヌアツ','サモア','トンガ','キリバス','ミクロネシア','マーシャル諸島','パラオ','ナウル','ツバル'];
+ 
+// visitData構造: { japan: { '北海道': 2023, '東京': 2024 }, china: {...}, world: {...} }
+let currentMode = 'bucket';
+let visitData = {};
+ 
+async function loadVisitFromFirebase() {
+  try {
+    const res = await fetch(DB_URL + '/visitData.json');
+    const data = await res.json();
+    if (data && typeof data === 'object') visitData = data;
+  } catch(e) { console.error('visitData読み込みエラー:', e); }
+}
+ 
+async function saveVisitToFirebase() {
+  try {
+    await fetch(DB_URL + '/visitData.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(visitData)
+    });
+  } catch(e) { console.error('visitData保存エラー:', e); }
+}
+ 
+function saveVisit() { saveVisitToFirebase(); }
+ 
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    if (b.textContent.includes(mode === 'bucket' ? 'バケット' : mode === 'japan' ? '都道府県' : mode === 'china' ? '中国' : '世界')) {
+      b.classList.add('active');
+    }
+  });
+  const mainEl = document.querySelector('main');
+  const visitPanel = document.getElementById('visitPanel');
+  if (mode === 'bucket') {
+    mainEl.style.display = '';
+    visitPanel.style.display = 'none';
+  } else {
+    mainEl.style.display = 'none';
+    visitPanel.style.display = 'block';
+    renderVisit(mode);
+  }
+}
+ 
+function renderVisit(mode) {
+  const titleEl = document.getElementById('visitTitle');
+  const statsEl = document.getElementById('visitStats');
+  const fillEl  = document.getElementById('visitFill');
+  const gridEl  = document.getElementById('visitGrid');
+ 
+  let list, title, key;
+  if (mode === 'japan') {
+    list = JAPAN_PREFS; title = '🗾 日本 都道府県'; key = 'japan';
+  } else if (mode === 'china') {
+    list = CHINA_REGIONS; title = '🇨🇳 中国 省・自治区・直轄市'; key = 'china';
+  } else {
+    list = WORLD_COUNTRIES; title = '🌍 世界の国々'; key = 'world';
+  }
+ 
+  const visited = visitData[key] || {};
+  const count = Object.keys(visited).length;
+  const total = list.length;
+  const pct = total ? Math.round(count / total * 100) : 0;
+ 
+  titleEl.textContent = title;
+  statsEl.textContent = `訪問済み ${count} / ${total}ヶ所　達成率 ${pct}%`;
+  fillEl.style.width = pct + '%';
+  const overlayEl = document.getElementById('mapOverlay');
+  if (overlayEl) overlayEl.innerHTML = `${count}/${total}<br>${pct}%`;
+ 
+  // 地図を表示
+  const mapEl = document.getElementById('visitMap');
+  mapEl.innerHTML = MAP_SVG[key];
+  const currentYear = new Date().getFullYear();
+  // 地図の各pathに色を適用
+  mapEl.querySelectorAll('path[data-name]').forEach(path => {
+    const name = path.getAttribute('data-name');
+    const year = visited[name];
+    if (year !== undefined) {
+      const age = currentYear - (year || currentYear);
+      const opacity = Math.max(0.4, 1 - age * 0.06);
+      path.style.fill = `rgba(139,44,100,${opacity})`;
+      path.classList.add('map-visited');
+      path.title = `${name}（${year || currentYear}年）`;
+    }
+    // 地図クリックでもトグル
+    path.addEventListener('click', () => {
+      const gridItem = [...document.querySelectorAll('.visit-item')].find(el => el.textContent.startsWith(name));
+      if (gridItem) {
+        toggleVisit(key, name, gridItem);
+        // 地図の色も更新
+        if (visitData[key] && visitData[key][name] !== undefined) {
+          const y = visitData[key][name];
+          const age2 = currentYear - (y || currentYear);
+          const op = Math.max(0.4, 1 - age2 * 0.06);
+          path.style.fill = `rgba(139,44,100,${op})`;
+          path.classList.add('map-visited');
+        } else {
+          path.style.fill = '';
+          path.classList.remove('map-visited');
+        }
+      }
+    });
+  });
+ 
+  // 年ごとに色を変える（最近=濃い緑、古い=薄い緑）
+  gridEl.innerHTML = list.map(name => {
+    const year = visited[name];
+    const isVisited = year !== undefined;
+    let style = '';
+    if (isVisited && year) {
+      const age = currentYear - year;
+      const opacity = Math.max(0.4, 1 - age * 0.06);
+      style = `style="background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;"`;
+    }
+    const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+    return `<div class="visit-item${isVisited ? ' visited' : ''}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
+  }).join('');
+}
+ 
+function toggleVisitAndMap(key, name, el) {
+  toggleVisit(key, name, el);
+}
+ 
+// 年選択ダイアログ用の一時変数
+let _yearDialogKey = '';
+let _yearDialogName = '';
+let _yearDialogEl = null;
+ 
+function showYearDialog(key, name, el) {
+  _yearDialogKey = key;
+  _yearDialogName = name;
+  _yearDialogEl = el;
+  const currentYear = new Date().getFullYear();
+  const sel = document.getElementById('yearSelect');
+  sel.innerHTML = '';
+  for (let y = currentYear; y >= 1950; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+  sel.value = currentYear;
+  document.getElementById('yearDialogTitle').textContent = `「${name}」を訪問した年`;
+  document.getElementById('yearDialog').style.display = 'flex';
+}
+ 
+function confirmYear() {
+  const year = parseInt(document.getElementById('yearSelect').value);
+  const key = _yearDialogKey;
+  const name = _yearDialogName;
+  const el = _yearDialogEl;
+  document.getElementById('yearDialog').style.display = 'none';
+ 
+  if (!visitData[key]) visitData[key] = {};
+  visitData[key][name] = year;
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - year;
+  const opacity = Math.max(0.4, 1 - age * 0.06);
+  el.classList.add('visited');
+  el.style = `background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;`;
+  let yearEl = el.querySelector('.visit-year');
+  if (!yearEl) {
+    yearEl = document.createElement('span');
+    yearEl.className = 'visit-year';
+    el.appendChild(yearEl);
+  }
+  yearEl.textContent = year;
+  saveVisit();
+  updateVisitStats(key, el);
+  // 地図も更新
+  updateMapColor(key, name, opacity);
+}
+ 
+function cancelYear() {
+  document.getElementById('yearDialog').style.display = 'none';
+}
+ 
+function updateMapColor(key, name, opacity) {
+  const mapEl = document.getElementById('visitMap');
+  if (!mapEl) return;
+  const path = mapEl.querySelector(`path[data-name="${name}"]`);
+  if (!path) return;
+  if (opacity !== null) {
+    path.style.fill = `rgba(139,44,100,${opacity})`;
+    path.classList.add('map-visited');
+  } else {
+    path.style.fill = '';
+    path.classList.remove('map-visited');
+  }
+}
+ 
+function updateVisitStats(key, el) {
+  const visited = Object.keys(visitData[key] || {}).length;
+  const grid = el.closest('.visit-grid');
+  const total = grid ? grid.children.length : 1;
+  const pct = Math.round(visited / total * 100);
+  document.getElementById('visitStats').textContent = `訪問済み ${visited} / ${total}ヶ所　達成率 ${pct}%`;
+  document.getElementById('visitFill').style.width = pct + '%';
+  const overlayEl = document.getElementById('mapOverlay');
+  if (overlayEl) overlayEl.innerHTML = `${visited}/${total}<br>${pct}%`;
+}
+ 
+function toggleVisit(key, name, el) {
+  if (!visitData[key]) visitData[key] = {};
+  if (visitData[key][name] !== undefined) {
+    // 訪問済み → 未訪問に戻す
+    delete visitData[key][name];
+    el.classList.remove('visited');
+    el.removeAttribute('style');
+    const yearEl = el.querySelector('.visit-year');
+    if (yearEl) yearEl.remove();
+    saveVisit();
+    updateVisitStats(key, el);
+    updateMapColor(key, name, null);
+  } else {
+    // 未訪問 → 年選択ダイアログを表示
+    showYearDialog(key, name, el);
+  }
+}
+ 
+let searchQuery = '';
+ 
+function doSearch(val) {
+  searchQuery = val.trim();
+  const clearBtn = document.getElementById('searchClear');
+  const countEl  = document.getElementById('searchCount');
+  if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+  if (searchQuery) {
+    render();
+    // 件数表示
+    const hits = items.filter(item =>
+      item.text.includes(searchQuery) || (item.memo || '').includes(searchQuery)
+    );
+    if (countEl) countEl.textContent = `${hits.length}件`;
+  } else {
+    if (countEl) countEl.textContent = '';
+    render();
+  }
+}
+ 
+function clearSearch() {
+  searchQuery = '';
+  const input = document.getElementById('searchInput');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById('searchClear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  const countEl = document.getElementById('searchCount');
+  if (countEl) countEl.textContent = '';
+  render();
+}
+ 
+function highlightText(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(escaped, 'gi'), match =>
+    `<span class="search-highlight">${match}</span>`
+  );
+}
  
 function setPrio(btn) {
   document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
@@ -1525,7 +2378,7 @@ function buildItemHTML(item) {
   return `<div class="item ${item.done ? 'done' : ''}" data-cat="${item.cat}" data-idx="${item._i}">
     <button class="check-btn" onclick="toggle(${item._i})">✓</button>
     <div class="item-body">
-      <div class="item-text" id="item-text-${item._i}">${item.text}</div>
+      <div class="item-text" id="item-text-${item._i}">${highlightText(item.text, searchQuery)}</div>
       <div class="item-edit-row" id="edit-row-${item._i}" style="display:none;">
         <input class="item-edit-input" id="edit-input-${item._i}" type="text" maxlength="60"
           onkeydown="if(event.key==='Enter')saveEdit(${item._i});if(event.key==='Escape')cancelEdit(${item._i})">
@@ -1596,10 +2449,18 @@ function render() {
   }
  
   const pts = { '高': 3, '中': 2, '低': 1 };
-  const mapped = items.map((item, i) => ({
+  let mapped = items.map((item, i) => ({
     ...item, urg: item.urg || '中',
     score: pts[item.prio] * pts[item.urg || '中'], _i: i
   }));
+ 
+  // 検索フィルタリング
+  if (searchQuery) {
+    mapped = mapped.filter(x =>
+      x.text.includes(searchQuery) || (x.memo || '').includes(searchQuery)
+    );
+  }
+ 
   let active, done;
   if (currentFilter === '達成済み') {
     active = [];
