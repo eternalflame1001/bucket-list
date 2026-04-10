@@ -1,3 +1,6 @@
+Bucket list firebase · HTML
+コピー
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -323,13 +326,24 @@
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
   .tab:hover:not(.active) { color: var(--ink); }
   .tab-all { font-size: 20px; padding: 2px 0 2px; }
-  .tab-stat {
-    font-size: 9px;
+  .tab-pct {
+    font-size: 10px;
     font-family: 'Zen Kaku Gothic New', sans-serif;
     color: var(--ink);
     font-weight: 700;
     letter-spacing: 0;
     line-height: 1;
+    min-height: 11px;
+  }
+  .tab.active .tab-pct { color: var(--accent); }
+  .tab-stat {
+    font-size: 10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    min-height: 11px;
   }
   .tab.active .tab-stat { color: var(--accent); }
   .tab-trash { color: #9a8f7a; }
@@ -875,14 +889,14 @@
  
   <!-- Filter tabs -->
   <div class="filter-tabs">
-    <button class="tab tab-all active" onclick="setFilter('全て', this)">📚<span class="tab-stat" id="stat-all"></span></button>
-    <button class="tab" onclick="setFilter('海外旅行', this)">🗺️<span class="tab-stat" id="stat-海外旅行"></span></button>
-    <button class="tab" onclick="setFilter('国内旅行', this)">🗾<span class="tab-stat" id="stat-国内旅行"></span></button>
-    <button class="tab" onclick="setFilter('食・グルメ', this)">🍜<span class="tab-stat" id="stat-食・グルメ"></span></button>
-    <button class="tab" onclick="setFilter('スキル・学習', this)">✏️<span class="tab-stat" id="stat-スキル・学習"></span></button>
-    <button class="tab" onclick="setFilter('人生の目標', this)">⭐<span class="tab-stat" id="stat-人生の目標"></span></button>
-    <button class="tab" onclick="setFilter('達成済み', this)">✅<span class="tab-stat" id="stat-達成済み"></span></button>
-    <button class="tab tab-trash" onclick="setFilter('ゴミ箱', this)">🗑️<span class="tab-stat" id="trashCount"></span></button>
+    <button class="tab tab-all active" onclick="setFilter('全て', this)"><span class="tab-pct" id="pct-all"></span>📚<span class="tab-stat" id="stat-all"></span></button>
+    <button class="tab" onclick="setFilter('海外旅行', this)"><span class="tab-pct" id="pct-海外旅行"></span>🌏<span class="tab-stat" id="stat-海外旅行"></span></button>
+    <button class="tab" onclick="setFilter('国内旅行', this)"><span class="tab-pct" id="pct-国内旅行"></span>🗾<span class="tab-stat" id="stat-国内旅行"></span></button>
+    <button class="tab" onclick="setFilter('食・グルメ', this)"><span class="tab-pct" id="pct-食・グルメ"></span>🍜<span class="tab-stat" id="stat-食・グルメ"></span></button>
+    <button class="tab" onclick="setFilter('スキル・学習', this)"><span class="tab-pct" id="pct-スキル・学習"></span>✏️<span class="tab-stat" id="stat-スキル・学習"></span></button>
+    <button class="tab" onclick="setFilter('人生の目標', this)"><span class="tab-pct" id="pct-人生の目標"></span>⭐<span class="tab-stat" id="stat-人生の目標"></span></button>
+    <button class="tab" onclick="setFilter('達成済み', this)"><span class="tab-pct" id="pct-達成済み"></span>✅<span class="tab-stat" id="stat-達成済み"></span></button>
+    <button class="tab tab-trash" onclick="setFilter('ゴミ箱', this)"><span class="tab-pct"></span>🗑️<span class="tab-stat" id="trashCount"></span></button>
   </div>
  
   <!-- Items -->
@@ -1479,24 +1493,30 @@ function updateStats() {
   // タブの統計を更新
   const cats = ['海外旅行', '国内旅行', '食・グルメ', 'スキル・学習', '人生の目標'];
   cats.forEach(cat => {
-    const el = document.getElementById(`stat-${cat}`);
-    if (!el) return;
+    const statEl = document.getElementById(`stat-${cat}`);
+    const pctEl  = document.getElementById(`pct-${cat}`);
+    if (!statEl) return;
     const ci = items.filter(x => x.cat === cat);
     const ct = ci.length, cd = ci.filter(x => x.done).length;
     const cp = ct ? Math.round(cd / ct * 100) : 0;
-    el.textContent = `${cd}/${ct} ${cp}%`;
+    statEl.textContent = `${cd}/${ct}`;
+    if (pctEl) pctEl.textContent = `${cp}%`;
   });
  
   // 全て
-  const allEl = document.getElementById('stat-all');
-  if (allEl) {
+  const allStat = document.getElementById('stat-all');
+  const allPct  = document.getElementById('pct-all');
+  if (allStat) {
     const pct = total ? Math.round(doneCount / total * 100) : 0;
-    allEl.textContent = `${doneCount}/${total} ${pct}%`;
+    allStat.textContent = `${doneCount}/${total}`;
+    if (allPct) allPct.textContent = `${pct}%`;
   }
  
   // 達成済み
-  const doneEl = document.getElementById('stat-達成済み');
-  if (doneEl) doneEl.textContent = `${doneCount}件`;
+  const doneStat = document.getElementById('stat-達成済み');
+  const donePct  = document.getElementById('pct-達成済み');
+  if (doneStat) doneStat.textContent = `${doneCount}件`;
+  if (donePct)  donePct.textContent = '';
 }
  
 function toFullWidth(n) {
