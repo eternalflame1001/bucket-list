@@ -2393,10 +2393,11 @@ function changeVisitYear(key, name) {
   }
   sel.value = existingYear;
   document.getElementById('yearDialogTitle').textContent = `「${name}」の訪問年を変更`;
-  // elはダミー（confirmYearで処理）
   _yearDialogEl = [...document.querySelectorAll('.visit-item')].find(e => e.textContent.startsWith(name)) || document.createElement('div');
   document.getElementById('yearDialog').style.display = 'flex';
 }
+
+function updateVisitStats(key, el) {
   const visited = Object.keys(visitData[key] || {}).length;
   const grid = el.closest('.visit-grid');
   const total = grid ? grid.children.length : 1;
