@@ -1,3 +1,6 @@
+Bucket list firebase · HTML
+コピー
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -1511,15 +1514,15 @@ function buildItemHTML(item) {
         <span class="badge badge-score score-${item.score}" title="重要度×緊急度">${toFullWidth(item.score)}</span>
         <div class="change-group">
           <span class="change-group-label">緊急度</span>
-          <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高(3)</button>
-          <button class="urg-change-btn${item.urg==='中'?' active-中':''}" data-v="中" onclick="changeUrg(${item._i},'中')">中(2)</button>
-          <button class="urg-change-btn${item.urg==='低'?' active-低':''}" data-v="低" onclick="changeUrg(${item._i},'低')">低(1)</button>
+          <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高</button>
+          <button class="urg-change-btn${item.urg==='中'?' active-中':''}" data-v="中" onclick="changeUrg(${item._i},'中')">中</button>
+          <button class="urg-change-btn${item.urg==='低'?' active-低':''}" data-v="低" onclick="changeUrg(${item._i},'低')">低</button>
         </div>
         <div class="change-group">
           <span class="change-group-label">重要度</span>
-          <button class="prio-change-btn${item.prio==='高'?' active-高':''}" data-v="高" onclick="changePrio(${item._i},'高')">高(3)</button>
-          <button class="prio-change-btn${item.prio==='中'?' active-中':''}" data-v="中" onclick="changePrio(${item._i},'中')">中(2)</button>
-          <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低(1)</button>
+          <button class="prio-change-btn${item.prio==='高'?' active-高':''}" data-v="高" onclick="changePrio(${item._i},'高')">高</button>
+          <button class="prio-change-btn${item.prio==='中'?' active-中':''}" data-v="中" onclick="changePrio(${item._i},'中')">中</button>
+          <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低</button>
         </div>
       </div>
       <div class="item-memo-row${item.memo ? ' open' : ''}" id="memo-row-${item._i}">
