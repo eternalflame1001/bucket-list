@@ -1,3 +1,6 @@
+t list firebase · HTML
+コピー
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -76,7 +79,7 @@
   }
   .header-desc {
     margin-top: 10px;
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(245,240,232,0.55);
     letter-spacing: 0.05em;
   }
@@ -153,7 +156,7 @@
   }
   .header-cat-name { display: none; }
   .header-cat-fraction {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--ink);
     font-family: 'Shippori Mincho', serif;
     white-space: nowrap;
@@ -211,7 +214,7 @@
     transition: border-color 0.2s;
   }
   input[type="text"]:focus { border-bottom-color: var(--accent); }
-  input[type="text"]::placeholder { color: var(--faded); font-size: 13px; }
+  input[type="text"]::placeholder { color: var(--faded); font-size: 12px; }
  
   .add-meta {
     display: flex;
@@ -273,7 +276,7 @@
     border: none;
     padding: 5px 16px;
     font-family: 'Shippori Mincho', serif;
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 0.1em;
     cursor: pointer;
     border-radius: 2px;
@@ -342,7 +345,7 @@
     border: none;
     color: var(--sage);
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     padding: 4px;
     line-height: 1;
     transition: color 0.15s;
@@ -416,9 +419,10 @@
     flex-wrap: wrap;
   }
   .cat-tag {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.1em;
-    color: var(--faded);
+    color: var(--ink);
+    font-weight: 700;
   }
   .prio-dot {
     width: 6px; height: 6px;
@@ -437,8 +441,8 @@
   .prio-change-btn {
     border: 1px solid var(--aged);
     background: var(--paper);
-    padding: 2px 7px;
-    font-size: 10px;
+    padding: 3px 9px;
+    font-size: 12px;
     cursor: pointer;
     border-radius: 2px;
     transition: all 0.15s;
@@ -453,8 +457,8 @@
   .urg-change-btn {
     border: 1px solid var(--aged);
     background: var(--paper);
-    padding: 2px 7px;
-    font-size: 10px;
+    padding: 3px 9px;
+    font-size: 12px;
     cursor: pointer;
     border-radius: 2px;
     transition: all 0.15s;
@@ -488,16 +492,17 @@
   .badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
  
   /* スコアバッジ：9点が最高、1点が最低 */
-  .badge-score { font-weight: 700; letter-spacing: 0.05em; }
-  .score-9 { background: rgba(139,44,10,0.18); color: #8b2c0a; border: 1px solid rgba(139,44,10,0.3); }
-  .score-6 { background: rgba(201,162,39,0.18); color: #9a7010; border: 1px solid rgba(201,162,39,0.3); }
-  .score-4 { background: rgba(90,122,90,0.15); color: #3d6e3d; border: 1px solid rgba(90,122,90,0.25); }
-  .score-3 { background: rgba(106,156,191,0.15); color: #3a6ea5; border: 1px solid rgba(106,156,191,0.25); }
-  .score-2 { background: rgba(154,143,122,0.12); color: var(--faded); border: 1px solid rgba(154,143,122,0.2); }
-  .score-1 { background: rgba(154,143,122,0.08); color: #bbb; border: 1px solid rgba(154,143,122,0.15); }
+  .badge-score { font-weight: 700; font-size: 15px; color: var(--ink); letter-spacing: 0.05em; border: 1px solid var(--aged); background: var(--paper); }
+  .score-9 { }
+  .score-6 { }
+  .score-4 { }
+  .score-3 { }
+  .score-2 { }
+  .score-1 { }
  
   .change-row {
     display: flex;
+    align-items: center;
     gap: 10px;
     margin-top: 6px;
     flex-wrap: wrap;
@@ -508,8 +513,9 @@
     gap: 4px;
   }
   .change-group-label {
-    font-size: 10px;
-    color: var(--faded);
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 700;
     letter-spacing: 0.05em;
     white-space: nowrap;
   }
@@ -576,7 +582,7 @@
     background: #f9f6f0;
     padding: 8px 10px;
     font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--ink);
     outline: none;
     resize: vertical;
@@ -1485,6 +1491,10 @@ function updateStats() {
     `</div>`;
 }
  
+function toFullWidth(n) {
+  return String(n).replace(/[0-9]/g, c => '０１２３４５６７８９'[c]);
+}
+ 
 function buildItemHTML(item) {
   return `<div class="item ${item.done ? 'done' : ''}" data-cat="${item.cat}" data-idx="${item._i}">
     <button class="check-btn" onclick="toggle(${item._i})">✓</button>
@@ -1498,7 +1508,7 @@ function buildItemHTML(item) {
       </div>
       <div class="change-row" ${item.done ? 'style="display:none"' : ''}>
         <span class="cat-tag">${item.cat}</span>
-        <span class="badge badge-score score-${item.score}" title="重要度×緊急度">スコア ${item.score}</span>
+        <span class="badge badge-score score-${item.score}" title="重要度×緊急度">${toFullWidth(item.score)}</span>
         <div class="change-group">
           <span class="change-group-label">緊急度</span>
           <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高(3)</button>
