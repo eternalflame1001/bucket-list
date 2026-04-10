@@ -285,24 +285,25 @@
   /* Filter tabs */
   .filter-tabs {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 0;
     margin-bottom: 0;
     border-bottom: 1.5px solid var(--aged);
-    overflow-x: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
     position: sticky;
     top: 0;
     background: var(--paper);
     z-index: 100;
-    padding-top: 6px;
+    padding-top: 2px;
     box-shadow: none;
+    width: 100%;
   }
   .filter-tabs::-webkit-scrollbar { display: none; }
   .tab {
-    padding: 6px 10px 4px;
-    font-size: 22px;
-    letter-spacing: 0.1em;
+    padding: 2px 2px 2px;
+    font-size: 20px;
+    letter-spacing: 0;
     cursor: pointer;
     border: none;
     background: none;
@@ -315,13 +316,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
   }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
   .tab:hover:not(.active) { color: var(--ink); }
-  .tab-all { font-size: 22px; padding: 6px 10px 4px; }
+  .tab-all { font-size: 20px; padding: 2px 2px 2px; }
   .tab-stat {
-    font-size: 10px;
+    font-size: 9px;
     font-family: 'Zen Kaku Gothic New', sans-serif;
     color: var(--ink);
     font-weight: 700;
