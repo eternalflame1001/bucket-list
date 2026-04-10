@@ -197,23 +197,24 @@
     background: white;
     border: 1px solid var(--aged);
     border-radius: 2px;
-    padding: 10px 10px;
+    padding: 6px 6px;
     box-shadow: 0 2px 12px var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    min-width: 64px;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
     position: relative;
   }
-  .search-icon { font-size: 20px; }
+  .search-icon { font-size: 16px; }
   .search-section input[type="text"] {
     width: 100%;
     border: none;
     border-bottom: 1.5px solid var(--aged);
     background: transparent;
-    padding: 2px 2px;
-    font-size: 12px;
+    padding: 2px 0;
+    font-size: 10px;
     color: var(--ink);
     outline: none;
     text-align: center;
@@ -1215,8 +1216,8 @@
 <main>
   <!-- Progress -->
   <!-- Add form + Search -->
-  <div style="display:flex; gap:8px; align-items:stretch; margin-bottom:16px; padding: 0 0px;">
-  <div class="add-section" style="margin-bottom:0; flex:1;">
+  <div style="display:flex; gap:4px; align-items:stretch; margin-bottom:16px; width:100%; box-sizing:border-box; overflow:hidden;">
+  <div class="add-section" style="margin-bottom:0; flex:4; min-width:0; overflow:hidden;">
     <div class="add-row">
       <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
       <button class="add-btn" onclick="addItem()">追加</button>
