@@ -894,6 +894,8 @@
 <div class="mode-tabs">
   <button class="mode-btn active" onclick="setMode('bucket')">📚 Bucket List</button>
   <button class="mode-btn" onclick="setMode('onsen')">🚗 国内</button>
+  <button class="mode-btn" onclick="setMode('gourmet')">🍽 グルメ</button>
+  <button class="mode-btn" onclick="setMode('ramen')">🍜 ラーメン</button>
   <button class="mode-btn" onclick="setMode('japan')">🗾 都道府県</button>
   <button class="mode-btn" onclick="setMode('china')">🇨🇳 中国</button>
   <button class="mode-btn" onclick="setMode('world')">🌍 世界</button>
@@ -1769,9 +1771,9 @@ function setMode(mode) {
   }
   mainEl.style.display = 'none';
   visitPanel.style.display = 'block';
-  // 温泉以外ではレイヤータブ非表示
+  // 国内系モードではレイヤータブ表示
   const layerTabs = document.getElementById('mapLayerTabs');
-  if (layerTabs) layerTabs.style.display = mode === 'onsen' ? 'flex' : 'none';
+  if (layerTabs) layerTabs.style.display = (mode === 'onsen' || mode === 'gourmet' || mode === 'ramen') ? 'flex' : 'none';
   renderVisit(mode);
 }
 
@@ -2333,8 +2335,10 @@ function renderVisit(mode) {
   const mapEl = document.getElementById('visitMap');
   if (mapEl) {
     mapEl.innerHTML = '<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>';
+    // gourmet/ramenは日本地図を使用
+    const mapKey = (key === 'gourmet' || key === 'ramen') ? 'onsen' : key;
     window.setTimeout(function() {
-      renderMapD3(key, visited, currentYear).catch(function(e){ console.warn('地図:', e); });
+      renderMapD3(mapKey, visited, currentYear).catch(function(e){ console.warn('地図:', e); });
     }, 50);
   }
 }
@@ -2473,7 +2477,7 @@ async function renderMapD3(key, visited, currentYear) {
       setTimeout(()=>reapplyMapColors(key,visited,currentYear),150);
     } catch(e) { console.error('世界地図エラー:',e); }
 
-  } else if (key === 'japan' || key === 'onsen') {
+  } else if (key === 'japan' || key === 'onsen' || key === 'gourmet' || key === 'ramen') {
     const h = Math.round(w*0.85);
     const svg = d3.select('#worldD3svg').attr('viewBox',`0 0 ${w} ${h}`);
     svg.selectAll('*').remove();
@@ -2513,8 +2517,7 @@ async function renderMapD3(key, visited, currentYear) {
         });
       setTimeout(()=>{
         reapplyMapColors(key,visited,currentYear);
-        if (key === 'onsen') {
-          // レイヤータブを表示
+        if (key === 'onsen' || key === 'gourmet' || key === 'ramen') {
           const layerTabs = document.getElementById('mapLayerTabs');
           if (layerTabs) layerTabs.style.display = 'flex';
           redrawDots();
