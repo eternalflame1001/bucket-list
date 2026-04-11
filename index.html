@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -18,1178 +19,1183 @@
     --shadow: rgba(26,18,9,0.15);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+- { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(139,44,10,0.06) 0%, transparent 60%);
-    padding: 0 0 60px;
-  }
+body {
+background: var(–paper);
+color: var(–ink);
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+min-height: 100vh;
+background-image:
+radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.08) 0%, transparent 60%),
+radial-gradient(ellipse at 80% 20%, rgba(139,44,10,0.06) 0%, transparent 60%);
+padding: 0 0 60px;
+}
 
-  /* Header */
-  header {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 40px 24px 32px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 30px,
-      rgba(255,255,255,0.02) 30px,
-      rgba(255,255,255,0.02) 31px
-    );
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
-  }
-  .header-sub {
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-weight: 300;
-    font-size: 11px;
-    letter-spacing: 0.4em;
-    color: var(--gold);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-  }
-  h1 {
-    font-family: 'Shippori Mincho', serif;
-    font-size: clamp(28px, 7vw, 44px);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    position: relative;
-  }
-  .header-desc {
-    margin-top: 10px;
-    font-size: 12px;
-    color: rgba(245,240,232,0.55);
-    letter-spacing: 0.05em;
-  }
+/* Header */
+header {
+background: var(–ink);
+color: var(–paper);
+padding: 40px 24px 32px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+header::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: repeating-linear-gradient(
+45deg,
+transparent,
+transparent 30px,
+rgba(255,255,255,0.02) 30px,
+rgba(255,255,255,0.02) 31px
+);
+}
+header::after {
+content: ‘’;
+position: absolute;
+bottom: 0; left: 0; right: 0;
+height: 4px;
+background: linear-gradient(90deg, var(–accent), var(–gold), var(–accent));
+}
+.header-sub {
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-weight: 300;
+font-size: 11px;
+letter-spacing: 0.4em;
+color: var(–gold);
+margin-bottom: 12px;
+text-transform: uppercase;
+}
+h1 {
+font-family: ‘Shippori Mincho’, serif;
+font-size: clamp(28px, 7vw, 44px);
+font-weight: 700;
+letter-spacing: 0.1em;
+position: relative;
+}
+.header-desc {
+margin-top: 10px;
+font-size: 12px;
+color: rgba(245,240,232,0.55);
+letter-spacing: 0.05em;
+}
 
-  /* Stats bar */
-  .stats-bar {
-    background: var(--ink);
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    padding: 14px 24px;
-    border-bottom: 1px solid rgba(201,162,39,0.3);
-  }
-  .stat {
-    text-align: center;
-    color: var(--paper);
-  }
-  .stat-num {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 22px;
-    color: var(--gold);
-    display: block;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: rgba(245,240,232,0.5);
-    margin-top: 3px;
-  }
+/* Stats bar */
+.stats-bar {
+background: var(–ink);
+display: flex;
+justify-content: center;
+gap: 32px;
+padding: 14px 24px;
+border-bottom: 1px solid rgba(201,162,39,0.3);
+}
+.stat {
+text-align: center;
+color: var(–paper);
+}
+.stat-num {
+font-family: ‘Shippori Mincho’, serif;
+font-size: 22px;
+color: var(–gold);
+display: block;
+line-height: 1;
+}
+.stat-label {
+font-size: 10px;
+letter-spacing: 0.15em;
+color: rgba(245,240,232,0.5);
+margin-top: 3px;
+}
 
-  /* Main */
-  main { max-width: 680px; margin: 0 auto; padding: 16px 0 0; }
+/* Main */
+main { max-width: 680px; margin: 0 auto; padding: 16px 0 0; }
 
-  /* ヘッダーカテゴリー別達成率 */
-  .header-cat-stats {
-    background: var(--paper);
-    border: none;
-    border-bottom: 1.5px solid var(--aged);
-    border-radius: 0;
-    padding: 6px 16px 8px;
-    margin-bottom: 16px;
-    box-shadow: 0 3px 8px rgba(26,18,9,0.08);
-    position: sticky;
-    top: 47px;
-    z-index: 99;
-  }
-  .header-cat-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 0;
-  }
-  .header-cat-item {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 4px 6px;
-    border-right: 1px solid var(--aged);
-    white-space: nowrap;
-  }
-  .header-cat-item:last-child { border-right: none; }
-  .header-cat-total {
-    border-left: 2px solid var(--aged);
-    background: rgba(139,44,100,0.08);
-  }
-  .header-cat-total .header-cat-fraction { color: #5a7a5a; }
-  .header-cat-total .header-cat-pct { color: #5a7a5a; }
-  .header-cat-top { display: contents; }
-  .header-cat-icon {
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  .header-cat-name { display: none; }
-  .header-cat-fraction {
-    font-size: 12px;
-    color: var(--ink);
-    font-family: 'Shippori Mincho', serif;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .header-cat-pct {
-    font-size: 12px;
-    color: var(--accent);
-    font-family: 'Shippori Mincho', serif;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .header-cat-bar-wrap { display: none; }
-  .header-cat-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.6s ease;
-  }
+/* ヘッダーカテゴリー別達成率 */
+.header-cat-stats {
+background: var(–paper);
+border: none;
+border-bottom: 1.5px solid var(–aged);
+border-radius: 0;
+padding: 6px 16px 8px;
+margin-bottom: 16px;
+box-shadow: 0 3px 8px rgba(26,18,9,0.08);
+position: sticky;
+top: 47px;
+z-index: 99;
+}
+.header-cat-grid {
+display: flex;
+flex-wrap: nowrap;
+gap: 0;
+}
+.header-cat-item {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+padding: 4px 6px;
+border-right: 1px solid var(–aged);
+white-space: nowrap;
+}
+.header-cat-item:last-child { border-right: none; }
+.header-cat-total {
+border-left: 2px solid var(–aged);
+background: rgba(139,44,100,0.08);
+}
+.header-cat-total .header-cat-fraction { color: #5a7a5a; }
+.header-cat-total .header-cat-pct { color: #5a7a5a; }
+.header-cat-top { display: contents; }
+.header-cat-icon {
+font-size: 14px;
+flex-shrink: 0;
+}
+.header-cat-name { display: none; }
+.header-cat-fraction {
+font-size: 12px;
+color: var(–ink);
+font-family: ‘Shippori Mincho’, serif;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.header-cat-pct {
+font-size: 12px;
+color: var(–accent);
+font-family: ‘Shippori Mincho’, serif;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.header-cat-bar-wrap { display: none; }
+.header-cat-bar-fill {
+height: 100%;
+border-radius: 2px;
+transition: width 0.6s ease;
+}
 
-  /* Add form */
-  .add-section {
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    padding: 12px 8px 10px;
-    box-shadow: 0 2px 12px var(--shadow);
-    position: relative;
-  }
-  .add-section::before {
-    content: '+ 追加';
-    position: absolute;
-    top: -11px; left: 10px;
-    background: white;
-    padding: 0 6px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--faded);
-  }
-  .search-section {
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    padding: 6px 6px;
-    box-shadow: 0 2px 12px var(--shadow);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-    min-width: 0;
-    position: relative;
-  }
-  .search-icon { font-size: 16px; }
-  .search-section input[type="text"] {
-    width: 100%;
-    border: none;
-    border-bottom: 1.5px solid var(--aged);
-    background: transparent;
-    padding: 2px 0;
-    font-size: 10px;
-    color: var(--ink);
-    outline: none;
-    text-align: center;
-  }
-  .search-section input[type="text"]:focus { border-bottom-color: var(--accent); }
-  .search-section input[type="text"]::placeholder { color: var(--faded); font-size: 11px; }
-  .search-clear {
-    background: none;
-    border: none;
-    color: var(--faded);
-    cursor: pointer;
-    font-size: 12px;
-    padding: 0;
-  }
-  .search-clear:hover { color: var(--accent); }
-  .search-count {
-    font-size: 10px;
-    color: var(--accent);
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .search-highlight {
-    background: rgba(201,162,39,0.3);
-    border-radius: 2px;
-  }
-  .add-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  input[type="text"] {
-    flex: 1;
-    border: none;
-    border-bottom: 1.5px solid var(--aged);
-    background: transparent;
-    padding: 4px 4px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input[type="text"]:focus { border-bottom-color: var(--accent); }
-  input[type="text"]::placeholder { color: var(--faded); font-size: 12px; }
+/* Add form */
+.add-section {
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+padding: 12px 8px 10px;
+box-shadow: 0 2px 12px var(–shadow);
+position: relative;
+}
+.add-section::before {
+content: ‘+ 追加’;
+position: absolute;
+top: -11px; left: 10px;
+background: white;
+padding: 0 6px;
+font-size: 11px;
+letter-spacing: 0.1em;
+color: var(–faded);
+}
+.search-section {
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+padding: 6px 6px;
+box-shadow: 0 2px 12px var(–shadow);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+flex: 1;
+min-width: 0;
+position: relative;
+}
+.search-icon { font-size: 16px; }
+.search-section input[type=“text”] {
+width: 100%;
+border: none;
+border-bottom: 1.5px solid var(–aged);
+background: transparent;
+padding: 2px 0;
+font-size: 10px;
+color: var(–ink);
+outline: none;
+text-align: center;
+}
+.search-section input[type=“text”]:focus { border-bottom-color: var(–accent); }
+.search-section input[type=“text”]::placeholder { color: var(–faded); font-size: 11px; }
+.search-clear {
+background: none;
+border: none;
+color: var(–faded);
+cursor: pointer;
+font-size: 12px;
+padding: 0;
+}
+.search-clear:hover { color: var(–accent); }
+.search-count {
+font-size: 10px;
+color: var(–accent);
+font-weight: 700;
+white-space: nowrap;
+}
+.search-highlight {
+background: rgba(201,162,39,0.3);
+border-radius: 2px;
+}
+.add-row {
+display: flex;
+gap: 8px;
+margin-bottom: 6px;
+}
+input[type=“text”] {
+flex: 1;
+border: none;
+border-bottom: 1.5px solid var(–aged);
+background: transparent;
+padding: 4px 4px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-size: 14px;
+color: var(–ink);
+outline: none;
+transition: border-color 0.2s;
+}
+input[type=“text”]:focus { border-bottom-color: var(–accent); }
+input[type=“text”]::placeholder { color: var(–faded); font-size: 12px; }
 
-  .add-meta {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  select {
-    border: 1px solid var(--aged);
-    background: var(--paper);
-    padding: 4px 8px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 12px;
-    color: var(--ink);
-    border-radius: 2px;
-    outline: none;
-    cursor: pointer;
-    flex: 1;
-  }
-  .priority-btns { display: flex; gap: 4px; }
-  .prio-btn {
-    border: 1px solid var(--aged);
-    background: var(--paper);
-    padding: 3px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    color: var(--faded);
-  }
-  .prio-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.add-meta {
+display: flex;
+gap: 8px;
+align-items: center;
+}
+select {
+border: 1px solid var(–aged);
+background: var(–paper);
+padding: 4px 8px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-size: 12px;
+color: var(–ink);
+border-radius: 2px;
+outline: none;
+cursor: pointer;
+flex: 1;
+}
+.priority-btns { display: flex; gap: 4px; }
+.prio-btn {
+border: 1px solid var(–aged);
+background: var(–paper);
+padding: 3px 8px;
+font-size: 11px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+color: var(–faded);
+}
+.prio-btn.active { background: var(–accent); color: white; border-color: var(–accent); }
 
-  .add-meta-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 5px;
-  }
-  .meta-label {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--faded);
-    white-space: nowrap;
-  }
-  .urg-btn {
-    border: 1px solid var(--aged);
-    background: var(--paper);
-    padding: 3px 8px;
-    font-size: 11px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    color: var(--faded);
-  }
-  .urg-btn.active { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+.add-meta-row {
+display: flex;
+gap: 8px;
+align-items: center;
+margin-top: 5px;
+}
+.meta-label {
+font-size: 11px;
+letter-spacing: 0.1em;
+color: var(–faded);
+white-space: nowrap;
+}
+.urg-btn {
+border: 1px solid var(–aged);
+background: var(–paper);
+padding: 3px 8px;
+font-size: 11px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+color: var(–faded);
+}
+.urg-btn.active { background: #8b2c0a; color: white; border-color: #8b2c0a; }
 
-  .add-btn {
-    background: var(--ink);
-    color: var(--gold);
-    border: none;
-    padding: 5px 16px;
-    font-family: 'Shippori Mincho', serif;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .add-btn:hover { background: var(--accent); color: white; }
+.add-btn {
+background: var(–ink);
+color: var(–gold);
+border: none;
+padding: 5px 10px;
+font-family: ‘Shippori Mincho’, serif;
+font-size: 11px;
+letter-spacing: 0.05em;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.2s;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.add-btn:hover { background: var(–accent); color: white; }
 
-  /* Filter tabs */
-  .filter-tabs {
-    display: flex;
-    justify-content: space-between;
-    gap: 0;
-    margin-bottom: 0;
-    border-bottom: 1.5px solid var(--aged);
-    overflow-x: hidden;
-    scrollbar-width: none;
-    position: sticky;
-    top: 0;
-    background: var(--paper);
-    z-index: 100;
-    padding: 2px 0 0 0;
-    box-shadow: none;
-    width: 100%;
-  }
-  .filter-tabs::-webkit-scrollbar { display: none; }
-  .tab {
-    padding: 2px 0 2px;
-    font-size: 20px;
-    letter-spacing: 0;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: var(--faded);
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1.5px;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1px;
-    flex: 1;
-    min-width: 0;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
-  .tab:hover:not(.active) { color: var(--ink); }
-  .tab-all { font-size: 20px; padding: 2px 0 2px; }
-  .tab-pct {
-    font-size: 10px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    color: var(--ink);
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1;
-    min-height: 11px;
-  }
-  .tab.active .tab-pct { color: var(--accent); }
-  .tab-stat {
-    font-size: 10px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    color: var(--ink);
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1;
-    min-height: 11px;
-  }
-  .tab.active .tab-stat { color: var(--accent); }
-  .tab-trash { color: #9a8f7a; }
-  .tab-trash.active { color: #8b2c0a; border-bottom-color: #8b2c0a; }
+/* Filter tabs */
+.filter-tabs {
+display: flex;
+justify-content: space-between;
+gap: 0;
+margin-bottom: 0;
+border-bottom: 1.5px solid var(–aged);
+overflow-x: hidden;
+scrollbar-width: none;
+position: sticky;
+top: 0;
+background: var(–paper);
+z-index: 100;
+padding: 2px 0 0 0;
+box-shadow: none;
+width: 100%;
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.tab {
+padding: 2px 0 2px;
+font-size: 20px;
+letter-spacing: 0;
+cursor: pointer;
+border: none;
+background: none;
+color: var(–faded);
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+white-space: nowrap;
+border-bottom: 2px solid transparent;
+margin-bottom: -1.5px;
+transition: all 0.2s;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 1px;
+flex: 1;
+min-width: 0;
+}
+.tab.active { color: var(–accent); border-bottom-color: var(–accent); font-weight: 700; }
+.tab:hover:not(.active) { color: var(–ink); }
+.tab-all { font-size: 20px; padding: 2px 0 2px; }
+.tab-pct {
+font-size: 10px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+color: var(–ink);
+font-weight: 700;
+letter-spacing: 0;
+line-height: 1;
+min-height: 11px;
+}
+.tab.active .tab-pct { color: var(–accent); }
+.tab-stat {
+font-size: 10px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+color: var(–ink);
+font-weight: 700;
+letter-spacing: 0;
+line-height: 1;
+min-height: 11px;
+}
+.tab.active .tab-stat { color: var(–accent); }
+.tab-trash { color: #9a8f7a; }
+.tab-trash.active { color: #8b2c0a; border-bottom-color: #8b2c0a; }
 
-  /* ゴミ箱を空にするボタン */
-  .trash-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 12px;
-  }
-  .empty-trash-btn {
-    background: none;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 5px 14px;
-    font-size: 12px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-  }
-  .empty-trash-btn:hover { background: var(--accent); color: white; }
-  .restore-btn {
-    background: none;
-    border: none;
-    color: var(--sage);
-    cursor: pointer;
-    font-size: 12px;
-    padding: 4px;
-    line-height: 1;
-    transition: color 0.15s;
-    flex-shrink: 0;
-  }
-  .restore-btn:hover { color: #2a5a2a; }
-  .item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
+/* ゴミ箱を空にするボタン */
+.trash-actions {
+display: flex;
+justify-content: flex-end;
+margin-bottom: 12px;
+}
+.empty-trash-btn {
+background: none;
+border: 1px solid var(–accent);
+color: var(–accent);
+padding: 5px 14px;
+font-size: 12px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+letter-spacing: 0.05em;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.2s;
+}
+.empty-trash-btn:hover { background: var(–accent); color: white; }
+.restore-btn {
+background: none;
+border: none;
+color: var(–sage);
+cursor: pointer;
+font-size: 12px;
+padding: 4px;
+line-height: 1;
+transition: color 0.15s;
+flex-shrink: 0;
+}
+.restore-btn:hover { color: #2a5a2a; }
+.item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
 
-  /* Items */
-  .items-list { display: flex; flex-direction: column; gap: 10px; padding: 0 4px; }
+/* Items */
+.items-list { display: flex; flex-direction: column; gap: 10px; padding: 0 4px; }
 
-  .item {
-    background: white;
-    border: 1px solid var(--aged);
-    border-left: 3px solid var(--aged);
-    border-radius: 2px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 1px 4px var(--shadow);
-    transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
-  }
-  /* アニメーションなし */
-  .item:hover { box-shadow: 0 3px 12px var(--shadow); transform: translateY(-1px); }
-  .item.done {
-    background: var(--paper);
-    border-left-color: var(--sage);
-    opacity: 0.75;
-  }
-  .item.done .item-text { color: var(--faded); }
+.item {
+background: white;
+border: 1px solid var(–aged);
+border-left: 3px solid var(–aged);
+border-radius: 2px;
+padding: 14px 16px;
+display: flex;
+align-items: center;
+gap: 12px;
+box-shadow: 0 1px 4px var(–shadow);
+transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
+}
+/* アニメーションなし */
+.item:hover { box-shadow: 0 3px 12px var(–shadow); transform: translateY(-1px); }
+.item.done {
+background: var(–paper);
+border-left-color: var(–sage);
+opacity: 0.75;
+}
+.item.done .item-text { color: var(–faded); }
 
-  .item[data-cat="海外旅行"] { border-left-color: #5b8db8; }
-  .item[data-cat="国内旅行"] { border-left-color: #3a9e7a; }
-  .item[data-cat="食・グルメ"] { border-left-color: #c87941; }
-  .item[data-cat="スキル・学習"] { border-left-color: #7a5bb8; }
-  .item[data-cat="人生の目標"] { border-left-color: var(--accent); }
-  .item.done { border-left-color: var(--sage) !important; }
+.item[data-cat=“海外旅行”] { border-left-color: #5b8db8; }
+.item[data-cat=“国内旅行”] { border-left-color: #3a9e7a; }
+.item[data-cat=“食・グルメ”] { border-left-color: #c87941; }
+.item[data-cat=“スキル・学習”] { border-left-color: #7a5bb8; }
+.item[data-cat=“人生の目標”] { border-left-color: var(–accent); }
+.item.done { border-left-color: var(–sage) !important; }
 
-  .check-btn {
-    width: 24px; height: 24px;
-    border: 1.5px solid var(--aged);
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    color: transparent;
-    font-size: 12px;
-  }
-  .item.done .check-btn {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: white;
-  }
-  .check-btn:hover { border-color: var(--sage); }
+.check-btn {
+width: 24px; height: 24px;
+border: 1.5px solid var(–aged);
+border-radius: 50%;
+background: none;
+cursor: pointer;
+flex-shrink: 0;
+display: flex; align-items: center; justify-content: center;
+transition: all 0.2s;
+color: transparent;
+font-size: 12px;
+}
+.item.done .check-btn {
+background: var(–sage);
+border-color: var(–sage);
+color: white;
+}
+.check-btn:hover { border-color: var(–sage); }
 
-  .item-body { flex: 1; min-width: 0; }
-  .item-text {
-    font-size: 19px;
-    line-height: 1.4;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-weight: 700;
-  }
-  .item-meta {
-    display: flex;
-    gap: 8px;
-    margin-top: 4px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .cat-tag {
-    font-size: 10px;
-    letter-spacing: 0;
-    color: var(--ink);
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .prio-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .prio-dot.高 { background: var(--accent); }
-  .prio-dot.中 { background: var(--gold); }
-  .prio-dot.低 { background: var(--faded); }
+.item-body { flex: 1; min-width: 0; }
+.item-text {
+font-size: 19px;
+line-height: 1.4;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-weight: 700;
+}
+.item-meta {
+display: flex;
+gap: 8px;
+margin-top: 4px;
+align-items: center;
+flex-wrap: wrap;
+}
+.cat-tag {
+font-size: 10px;
+letter-spacing: 0;
+color: var(–ink);
+font-weight: 700;
+white-space: nowrap;
+}
+.prio-dot {
+width: 6px; height: 6px;
+border-radius: 50%;
+flex-shrink: 0;
+}
+.prio-dot.高 { background: var(–accent); }
+.prio-dot.中 { background: var(–gold); }
+.prio-dot.低 { background: var(–faded); }
 
-  .prio-change-btns {
-    display: flex;
-    gap: 3px;
-    margin-top: 5px;
-  }
-  .prio-change-btn {
-    border: 1px solid var(--aged);
-    background: var(--paper);
-    padding: 2px 4px;
-    font-size: 10px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    color: var(--faded);
-    letter-spacing: 0;
-    white-space: nowrap;
-  }
-  .prio-change-btn:hover { background: var(--aged); color: var(--ink); }
-  .prio-change-btn.active-高 { background: var(--accent); color: white; border-color: var(--accent); }
-  .prio-change-btn.active-中 { background: var(--gold); color: white; border-color: var(--gold); }
-  .prio-change-btn.active-低 { background: var(--faded); color: white; border-color: var(--faded); }
+.prio-change-btns {
+display: flex;
+gap: 3px;
+margin-top: 5px;
+}
+.prio-change-btn {
+border: 1px solid var(–aged);
+background: var(–paper);
+padding: 2px 4px;
+font-size: 10px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+color: var(–faded);
+letter-spacing: 0;
+white-space: nowrap;
+}
+.prio-change-btn:hover { background: var(–aged); color: var(–ink); }
+.prio-change-btn.active-高 { background: var(–accent); color: white; border-color: var(–accent); }
+.prio-change-btn.active-中 { background: var(–gold); color: white; border-color: var(–gold); }
+.prio-change-btn.active-低 { background: var(–faded); color: white; border-color: var(–faded); }
 
-  .urg-change-btn {
-    border: 1px solid var(--aged);
-    background: var(--paper);
-    padding: 2px 4px;
-    font-size: 10px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    color: var(--faded);
-    letter-spacing: 0;
-    white-space: nowrap;
-  }
-  .urg-change-btn:hover { background: var(--aged); color: var(--ink); }
-  .urg-change-btn.active-高 { background: #8b2c0a; color: white; border-color: #8b2c0a; }
-  .urg-change-btn.active-中 { background: #b84a20; color: white; border-color: #b84a20; }
-  .urg-change-btn.active-低 { background: #c8907a; color: white; border-color: #c8907a; }
+.urg-change-btn {
+border: 1px solid var(–aged);
+background: var(–paper);
+padding: 2px 4px;
+font-size: 10px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+color: var(–faded);
+letter-spacing: 0;
+white-space: nowrap;
+}
+.urg-change-btn:hover { background: var(–aged); color: var(–ink); }
+.urg-change-btn.active-高 { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+.urg-change-btn.active-中 { background: #b84a20; color: white; border-color: #b84a20; }
+.urg-change-btn.active-低 { background: #c8907a; color: white; border-color: #c8907a; }
 
-  .item-badges {
-    display: flex;
-    gap: 5px;
-    margin-top: 4px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .badge {
-    font-size: 9px;
-    padding: 1px 6px;
-    border-radius: 2px;
-    letter-spacing: 0.08em;
-    font-weight: 700;
-  }
-  .badge-prio-高 { background: rgba(139,44,10,0.12); color: var(--accent); }
-  .badge-prio-中 { background: rgba(201,162,39,0.15); color: #a07a10; }
-  .badge-prio-低 { background: rgba(154,143,122,0.15); color: var(--faded); }
-  .badge-urg-高  { background: rgba(139,44,10,0.15); color: #8b2c0a; }
-  .badge-urg-中  { background: rgba(200,100,60,0.13); color: #b84a20; }
-  .badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
+.item-badges {
+display: flex;
+gap: 5px;
+margin-top: 4px;
+align-items: center;
+flex-wrap: wrap;
+}
+.badge {
+font-size: 9px;
+padding: 1px 6px;
+border-radius: 2px;
+letter-spacing: 0.08em;
+font-weight: 700;
+}
+.badge-prio-高 { background: rgba(139,44,10,0.12); color: var(–accent); }
+.badge-prio-中 { background: rgba(201,162,39,0.15); color: #a07a10; }
+.badge-prio-低 { background: rgba(154,143,122,0.15); color: var(–faded); }
+.badge-urg-高  { background: rgba(139,44,10,0.15); color: #8b2c0a; }
+.badge-urg-中  { background: rgba(200,100,60,0.13); color: #b84a20; }
+.badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
 
-  /* スコアバッジ：9点が最高、1点が最低 */
-  .badge-score { font-weight: 700; font-size: 12px; color: var(--ink); letter-spacing: 0; border: 1px solid var(--aged); background: var(--paper); white-space: nowrap; }
-  .score-9 { }
-  .score-6 { }
-  .score-4 { }
-  .score-3 { }
-  .score-2 { }
-  .score-1 { }
+/* スコアバッジ：9点が最高、1点が最低 */
+.badge-score { font-weight: 700; font-size: 12px; color: var(–ink); letter-spacing: 0; border: 1px solid var(–aged); background: var(–paper); white-space: nowrap; }
+.score-9 { }
+.score-6 { }
+.score-4 { }
+.score-3 { }
+.score-2 { }
+.score-1 { }
 
-  .change-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 6px;
-    flex-wrap: nowrap;
-  }
-  .change-group {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .change-group-label {
-    font-size: 10px;
-    color: var(--ink);
-    font-weight: 700;
-    letter-spacing: 0;
-    white-space: nowrap;
-  }
-    white-space: nowrap;
-  }
+.change-row {
+display: flex;
+align-items: center;
+gap: 4px;
+margin-top: 6px;
+flex-wrap: nowrap;
+}
+.change-group {
+display: flex;
+align-items: center;
+gap: 4px;
+}
+.change-group-label {
+font-size: 10px;
+color: var(–ink);
+font-weight: 700;
+letter-spacing: 0;
+white-space: nowrap;
+}
+white-space: nowrap;
+}
 
-  .delete-btn {
-    background: none;
-    border: 1px solid var(--aged);
-    border-radius: 4px;
-    color: var(--faded);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px 8px;
-    line-height: 1;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .delete-btn:hover { color: white; background: var(--accent); border-color: var(--accent); }
+.delete-btn {
+background: none;
+border: 1px solid var(–aged);
+border-radius: 4px;
+color: var(–faded);
+cursor: pointer;
+font-size: 14px;
+padding: 4px 8px;
+line-height: 1;
+transition: all 0.15s;
+flex-shrink: 0;
+}
+.delete-btn:hover { color: white; background: var(–accent); border-color: var(–accent); }
 
-  .edit-btn {
-    background: none;
-    border: 1px solid var(--aged);
-    border-radius: 4px;
-    color: var(--faded);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px 8px;
-    line-height: 1;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .edit-btn:hover { color: white; background: var(--gold); border-color: var(--gold); }
+.edit-btn {
+background: none;
+border: 1px solid var(–aged);
+border-radius: 4px;
+color: var(–faded);
+cursor: pointer;
+font-size: 14px;
+padding: 4px 8px;
+line-height: 1;
+transition: all 0.15s;
+flex-shrink: 0;
+}
+.edit-btn:hover { color: white; background: var(–gold); border-color: var(–gold); }
 
-  .detail-btn {
-    background: none;
-    border: 1px solid var(--aged);
-    border-radius: 4px;
-    color: var(--faded);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px 8px;
-    line-height: 1;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
-  .detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+.detail-btn {
+background: none;
+border: 1px solid var(–aged);
+border-radius: 4px;
+color: var(–faded);
+cursor: pointer;
+font-size: 14px;
+padding: 4px 8px;
+line-height: 1;
+transition: all 0.15s;
+flex-shrink: 0;
+}
+.detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+.detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
 
-  .item-btn-col {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex-shrink: 0;
-  }
+.item-btn-col {
+display: flex;
+flex-direction: column;
+gap: 4px;
+flex-shrink: 0;
+}
 
-  .item-memo-row {
-    margin-top: 8px;
-    display: none;
-  }
-  .item-memo-row.open { display: block; }
-  .item-memo-textarea {
-    width: 100%;
-    border: 1px solid var(--aged);
-    border-radius: 4px;
-    background: #f9f6f0;
-    padding: 8px 10px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 12px;
-    color: var(--ink);
-    outline: none;
-    resize: vertical;
-    min-height: 80px;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-  }
-  .item-memo-textarea:focus { border-color: #3a6ea5; }
-  .item-memo-textarea::placeholder { color: var(--faded); }
-  .item-memo-save {
-    background: #3a6ea5;
-    color: white;
-    border: none;
-    padding: 4px 14px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 2px;
-    margin-top: 5px;
-    transition: all 0.15s;
-  }
-  .item-memo-save:hover { background: #2a5a8a; }
-  .item-memo-preview {
-    font-size: 12px;
-    color: #3a6ea5;
-    margin-top: 4px;
-    white-space: pre-wrap;
-    line-height: 1.5;
-    background: #f0f4fa;
-    padding: 6px 10px;
-    border-radius: 4px;
-    border-left: 3px solid #3a6ea5;
-  }
+.item-memo-row {
+margin-top: 8px;
+display: none;
+}
+.item-memo-row.open { display: block; }
+.item-memo-textarea {
+width: 100%;
+border: 1px solid var(–aged);
+border-radius: 4px;
+background: #f9f6f0;
+padding: 8px 10px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-size: 12px;
+color: var(–ink);
+outline: none;
+resize: vertical;
+min-height: 80px;
+transition: border-color 0.2s;
+box-sizing: border-box;
+}
+.item-memo-textarea:focus { border-color: #3a6ea5; }
+.item-memo-textarea::placeholder { color: var(–faded); }
+.item-memo-save {
+background: #3a6ea5;
+color: white;
+border: none;
+padding: 4px 14px;
+font-size: 12px;
+cursor: pointer;
+border-radius: 2px;
+margin-top: 5px;
+transition: all 0.15s;
+}
+.item-memo-save:hover { background: #2a5a8a; }
+.item-memo-preview {
+font-size: 12px;
+color: #3a6ea5;
+margin-top: 4px;
+white-space: pre-wrap;
+line-height: 1.5;
+background: #f0f4fa;
+padding: 6px 10px;
+border-radius: 4px;
+border-left: 3px solid #3a6ea5;
+}
 
-  .item-edit-row {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-    align-items: center;
-  }
-  .item-edit-input {
-    flex: 1;
-    border: none;
-    border-bottom: 1.5px solid var(--gold);
-    background: transparent;
-    padding: 4px 4px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-  }
-  .item-edit-save {
-    background: var(--ink);
-    color: var(--gold);
-    border: none;
-    padding: 4px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .item-edit-save:hover { background: var(--sage); color: white; }
-  .item-edit-cancel {
-    background: none;
-    border: 1px solid var(--aged);
-    color: var(--faded);
-    padding: 4px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-  }
-  .item-edit-cancel:hover { color: var(--ink); border-color: var(--ink); }
+.item-edit-row {
+display: flex;
+gap: 6px;
+margin-top: 8px;
+align-items: center;
+}
+.item-edit-input {
+flex: 1;
+border: none;
+border-bottom: 1.5px solid var(–gold);
+background: transparent;
+padding: 4px 4px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-size: 14px;
+color: var(–ink);
+outline: none;
+}
+.item-edit-save {
+background: var(–ink);
+color: var(–gold);
+border: none;
+padding: 4px 12px;
+font-size: 12px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+white-space: nowrap;
+}
+.item-edit-save:hover { background: var(–sage); color: white; }
+.item-edit-cancel {
+background: none;
+border: 1px solid var(–aged);
+color: var(–faded);
+padding: 4px 10px;
+font-size: 12px;
+cursor: pointer;
+border-radius: 2px;
+transition: all 0.15s;
+}
+.item-edit-cancel:hover { color: var(–ink); border-color: var(–ink); }
 
-  /* Progress */
-  .progress-section { margin-bottom: 24px; }
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--faded);
-    margin-bottom: 6px;
-  }
-  .progress-bar {
-    height: 4px;
-    background: var(--aged);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--sage), var(--gold));
-    border-radius: 2px;
-    transition: width 0.5s ease;
-  }
+/* Progress */
+.progress-section { margin-bottom: 24px; }
+.progress-label {
+display: flex;
+justify-content: space-between;
+font-size: 11px;
+letter-spacing: 0.1em;
+color: var(–faded);
+margin-bottom: 6px;
+}
+.progress-bar {
+height: 4px;
+background: var(–aged);
+border-radius: 2px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, var(–sage), var(–gold));
+border-radius: 2px;
+transition: width 0.5s ease;
+}
 
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 48px 24px;
-    color: var(--faded);
-  }
-  .empty-icon { font-size: 40px; margin-bottom: 12px; }
-  .empty-text { font-family: 'Shippori Mincho', serif; font-size: 16px; }
-  .empty-sub { font-size: 12px; margin-top: 6px; letter-spacing: 0.05em; }
+/* Empty state */
+.empty {
+text-align: center;
+padding: 48px 24px;
+color: var(–faded);
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-family: ‘Shippori Mincho’, serif; font-size: 16px; }
+.empty-sub { font-size: 12px; margin-top: 6px; letter-spacing: 0.05em; }
 
-  /* カテゴリー別達成率 */
-  .cat-stats {
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 4px var(--shadow);
-  }
-  .cat-stats-title {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--faded);
-    margin-bottom: 10px;
-  }
-  .cat-stat-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .cat-stat-row:last-child { margin-bottom: 0; }
-  .cat-stat-label {
-    font-size: 11px;
-    color: var(--ink);
-    width: 90px;
-    flex-shrink: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .cat-stat-bar-wrap {
-    flex: 1;
-    height: 6px;
-    background: var(--aged);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .cat-stat-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.6s ease;
-  }
-  .cat-stat-count {
-    font-size: 11px;
-    color: var(--faded);
-    white-space: nowrap;
-    width: 60px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .cat-stat-pct {
-    font-size: 11px;
-    font-family: 'Shippori Mincho', serif;
-    color: var(--ink);
-    width: 36px;
-    text-align: right;
-    flex-shrink: 0;
-  }
+/* カテゴリー別達成率 */
+.cat-stats {
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+padding: 14px 16px;
+margin-bottom: 20px;
+box-shadow: 0 1px 4px var(–shadow);
+}
+.cat-stats-title {
+font-size: 10px;
+letter-spacing: 0.2em;
+color: var(–faded);
+margin-bottom: 10px;
+}
+.cat-stat-row {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 8px;
+}
+.cat-stat-row:last-child { margin-bottom: 0; }
+.cat-stat-label {
+font-size: 11px;
+color: var(–ink);
+width: 90px;
+flex-shrink: 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.cat-stat-bar-wrap {
+flex: 1;
+height: 6px;
+background: var(–aged);
+border-radius: 3px;
+overflow: hidden;
+}
+.cat-stat-bar-fill {
+height: 100%;
+border-radius: 3px;
+transition: width 0.6s ease;
+}
+.cat-stat-count {
+font-size: 11px;
+color: var(–faded);
+white-space: nowrap;
+width: 60px;
+text-align: right;
+flex-shrink: 0;
+}
+.cat-stat-pct {
+font-size: 11px;
+font-family: ‘Shippori Mincho’, serif;
+color: var(–ink);
+width: 36px;
+text-align: right;
+flex-shrink: 0;
+}
 
-  /* Confetti */
-  .confetti-piece {
-    position: fixed;
-    width: 8px; height: 8px;
-    pointer-events: none;
-    animation: confettiFall 1.5s ease-in forwards;
-    z-index: 9999;
-    border-radius: 1px;
-  }
-  @keyframes confettiFall {
-    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
+/* Confetti */
+.confetti-piece {
+position: fixed;
+width: 8px; height: 8px;
+pointer-events: none;
+animation: confettiFall 1.5s ease-in forwards;
+z-index: 9999;
+border-radius: 1px;
+}
+@keyframes confettiFall {
+0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
 
-  /* モード切り替えバー */
-  .mode-bar {
-    background: var(--ink);
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    border-top: 1px solid rgba(201,162,39,0.2);
-  }
-  .mode-btn {
-    flex: 1;
-    background: none;
-    border: none;
-    color: rgba(245,240,232,0.5);
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 11px;
-    padding: 8px 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-  }
-  .mode-btn.active {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-    font-weight: 700;
-  }
-  .mode-btn:hover:not(.active) { color: var(--paper); }
+/* モード切り替えバー */
+.mode-bar {
+background: var(–ink);
+display: flex;
+justify-content: center;
+gap: 0;
+border-top: 1px solid rgba(201,162,39,0.2);
+}
+.mode-btn {
+flex: 1;
+background: none;
+border: none;
+color: rgba(245,240,232,0.5);
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+font-size: 11px;
+padding: 8px 4px;
+cursor: pointer;
+transition: all 0.2s;
+border-bottom: 2px solid transparent;
+white-space: nowrap;
+}
+.mode-btn.active {
+color: var(–gold);
+border-bottom-color: var(–gold);
+font-weight: 700;
+}
+.mode-btn:hover:not(.active) { color: var(–paper); }
 
-  /* 訪問記録パネル */
-  .visit-header {
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    padding: 12px 16px;
-    margin: 12px 8px 8px;
-    box-shadow: 0 1px 4px var(--shadow);
-  }
-  .visit-title {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 6px;
-  }
-  .visit-stats {
-    font-size: 12px;
-    color: var(--faded);
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
-  .visit-progress-bar {
-    height: 4px;
-    background: var(--aged);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .visit-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--sage), var(--gold));
-    border-radius: 2px;
-    transition: width 0.5s ease;
-  }
-  .visit-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px;
-  }
-  .visit-item {
-    border: 1.5px solid var(--aged);
-    border-radius: 4px;
-    padding: 6px 10px;
-    font-size: 12px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    cursor: pointer;
-    transition: all 0.15s;
-    background: white;
-    color: var(--ink);
-    user-select: none;
-    font-weight: 700;
-  }
-  .visit-item.visited {
-    background: #8b2c6a;
-    border-color: #8b2c6a;
-    color: white;
-  }
-  .visit-item:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--shadow); }
-  .visit-year {
-    display: block;
-    font-size: 9px;
-    opacity: 0.85;
-    margin-top: 2px;
-    font-weight: 400;
-  }
-  .visit-map-wrap {
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    margin: 0 8px 8px;
-    padding: 8px;
-    box-shadow: 0 1px 4px var(--shadow);
-    overflow: hidden;
-  }
-  #visitMap svg {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  #visitMap path {
-    fill: #e8dfc8;
-    stroke: #9a8f7a;
-    stroke-width: 0.5;
-    cursor: pointer;
-    transition: fill 0.2s;
-  }
-  #visitMap path.map-visited {
-    stroke: #6a1a4a;
-    stroke-width: 0.8;
-  }
-  #visitMap path:hover { opacity: 0.8; }
-  .map-overlay {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(26,18,9,0.75);
-    color: var(--gold);
-    font-family: 'Shippori Mincho', serif;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 4px;
-    line-height: 1.5;
-    text-align: center;
-    pointer-events: none;
-  }
-  .onsen-item-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 2px;
-    width: calc(33% - 4px);
-    min-width: 80px;
-  }
-  .onsen-btn {
-    flex: 1;
-    line-height: 1.3;
-    padding: 6px 6px 4px;
-    text-align: center;
-    font-size: 12px;
-  }
-  .onsen-detail-btn {
-    background: #f0f4fa;
-    border: 1px solid #c0cce0;
-    border-radius: 2px;
-    font-size: 10px;
-    padding: 2px 4px;
-    cursor: pointer;
-    color: #3a6ea5;
-    text-align: center;
-    width: 100%;
-    transition: all 0.15s;
-  }
-  .onsen-detail-btn:hover { background: #3a6ea5; color: white; }
-  .onsen-detail-popup {
-    background: #f0f4fa;
-    border: 1px solid #c0cce0;
-    border-left: 3px solid #3a6ea5;
-    border-radius: 4px;
-    padding: 8px 10px;
-    font-size: 11px;
-    color: #1a1209;
-    margin-top: 4px;
-    line-height: 1.6;
-  }
-  .onsen-detail-popup strong {
-    display: block;
-    font-size: 10px;
-    color: #3a6ea5;
-    margin-bottom: 3px;
-  }
-  .continent-group {
-    width: 100%;
-    margin-bottom: 6px;
-  }
-  .continent-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink);
-    background: var(--aged);
-    padding: 4px 10px;
-    border-radius: 2px;
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .continent-count {
-    font-size: 11px;
-    color: #8b2c6a;
-    font-weight: 700;
-  }
-  .continent-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    padding: 0 4px 4px;
-  }
-  .visit-history {
-    margin: 0 8px 16px;
-    background: white;
-    border: 1px solid var(--aged);
-    border-radius: 2px;
-    box-shadow: 0 1px 4px var(--shadow);
-    overflow: hidden;
-  }
-  .visit-history-title {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--faded);
-    padding: 8px 14px 4px;
-    border-bottom: 1px solid var(--aged);
-    font-weight: 700;
-  }
-  .visit-history-year {
-    padding: 6px 14px 2px;
-    font-family: 'Shippori Mincho', serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #8b2c6a;
-    border-top: 1px solid var(--aged);
-    margin-top: 4px;
-  }
-  .visit-history-year:first-of-type { border-top: none; margin-top: 0; }
-  .visit-history-places {
-    padding: 2px 14px 6px;
-    font-size: 12px;
-    color: var(--ink);
-    line-height: 1.8;
-  }
-  .history-name-btn {
-    cursor: pointer;
-    color: #8b2c6a;
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .history-name-btn:hover { color: #6a1a4a; }
+/* 訪問記録パネル */
+.visit-header {
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+padding: 12px 16px;
+margin: 12px 8px 8px;
+box-shadow: 0 1px 4px var(–shadow);
+}
+.visit-title {
+font-family: ‘Shippori Mincho’, serif;
+font-size: 15px;
+font-weight: 700;
+color: var(–ink);
+margin-bottom: 6px;
+}
+.visit-stats {
+font-size: 12px;
+color: var(–faded);
+margin-bottom: 6px;
+font-weight: 700;
+}
+.visit-progress-bar {
+height: 4px;
+background: var(–aged);
+border-radius: 2px;
+overflow: hidden;
+}
+.visit-progress-fill {
+height: 100%;
+background: linear-gradient(90deg, var(–sage), var(–gold));
+border-radius: 2px;
+transition: width 0.5s ease;
+}
+.visit-grid {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+padding: 8px;
+}
+.visit-item {
+border: 1.5px solid var(–aged);
+border-radius: 4px;
+padding: 6px 10px;
+font-size: 12px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+cursor: pointer;
+transition: all 0.15s;
+background: white;
+color: var(–ink);
+user-select: none;
+font-weight: 700;
+}
+.visit-item.visited {
+background: #8b2c6a;
+border-color: #8b2c6a;
+color: white;
+}
+.visit-item:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(–shadow); }
+.visit-year {
+display: block;
+font-size: 9px;
+opacity: 0.85;
+margin-top: 2px;
+font-weight: 400;
+}
+.visit-map-wrap {
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+margin: 0 8px 8px;
+padding: 8px;
+box-shadow: 0 1px 4px var(–shadow);
+overflow: hidden;
+}
+#visitMap svg {
+width: 100%;
+height: auto;
+display: block;
+}
+#visitMap path {
+fill: #e8dfc8;
+stroke: #9a8f7a;
+stroke-width: 0.5;
+cursor: pointer;
+transition: fill 0.2s;
+}
+#visitMap path.map-visited {
+stroke: #6a1a4a;
+stroke-width: 0.8;
+}
+#visitMap path:hover { opacity: 0.8; }
+.map-overlay {
+position: absolute;
+top: 12px;
+right: 12px;
+background: rgba(26,18,9,0.75);
+color: var(–gold);
+font-family: ‘Shippori Mincho’, serif;
+font-size: 15px;
+font-weight: 700;
+padding: 6px 12px;
+border-radius: 4px;
+line-height: 1.5;
+text-align: center;
+pointer-events: none;
+}
+.onsen-item-wrap {
+display: flex;
+flex-direction: column;
+align-items: stretch;
+gap: 2px;
+width: calc(33% - 4px);
+min-width: 70px;
+}
+.onsen-btn {
+flex: 1;
+line-height: 1.2;
+padding: 4px 4px 3px;
+text-align: center;
+font-size: 10px;
+font-weight: 700;
+}
+.onsen-detail-btn {
+background: #f0f4fa;
+border: 1px solid #c0cce0;
+border-radius: 2px;
+font-size: 9px;
+padding: 1px 4px;
+cursor: pointer;
+color: #3a6ea5;
+text-align: center;
+width: 100%;
+transition: all 0.15s;
+}
+.onsen-detail-btn:hover { background: #3a6ea5; color: white; }
+.onsen-detail-popup {
+background: #f0f4fa;
+border: 1px solid #c0cce0;
+border-left: 3px solid #3a6ea5;
+border-radius: 4px;
+padding: 8px 10px;
+font-size: 11px;
+color: #1a1209;
+margin-top: 4px;
+line-height: 1.6;
+}
+.onsen-detail-popup strong {
+display: block;
+font-size: 10px;
+color: #3a6ea5;
+margin-bottom: 3px;
+}
+.continent-group {
+width: 100%;
+margin-bottom: 6px;
+}
+.continent-label {
+font-size: 12px;
+font-weight: 700;
+color: var(–ink);
+background: var(–aged);
+padding: 4px 10px;
+border-radius: 2px;
+margin-bottom: 4px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.continent-count {
+font-size: 11px;
+color: #8b2c6a;
+font-weight: 700;
+}
+.continent-items {
+display: flex;
+flex-wrap: wrap;
+gap: 5px;
+padding: 0 4px 4px;
+}
+.visit-history {
+margin: 0 8px 16px;
+background: white;
+border: 1px solid var(–aged);
+border-radius: 2px;
+box-shadow: 0 1px 4px var(–shadow);
+overflow: hidden;
+}
+.visit-history-title {
+font-size: 11px;
+letter-spacing: 0.2em;
+color: var(–faded);
+padding: 8px 14px 4px;
+border-bottom: 1px solid var(–aged);
+font-weight: 700;
+}
+.visit-history-year {
+padding: 6px 14px 2px;
+font-family: ‘Shippori Mincho’, serif;
+font-size: 13px;
+font-weight: 700;
+color: #8b2c6a;
+border-top: 1px solid var(–aged);
+margin-top: 4px;
+}
+.visit-history-year:first-of-type { border-top: none; margin-top: 0; }
+.visit-history-places {
+padding: 2px 14px 6px;
+font-size: 12px;
+color: var(–ink);
+line-height: 1.8;
+}
+.history-name-btn {
+cursor: pointer;
+color: #8b2c6a;
+font-weight: 700;
+text-decoration: underline;
+text-underline-offset: 2px;
+}
+.history-name-btn:hover { color: #6a1a4a; }
 
-  /* 年選択ダイアログ */
-  .year-dialog-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .year-dialog {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    width: 280px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-  .year-dialog-title {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 14px;
-    text-align: center;
-  }
-  .year-select-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-  .year-select {
-    font-size: 22px;
-    font-family: 'Shippori Mincho', serif;
-    border: 2px solid var(--aged);
-    border-radius: 4px;
-    padding: 8px 16px;
-    color: var(--ink);
-    background: var(--paper);
-    text-align: center;
-    width: 120px;
-  }
-  .year-dialog-btns {
-    display: flex;
-    gap: 8px;
-  }
-  .year-dialog-ok {
-    flex: 1;
-    background: #8b2c6a;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 14px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .year-dialog-ok:hover { background: #6a1a4a; }
-  .year-dialog-cancel {
-    flex: 1;
-    background: none;
-    color: var(--faded);
-    border: 1px solid var(--aged);
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 14px;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    cursor: pointer;
-  }
-  .year-dialog-cancel:hover { color: var(--ink); border-color: var(--ink); }
+/* 年選択ダイアログ */
+.year-dialog-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.5);
+z-index: 2000;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.year-dialog {
+background: white;
+border-radius: 8px;
+padding: 20px;
+width: 280px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.year-dialog-title {
+font-family: ‘Shippori Mincho’, serif;
+font-size: 15px;
+font-weight: 700;
+color: var(–ink);
+margin-bottom: 14px;
+text-align: center;
+}
+.year-select-wrap {
+display: flex;
+justify-content: center;
+margin-bottom: 16px;
+}
+.year-select {
+font-size: 22px;
+font-family: ‘Shippori Mincho’, serif;
+border: 2px solid var(–aged);
+border-radius: 4px;
+padding: 8px 16px;
+color: var(–ink);
+background: var(–paper);
+text-align: center;
+width: 120px;
+}
+.year-dialog-btns {
+display: flex;
+gap: 8px;
+}
+.year-dialog-ok {
+flex: 1;
+background: #8b2c6a;
+color: white;
+border: none;
+border-radius: 4px;
+padding: 10px;
+font-size: 14px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+cursor: pointer;
+font-weight: 700;
+}
+.year-dialog-ok:hover { background: #6a1a4a; }
+.year-dialog-cancel {
+flex: 1;
+background: none;
+color: var(–faded);
+border: 1px solid var(–aged);
+border-radius: 4px;
+padding: 10px;
+font-size: 14px;
+font-family: ‘Zen Kaku Gothic New’, sans-serif;
+cursor: pointer;
+}
+.year-dialog-cancel:hover { color: var(–ink); border-color: var(–ink); }
 
-  /* 同期ステータス */
-  #syncStatus {
-    position: fixed;
-    bottom: 16px; right: 16px;
-    background: var(--ink);
-    color: var(--gold);
-    font-size: 11px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    letter-spacing: 0.1em;
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  }
-  .sync-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--gold);
-    animation: syncPulse 2s infinite;
-  }
-  .sync-dot.saving { background: var(--sage); animation: none; }
-  .sync-dot.error  { background: var(--accent); animation: none; }
-  @keyframes syncPulse {
-    0%,100% { opacity:1; } 50% { opacity:0.3; }
-  }
+/* 同期ステータス */
+#syncStatus {
+position: fixed;
+bottom: 16px; right: 16px;
+background: var(–ink);
+color: var(–gold);
+font-size: 11px;
+padding: 6px 14px;
+border-radius: 20px;
+letter-spacing: 0.1em;
+z-index: 1000;
+display: none;
+align-items: center;
+gap: 7px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.sync-dot {
+width: 7px; height: 7px;
+border-radius: 50%;
+background: var(–gold);
+animation: syncPulse 2s infinite;
+}
+.sync-dot.saving { background: var(–sage); animation: none; }
+.sync-dot.error  { background: var(–accent); animation: none; }
+@keyframes syncPulse {
+0%,100% { opacity:1; } 50% { opacity:0.3; }
+}
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+
 </head>
 <body>
 <div id="syncStatus">
@@ -1198,6 +1204,7 @@
 </div>
 
 <!-- 年選択ダイアログ -->
+
 <div class="year-dialog-overlay" id="yearDialog" style="display:none;">
   <div class="year-dialog">
     <div class="year-dialog-title" id="yearDialogTitle"></div>
@@ -1232,6 +1239,7 @@
 </div>
 
 <!-- モード切り替えバー -->
+
 <div class="mode-bar">
   <button class="mode-btn active" onclick="setMode('bucket')">📚 バケットリスト</button>
   <button class="mode-btn" onclick="setMode('onsen')">♨️ 温泉</button>
@@ -1241,6 +1249,7 @@
 </div>
 
 <!-- 訪問記録パネル -->
+
 <div id="visitPanel" style="display:none;">
   <div class="visit-header">
     <div class="visit-title" id="visitTitle"></div>
@@ -1257,12 +1266,10 @@
   <div class="visit-history" id="visitHistory"></div>
 </div>
 
-
-
 <main>
   <!-- Progress -->
   <!-- Add form + Search -->
-  <div style="display:flex; gap:4px; align-items:stretch; margin-bottom:16px; width:100%; box-sizing:border-box; overflow:hidden;">
+  <div style="display:flex; gap:3px; align-items:stretch; margin-bottom:16px; width:100%; box-sizing:border-box; overflow:hidden;">
   <div class="add-section" style="margin-bottom:0; flex:4; min-width:0; overflow:hidden;">
     <div class="add-row">
       <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
@@ -1302,6 +1309,7 @@
   </div>
 
   <!-- Filter tabs -->
+
   <div class="filter-tabs">
     <button class="tab tab-all active" onclick="setFilter('全て', this)"><span class="tab-pct" id="pct-all"></span>📚<span class="tab-stat" id="stat-all"></span></button>
     <button class="tab" onclick="setFilter('海外旅行', this)"><span class="tab-pct" id="pct-海外旅行"></span>🌏<span class="tab-stat" id="stat-海外旅行"></span></button>
@@ -1314,6 +1322,7 @@
   </div>
 
   <!-- Items -->
+
   <div class="header-cat-stats" id="headerCatStats" style="display:none;"></div>
   <div class="items-list" id="itemsList"></div>
 </main>
@@ -1950,6 +1959,121 @@ const ONSEN_DATA = [
   {key:'沖縄県那覇温泉',pref:'沖縄県',name:'那覇温泉',region:'🌺 九州・沖縄',stars:0,starStr:'',dayBath:'那覇温泉 ホテル那覇、那覇温泉 瀬長島温泉'}
 ];
 const ONSEN_LIST = ONSEN_DATA.map(o => o.key);
+
+const ONSEN_COORDS = {
+  '北海道登別温泉': [141.1, 42.43],
+  '北海道湯の川温泉': [141.78, 41.82],
+  '北海道定山渓温泉': [141.1, 42.98],
+  '北海道ニセコ温泉': [140.69, 42.8],
+  '北海道網走温泉': [144.27, 43.97],
+  '北海道美幌峠温泉': [144.07, 43.83],
+  '北海道阿寒湖温泉': [144.1, 43.45],
+  '北海道屈斜路温泉': [144.35, 43.6],
+  '青森県酸ヶ湯温泉': [140.88, 40.65],
+  '青森県浅虫温泉': [140.87, 40.85],
+  '青森県大鰐温泉': [140.57, 40.52],
+  '岩手県花巻温泉郷': [141.12, 39.37],
+  '岩手県繫温泉': [141.12, 39.72],
+  '岩手県金田一温泉': [141.28, 40.31],
+  '岩手県つなぎ温泉': [141.12, 39.72],
+  '宮城県鳴子温泉': [140.73, 38.73],
+  '宮城県松島温泉': [141.07, 38.37],
+  '宮城県作並温泉': [140.63, 38.33],
+  '秋田県玉川温泉': [140.73, 39.95],
+  '山形県蔵王温泉': [140.45, 38.17],
+  '山形県肘折温泉': [140.27, 38.72],
+  '山形県天童温泉': [140.38, 38.35],
+  '福島県磐梯熱海温泉': [140.15, 37.47],
+  '福島県土湯温泉': [140.28, 37.65],
+  '福島県会津東山温泉': [139.93, 37.5],
+  '福島県飯坂温泉': [140.35, 37.77],
+  '福島県いわき湯本温泉': [140.93, 36.98],
+  '群馬県草津温泉': [138.6, 36.62],
+  '群馬県伊香保温泉': [138.88, 36.47],
+  '群馬県万座温泉': [138.47, 36.57],
+  '群馬県奥飛騨温泉郷': [137.58, 36.42],
+  '群馬県四万温泉': [138.82, 36.68],
+  '群馬県みなかみ18湯温泉': [138.97, 36.77],
+  '栃木県鬼怒川温泉': [139.6, 36.83],
+  '栃木県日光湯元温泉': [139.4, 36.8],
+  '栃木県塩原温泉': [139.83, 36.97],
+  '栃木県日光温泉': [139.62, 36.75],
+  '茨城県袋田温泉': [140.38, 36.77],
+  '埼玉県鬼怒川上流温泉': [139.6, 36.87],
+  '千葉県勝浦温泉': [140.13, 35.15],
+  '千葉県鴨川温泉': [140.1, 35.1],
+  '神奈川県箱根温泉': [139.02, 35.23],
+  '東京都奥多摩温泉': [139.1, 35.78],
+  '新潟県越後湯沢温泉': [138.82, 36.93],
+  '新潟県月岡温泉': [139.28, 37.77],
+  '新潟県赤倉温泉': [138.55, 36.95],
+  '新潟県瀬波温泉': [139.42, 38.08],
+  '富山県宇奈月温泉': [137.58, 36.87],
+  '富山県黒部峡谷温泉': [137.65, 36.88],
+  '石川県和倉温泉': [136.98, 37.05],
+  '石川県山代温泉': [136.45, 36.37],
+  '石川県山中温泉': [136.38, 36.27],
+  '福井県あわら温泉': [136.23, 36.23],
+  '山梨県富士急温泉': [138.57, 35.37],
+  '山梨県下部温泉': [138.47, 35.47],
+  '山梨県西山温泉': [138.27, 35.57],
+  '長野県野沢温泉': [138.43, 36.92],
+  '長野県昼神温泉': [137.67, 35.47],
+  '長野県上諏訪温泉': [138.12, 36.03],
+  '長野県白馬八方温泉': [137.87, 36.7],
+  '長野県白骨温泉': [137.72, 36.17],
+  '長野県戸倉上山田温泉': [138.18, 36.42],
+  '長野県岡谷温泉': [138.05, 36.07],
+  '長野県斑尾高原温泉': [138.37, 36.93],
+  '長野県木曽路温泉': [137.72, 35.87],
+  '長野県別所温泉': [138.15, 36.35],
+  '岐阜県下呂温泉': [137.25, 35.8],
+  '岐阜県飛騨高山温泉': [137.25, 36.15],
+  '岐阜県白川郷温泉': [136.9, 36.25],
+  '静岡県熱海温泉': [139.07, 35.1],
+  '静岡県伊東温泉': [139.1, 34.97],
+  '静岡県浜名湖かんざんじ温泉': [137.57, 34.72],
+  '愛知県南知多温泉郷': [136.93, 34.7],
+  '三重県志摩温泉': [136.83, 34.32],
+  '滋賀県雄琴温泉': [135.88, 35.12],
+  '滋賀県奥びわ温泉': [136.12, 35.53],
+  '京都府天橋立温泉': [135.18, 35.57],
+  '京都府丹後温泉': [135.07, 35.62],
+  '大阪府泉南トルマリン温泉': [135.37, 34.37],
+  '兵庫県有馬温泉': [135.25, 34.8],
+  '兵庫県城崎温泉': [134.82, 35.63],
+  '兵庫県淡路島東浦温泉': [134.97, 34.47],
+  '奈良県洞川温泉': [135.92, 34.22],
+  '和歌山県南紀白浜温泉': [135.37, 33.68],
+  '和歌山県田辺温泉': [135.37, 33.73],
+  '鳥取県三朝温泉': [133.83, 35.37],
+  '島根県玉造温泉': [132.97, 35.43],
+  '岡山県湯郷温泉': [134.18, 34.98],
+  '広島県宮島温泉': [132.32, 34.3],
+  '山口県長門湯本温泉': [131.42, 34.38],
+  '山口県湯田温泉': [131.47, 34.17],
+  '徳島県祖谷温泉': [133.88, 33.9],
+  '香川県こんぴら温泉郷': [133.82, 34.18],
+  '香川県高松温泉': [134.05, 34.35],
+  '愛媛県道後温泉': [132.88, 33.85],
+  '愛媛県北条温泉': [132.73, 33.97],
+  '高知県いの町温泉': [133.42, 33.55],
+  '福岡県福岡温泉': [130.42, 33.6],
+  '福岡県二日市温泉': [130.52, 33.52],
+  '福岡県原鶴温泉': [130.72, 33.38],
+  '佐賀県嬉野温泉': [130.0, 33.1],
+  '長崎県小浜温泉': [130.2, 32.72],
+  '熊本県黒川温泉': [131.08, 33.0],
+  '熊本県菊池温泉': [130.82, 32.98],
+  '熊本県玉名温泉': [130.57, 32.92],
+  '大分県別府八湯温泉': [131.48, 33.28],
+  '大分県由布院温泉': [131.37, 33.25],
+  '大分県奥日田温泉': [131.12, 33.33],
+  '宮崎県霧島温泉郷': [130.87, 31.9],
+  '鹿児島県指宿温泉': [130.63, 31.25],
+  '沖縄県那覇温泉': [127.68, 26.22]
+};
+
 const WORLD_CONTINENTS = {
   '🌏 東アジア': ['日本','韓国','中国','台湾','香港','マカオ','モンゴル'],
   '🌴 東南アジア': ['ベトナム','タイ','カンボジア','ラオス','ミャンマー','マレーシア','シンガポール','インドネシア','フィリピン','ブルネイ','東ティモール'],
@@ -2441,7 +2565,10 @@ async function renderMapD3(key, visited, currentYear) {
             : '#e8dfc8');
         });
       // 描画完了後に全色を再適用
-      setTimeout(() => reapplyAllMapColors(key, visited, currentYear), 100);
+      setTimeout(() => {
+        reapplyAllMapColors(key, visited, currentYear);
+        if (key === 'onsen') drawOnsenDots(svg, projection, visited);
+      }, 150);
     } catch(e) {
       console.error('日本地図エラー:', e);
       mapEl.innerHTML = MAP_SVG['japan'];
@@ -2518,6 +2645,39 @@ async function renderMapD3(key, visited, currentYear) {
       applyMapColors('china', visited, currentYear);
     }
   }
+}
+
+function drawOnsenDots(svg, projection, visited) {
+  // 既存のドットを削除
+  svg.selectAll('.onsen-dot').remove();
+  svg.selectAll('.onsen-dot-label').remove();
+
+  ONSEN_DATA.forEach(onsen => {
+    const coords = ONSEN_COORDS[onsen.key];
+    if (!coords) return;
+    const [x, y] = projection([coords[0], coords[1]]);
+    if (!x || !y || x < 0 || y < 0) return;
+
+    const isVisited = visited[onsen.key] !== undefined;
+
+    // ドット
+    svg.append('circle')
+      .attr('class', 'onsen-dot')
+      .attr('cx', x).attr('cy', y)
+      .attr('r', 5)
+      .style('fill', isVisited ? '#e63946' : '#2196F3')
+      .style('stroke', 'white')
+      .style('stroke-width', 1.2)
+      .style('cursor', 'pointer')
+      .style('opacity', 0.9)
+      .on('click', function() {
+        const gridItem = document.querySelector(`.visit-item[data-vkey="${onsen.key}"]`);
+        const targetEl = gridItem || document.createElement('div');
+        toggleVisit('onsen', onsen.key, targetEl);
+      })
+      .append('title')
+      .text(`${onsen.name}（${onsen.pref}）${onsen.starStr}${isVisited ? ' ✅訪問済み' : ''}`);
+  });
 }
 
 function reapplyAllMapColors(key, visited, currentYear) {
@@ -2941,147 +3101,139 @@ function buildItemHTML(item) {
       <div class="item-memo-row${item.memo ? ' open' : ''}" id="memo-row-${item._i}">
         <textarea class="item-memo-textarea" id="memo-input-${item._i}" placeholder="詳細メモを入力…"
           onblur="saveMemo(${item._i})">${item.memo || ''}</textarea>
-      </div>
-    </div>
-    <div class="item-btn-col">
-      <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
-      <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
-      <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
-    </div>
+
+```
+  </div>
+</div>
+<div class="item-btn-col">
+  <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
+  <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
+  <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
+</div>
+```
+
   </div>`;
 }
 
 function render() {
-  const list = document.getElementById('itemsList');
+const list = document.getElementById(‘itemsList’);
 
-  // ゴミ箱表示
-  if (currentFilter === 'ゴミ箱') {
-    updateStats();
-    updateTrashCount();
-    if (trash.length === 0) {
-      list.innerHTML = `<div class="empty"><div class="empty-icon">🗑️</div><div class="empty-text">ゴミ箱は空です</div></div>`;
-      return;
-    }
-    const parts = [`<div class="trash-actions"><button class="empty-trash-btn" onclick="emptyTrash()">🗑️ ゴミ箱を空にする（${trash.length}件完全削除）</button></div>`];
-    parts.push(...trash.map((item, i) => {
-      const pts = { '高': 3, '中': 2, '低': 1 };
-      const urg = item.urg || '中';
-      const score = pts[item.prio] * pts[urg];
-      return `<div class="item trashed" data-cat="${item.cat}">
-        <div class="item-body">
-          <div class="item-text" style="color:var(--faded);">${item.text}</div>
-          <div class="item-badges">
-            <span class="cat-tag">${item.cat}</span>
-            <span class="badge badge-urg-${urg}">緊急度 ${urg}</span>
-            <span class="badge badge-prio-${item.prio}">重要度 ${item.prio}</span>
-            <span class="badge badge-score score-${score}">スコア ${score}</span>
-          </div>
-        </div>
-        <button class="restore-btn" onclick="restoreFromTrash(${i})" title="元に戻す">↩️</button>
-        <button class="delete-btn" onclick="removeFromTrash(${i})" title="完全削除">×</button>
-      </div>`;
-    }));
-    list.innerHTML = parts.join('');
-    return;
-  }
+// ゴミ箱表示
+if (currentFilter === ‘ゴミ箱’) {
+updateStats();
+updateTrashCount();
+if (trash.length === 0) {
+list.innerHTML = `<div class="empty"><div class="empty-icon">🗑️</div><div class="empty-text">ゴミ箱は空です</div></div>`;
+return;
+}
+const parts = [`<div class="trash-actions"><button class="empty-trash-btn" onclick="emptyTrash()">🗑️ ゴミ箱を空にする（${trash.length}件完全削除）</button></div>`];
+parts.push(…trash.map((item, i) => {
+const pts = { ‘高’: 3, ‘中’: 2, ‘低’: 1 };
+const urg = item.urg || ‘中’;
+const score = pts[item.prio] * pts[urg];
+return `<div class="item trashed" data-cat="${item.cat}"> <div class="item-body"> <div class="item-text" style="color:var(--faded);">${item.text}</div> <div class="item-badges"> <span class="cat-tag">${item.cat}</span> <span class="badge badge-urg-${urg}">緊急度 ${urg}</span> <span class="badge badge-prio-${item.prio}">重要度 ${item.prio}</span> <span class="badge badge-score score-${score}">スコア ${score}</span> </div> </div> <button class="restore-btn" onclick="restoreFromTrash(${i})" title="元に戻す">↩️</button> <button class="delete-btn" onclick="removeFromTrash(${i})" title="完全削除">×</button> </div>`;
+}));
+list.innerHTML = parts.join(’’);
+return;
+}
 
-  const pts = { '高': 3, '中': 2, '低': 1 };
-  let mapped = items.map((item, i) => ({
-    ...item, urg: item.urg || '中',
-    score: pts[item.prio] * pts[item.urg || '中'], _i: i
-  }));
+const pts = { ‘高’: 3, ‘中’: 2, ‘低’: 1 };
+let mapped = items.map((item, i) => ({
+…item, urg: item.urg || ‘中’,
+score: pts[item.prio] * pts[item.urg || ‘中’], _i: i
+}));
 
-  // 検索フィルタリング
-  if (searchQuery) {
-    mapped = mapped.filter(x =>
-      x.text.includes(searchQuery) || (x.memo || '').includes(searchQuery)
-    );
-  }
+// 検索フィルタリング
+if (searchQuery) {
+mapped = mapped.filter(x =>
+x.text.includes(searchQuery) || (x.memo || ‘’).includes(searchQuery)
+);
+}
 
-  let active, done;
-  if (currentFilter === '達成済み') {
-    active = [];
-    done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
-  } else if (currentFilter === '全て') {
-    active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
-    done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
-  } else {
-    active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
-    done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
-  }
-  updateStats();
-  updateTrashCount();
-  if ([...active,...done].length === 0) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
-    return;
-  }
-  const parts = [];
-  if (active.length > 0 && done.length > 0) {
-    parts.push(...active.map(item => buildItemHTML(item)));
-    parts.push(`<div class="done-separator" style="text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;">✅ 達成済み</div>`);
-    parts.push(...done.map(item => buildItemHTML(item)));
-  } else {
-    parts.push(...[...active,...done].map(item => buildItemHTML(item)));
-  }
-  list.innerHTML = parts.join('');
+let active, done;
+if (currentFilter === ‘達成済み’) {
+active = [];
+done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
+} else if (currentFilter === ‘全て’) {
+active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
+done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
+} else {
+active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
+done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
+}
+updateStats();
+updateTrashCount();
+if ([…active,…done].length === 0) {
+list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
+return;
+}
+const parts = [];
+if (active.length > 0 && done.length > 0) {
+parts.push(…active.map(item => buildItemHTML(item)));
+parts.push(`<div class="done-separator" style="text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;">✅ 達成済み</div>`);
+parts.push(…done.map(item => buildItemHTML(item)));
+} else {
+parts.push(…[…active,…done].map(item => buildItemHTML(item)));
+}
+list.innerHTML = parts.join(’’);
 }
 
 function toggleMemo(i) {
-  const row = document.getElementById(`memo-row-${i}`);
-  const btn = row ? row.closest('.item').querySelector('.detail-btn') : null;
-  if (!row) return;
-  const isOpen = row.classList.toggle('open');
-  if (btn) btn.classList.toggle('active', isOpen);
-  if (isOpen) {
-    const ta = document.getElementById(`memo-input-${i}`);
-    if (ta) ta.focus();
-  }
+const row = document.getElementById(`memo-row-${i}`);
+const btn = row ? row.closest(’.item’).querySelector(’.detail-btn’) : null;
+if (!row) return;
+const isOpen = row.classList.toggle(‘open’);
+if (btn) btn.classList.toggle(‘active’, isOpen);
+if (isOpen) {
+const ta = document.getElementById(`memo-input-${i}`);
+if (ta) ta.focus();
+}
 }
 
 function saveMemo(i) {
-  const ta = document.getElementById(`memo-input-${i}`);
-  if (!ta) return;
-  items[i].memo = ta.value;
-  // メモがあればボタンをactive状態に
-  const btn = ta.closest('.item').querySelector('.detail-btn');
-  if (btn) btn.classList.toggle('active', !!ta.value);
-  save();
+const ta = document.getElementById(`memo-input-${i}`);
+if (!ta) return;
+items[i].memo = ta.value;
+// メモがあればボタンをactive状態に
+const btn = ta.closest(’.item’).querySelector(’.detail-btn’);
+if (btn) btn.classList.toggle(‘active’, !!ta.value);
+save();
 }
 
 function editItem(i) {
-  const el = document.getElementById(`edit-row-${i}`);
-  const textEl = document.getElementById(`item-text-${i}`);
-  if (el.style.display === 'flex') {
-    cancelEdit(i);
-  } else {
-    el.style.display = 'flex';
-    const input = document.getElementById(`edit-input-${i}`);
-    input.value = items[i].text;
-    input.focus();
-    input.select();
-    textEl.style.opacity = '0.4';
-  }
+const el = document.getElementById(`edit-row-${i}`);
+const textEl = document.getElementById(`item-text-${i}`);
+if (el.style.display === ‘flex’) {
+cancelEdit(i);
+} else {
+el.style.display = ‘flex’;
+const input = document.getElementById(`edit-input-${i}`);
+input.value = items[i].text;
+input.focus();
+input.select();
+textEl.style.opacity = ‘0.4’;
+}
 }
 
 function saveEdit(i) {
-  const input = document.getElementById(`edit-input-${i}`);
-  const val = input.value.trim();
-  if (val) { items[i].text = val; save(); }
-  render();
+const input = document.getElementById(`edit-input-${i}`);
+const val = input.value.trim();
+if (val) { items[i].text = val; save(); }
+render();
 }
 
 function cancelEdit(i) {
-  const el = document.getElementById(`edit-row-${i}`);
-  const textEl = document.getElementById(`item-text-${i}`);
-  el.style.display = 'none';
-  textEl.style.opacity = '1';
+const el = document.getElementById(`edit-row-${i}`);
+const textEl = document.getElementById(`item-text-${i}`);
+el.style.display = ‘none’;
+textEl.style.opacity = ‘1’;
 }
 
-
-document.getElementById('newItem').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addItem();
+document.getElementById(‘newItem’).addEventListener(‘keydown’, e => {
+if (e.key === ‘Enter’) addItem();
 });
 // render() と updateTrashCount() は window.onload で呼ばれます
 </script>
+
 </body>
 </html>
