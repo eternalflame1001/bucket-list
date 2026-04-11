@@ -1646,8 +1646,8 @@ let pollTimer = null;
 async function loadFromFirebase() {
   try {
     const [itemsRes, trashRes] = await Promise.all([
-      fetch(DB_URL + '/bucketList.json'),
-      fetch(DB_URL + '/trashList.json')
+      fetch(DB_URL + '/bucketList.json', {cache: 'no-store'}),
+      fetch(DB_URL + '/trashList.json', {cache: 'no-store'})
     ]);
     const itemsData = await itemsRes.json();
     const trashData = await trashRes.json();
@@ -1708,21 +1708,8 @@ function setSyncStatus(state) {
 }
 
 function startPolling() {
-  pollTimer = setInterval(async () => {
-    if (isSyncing) return;
-    const data = await loadFromFirebase();
-    if (!data) return;
-    const newItems = JSON.stringify(data.items);
-    const newTrash = JSON.stringify(data.trash);
-    if (data.items && (newItems !== JSON.stringify(items) || newTrash !== JSON.stringify(trash))) {
-      items = data.items;
-      trash = data.trash;
-      render();
-      updateStats();
-      updateTrashCount();
-      setSyncStatus('synced');
-    }
-  }, 5000);
+  // ポーリング無効化（Firebase負荷軽減のため）
+  // pollTimer = setInterval(async () => { ... }, 5000);
 }
 
 window.onload = async function() {
