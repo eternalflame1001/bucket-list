@@ -906,7 +906,7 @@
     <div style="height:4px;background:var(--aged);border-radius:2px;margin-bottom:12px;">
       <div id="visitFill" style="height:100%;background:linear-gradient(90deg,#8b2c6a,#c9a227);border-radius:2px;transition:width 0.5s;width:0%;"></div>
     </div>
-    <div id="visitGrid" class="visit-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;"></div>
+    <div id="visitGrid" class="visit-grid" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;"></div>
     <div id="visitMap" style="margin-bottom:12px;position:relative;">
       <div id="mapOverlay" style="position:absolute;top:8px;right:8px;background:rgba(26,18,9,0.75);color:var(--gold);font-family:'Shippori Mincho',serif;font-size:13px;padding:6px 10px;border-radius:4px;text-align:center;line-height:1.4;z-index:10;"></div>
     </div>
@@ -1807,11 +1807,13 @@ function setMode(mode) {
   } else {
     mainEl.style.display = 'none';
     visitPanel.style.display = 'block';
-    // グリッドと地図をリセット
-    document.getElementById('visitGrid').innerHTML = '';
-    document.getElementById('visitHistory').innerHTML = '';
-    document.getElementById('visitMap').innerHTML = '<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>';
     renderVisit(mode);
+    // 地図を描画（非同期）
+    const visited = visitData[mode] || {};
+    const currentYear = new Date().getFullYear();
+    const mapEl = document.getElementById('visitMap');
+    mapEl.innerHTML = '<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>';
+    renderMapD3(mode, visited, currentYear);
   }
 }
 
@@ -1951,6 +1953,21 @@ const ONSEN_DATA = [
 ];
 const ONSEN_LIST = ONSEN_DATA.map(o => o.key);
 
+function renderVisitGrid(mode) {
+  // グリッドと統計だけ更新（地図は更新しない）
+  const visited = visitData[mode] || {};
+  const currentYear = new Date().getFullYear();
+  const count = Object.keys(visited).length;
+  const list = mode==='japan' ? JAPAN_PREFS : mode==='onsen' ? ONSEN_LIST : mode==='china' ? CHINA_REGIONS : WORLD_COUNTRIES;
+  const total = list.length;
+  const pct = total ? Math.round(count/total*100) : 0;
+  document.getElementById('visitStats').textContent = `訪問済み ${count} / ${total}ヶ所　達成率 ${pct}%`;
+  document.getElementById('visitFill').style.width = pct + '%';
+  document.getElementById('mapOverlay').innerHTML = `${count}/${total}<br>${pct}%`;
+  // 地図の色を更新
+  reapplyMapColors(mode, visited, currentYear);
+}
+
 function renderVisit(mode) {
   const titleEl = document.getElementById('visitTitle');
   const gridEl = document.getElementById('visitGrid');
@@ -1972,6 +1989,13 @@ function renderVisit(mode) {
 
   // グリッド表示（まずクリア）
   gridEl.innerHTML = '';
+  if (mode === 'world' || mode === 'onsen') {
+    gridEl.style.flexDirection = 'column';
+    gridEl.style.flexWrap = '';
+  } else {
+    gridEl.style.flexDirection = '';
+    gridEl.style.flexWrap = 'wrap';
+  }
   if (mode === 'world') {
     let html = '';
     Object.entries(WORLD_CONTINENTS).forEach(([continent, countries]) => {
@@ -2003,13 +2027,8 @@ function renderVisit(mode) {
         if (isVisited && year) { const age = currentYear-year; const op = Math.max(0.4,1-age*0.06); btnStyle = `background:rgba(139,44,100,${op});border-color:rgba(139,44,100,${op});color:white;`; }
         const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
         const starDisp = onsen.starStr ? `<span style="font-size:9px;display:block;">${onsen.starStr}</span>` : '';
-        const safeDayBath = onsen.dayBath ? onsen.dayBath.split("'").join("&#39;") : '';
-        html += `<div class="onsen-item-wrap">
-          <div class="visit-item onsen-btn${isVisited?' visited':''}" data-vkey="${onsen.key}" style="${btnStyle}" onclick="toggleVisitAndMap('${key}','${onsen.key}',this)">
-            <span style="font-size:9px;opacity:0.75;display:block;">${onsen.pref}</span>${onsen.name}${starDisp}${yearLabel}
-          </div>
-          ${onsen.dayBath?`<button class="onsen-detail-btn" data-bath="${safeDayBath}" onclick="toggleOnsenDetail(this)">🛁</button>`:''}
-        </div>`;
+        const bathBtn = onsen.dayBath ? `<button class="onsen-detail-btn" data-bath="${onsen.dayBath}" onclick="toggleOnsenDetail(this)">🛁</button>` : '';
+        html += `<div class="onsen-item-wrap"><div class="visit-item onsen-btn${isVisited?' visited':''}" data-vkey="${onsen.key}" style="${btnStyle}" onclick="toggleVisitAndMap('${key}','${onsen.key}',this)"><span style="font-size:9px;opacity:0.75;display:block;">${onsen.pref}</span>${onsen.name}${starDisp}${yearLabel}</div>${bathBtn}</div>`;
       });
       html += `</div></div>`;
     });
@@ -2025,11 +2044,6 @@ function renderVisit(mode) {
     }).join('');
   }
   renderVisitHistory(key);
-  // D3地図を描画
-  const mapEl = document.getElementById('visitMap');
-  const currentYear2 = new Date().getFullYear();
-  mapEl.innerHTML = '<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>';
-  renderMapD3(key, visited, currentYear2);
 }
 
 function toggleOnsenDetail(btn) {
@@ -2059,7 +2073,7 @@ function toggleVisit(key, name, el) {
     const gridItem = document.querySelector(`.visit-item[data-vkey="${name}"]`);
     if (gridItem && gridItem!==el) { gridItem.classList.remove('visited'); gridItem.removeAttribute('style'); const y=gridItem.querySelector('.visit-year'); if(y)y.remove(); }
     saveVisit();
-    renderVisit(currentMode);
+    renderVisitGrid(currentMode);
   } else {
     const targetEl = (el&&el.classList) ? el : (document.querySelector(`.visit-item[data-vkey="${name}"]`)||document.createElement('div'));
     showYearDialog(key, name, targetEl);
@@ -2095,7 +2109,7 @@ function confirmYear() {
     yearEl.textContent=year;
   }
   saveVisit();
-  renderVisit(currentMode);
+  renderVisitGrid(currentMode);
 }
 
 function cancelYear() { document.getElementById('yearDialog').style.display='none'; }
