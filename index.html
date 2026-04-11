@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>バケットリスト</title>
+<link rel="apple-touch-icon" href="icon.png">
+<title>Bucket List</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -18,838 +18,1197 @@
     --shadow: rgba(26,18,9,0.15);
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-background: var(–paper);
-color: var(–ink);
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-min-height: 100vh;
-background-image:
-radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.08) 0%, transparent 60%),
-radial-gradient(ellipse at 80% 20%, rgba(139,44,10,0.06) 0%, transparent 60%);
-padding: 0 0 60px;
-}
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 80%, rgba(201,162,39,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,44,10,0.06) 0%, transparent 60%);
+    padding: 0 0 60px;
+  }
 
-/* Header */
-header {
-background: var(–ink);
-color: var(–paper);
-padding: 40px 24px 32px;
-text-align: center;
-position: relative;
-overflow: hidden;
-}
-header::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: repeating-linear-gradient(
-45deg,
-transparent,
-transparent 30px,
-rgba(255,255,255,0.02) 30px,
-rgba(255,255,255,0.02) 31px
-);
-}
-header::after {
-content: ‘’;
-position: absolute;
-bottom: 0; left: 0; right: 0;
-height: 4px;
-background: linear-gradient(90deg, var(–accent), var(–gold), var(–accent));
-}
-.header-sub {
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-weight: 300;
-font-size: 11px;
-letter-spacing: 0.4em;
-color: var(–gold);
-margin-bottom: 12px;
-text-transform: uppercase;
-}
-h1 {
-font-family: ‘Shippori Mincho’, serif;
-font-size: clamp(28px, 7vw, 44px);
-font-weight: 700;
-letter-spacing: 0.1em;
-position: relative;
-}
-.header-desc {
-margin-top: 10px;
-font-size: 13px;
-color: rgba(245,240,232,0.55);
-letter-spacing: 0.05em;
-}
+  /* Header */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.02) 30px,
+      rgba(255,255,255,0.02) 31px
+    );
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+  }
+  .header-sub {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    position: relative;
+  }
+  .header-desc {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(245,240,232,0.55);
+    letter-spacing: 0.05em;
+  }
 
-/* Stats bar */
-.stats-bar {
-background: var(–ink);
-display: flex;
-justify-content: center;
-gap: 32px;
-padding: 14px 24px;
-border-bottom: 1px solid rgba(201,162,39,0.3);
-}
-.stat {
-text-align: center;
-color: var(–paper);
-}
-.stat-num {
-font-family: ‘Shippori Mincho’, serif;
-font-size: 22px;
-color: var(–gold);
-display: block;
-line-height: 1;
-}
-.stat-label {
-font-size: 10px;
-letter-spacing: 0.15em;
-color: rgba(245,240,232,0.5);
-margin-top: 3px;
-}
+  /* Stats bar */
+  .stats-bar {
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(201,162,39,0.3);
+  }
+  .stat {
+    text-align: center;
+    color: var(--paper);
+  }
+  .stat-num {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 22px;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.5);
+    margin-top: 3px;
+  }
 
-/* Main */
-main { max-width: 680px; margin: 0 auto; padding: 32px 16px 0; }
+  /* Main */
+  main { max-width: 680px; margin: 0 auto; padding: 16px 0 0; }
 
-/* ヘッダーカテゴリー別達成率 */
-.header-cat-stats {
-background: var(–paper);
-border: none;
-border-bottom: 1.5px solid var(–aged);
-border-radius: 0;
-padding: 6px 16px 8px;
-margin-bottom: 16px;
-box-shadow: 0 3px 8px rgba(26,18,9,0.08);
-position: sticky;
-top: 47px;
-z-index: 99;
-}
-.header-cat-grid {
-display: flex;
-flex-wrap: nowrap;
-gap: 0;
-}
-.header-cat-item {
-flex: 1;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 6px;
-padding: 4px 6px;
-border-right: 1px solid var(–aged);
-white-space: nowrap;
-}
-.header-cat-item:last-child { border-right: none; }
-.header-cat-total {
-border-left: 2px solid var(–aged);
-background: rgba(90,122,90,0.08);
-}
-.header-cat-total .header-cat-fraction { color: #5a7a5a; }
-.header-cat-total .header-cat-pct { color: #5a7a5a; }
-.header-cat-top { display: contents; }
-.header-cat-icon {
-font-size: 14px;
-flex-shrink: 0;
-}
-.header-cat-name { display: none; }
-.header-cat-fraction {
-font-size: 13px;
-color: var(–ink);
-font-family: ‘Shippori Mincho’, serif;
-white-space: nowrap;
-flex-shrink: 0;
-}
-.header-cat-pct {
-font-size: 12px;
-color: var(–accent);
-font-family: ‘Shippori Mincho’, serif;
-white-space: nowrap;
-flex-shrink: 0;
-}
-.header-cat-bar-wrap { display: none; }
-.header-cat-bar-fill {
-height: 100%;
-border-radius: 2px;
-transition: width 0.6s ease;
-}
+  /* ヘッダーカテゴリー別達成率 */
+  .header-cat-stats {
+    background: var(--paper);
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    border-radius: 0;
+    padding: 6px 16px 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 8px rgba(26,18,9,0.08);
+    position: sticky;
+    top: 47px;
+    z-index: 99;
+  }
+  .header-cat-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+  .header-cat-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-right: 1px solid var(--aged);
+    white-space: nowrap;
+  }
+  .header-cat-item:last-child { border-right: none; }
+  .header-cat-total {
+    border-left: 2px solid var(--aged);
+    background: rgba(139,44,100,0.08);
+  }
+  .header-cat-total .header-cat-fraction { color: #5a7a5a; }
+  .header-cat-total .header-cat-pct { color: #5a7a5a; }
+  .header-cat-top { display: contents; }
+  .header-cat-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .header-cat-name { display: none; }
+  .header-cat-fraction {
+    font-size: 12px;
+    color: var(--ink);
+    font-family: 'Shippori Mincho', serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .header-cat-pct {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'Shippori Mincho', serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .header-cat-bar-wrap { display: none; }
+  .header-cat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
 
-/* Add form */
-.add-section {
-background: white;
-border: 1px solid var(–aged);
-border-radius: 2px;
-padding: 12px 16px 10px;
-margin-bottom: 16px;
-box-shadow: 0 2px 12px var(–shadow);
-position: relative;
-}
-.add-section::before {
-content: ‘+ 新しい夢を追加’;
-position: absolute;
-top: -11px; left: 16px;
-background: white;
-padding: 0 8px;
-font-size: 11px;
-letter-spacing: 0.2em;
-color: var(–faded);
-}
-.add-row {
-display: flex;
-gap: 8px;
-margin-bottom: 6px;
-}
-input[type=“text”] {
-flex: 1;
-border: none;
-border-bottom: 1.5px solid var(–aged);
-background: transparent;
-padding: 4px 4px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-size: 14px;
-color: var(–ink);
-outline: none;
-transition: border-color 0.2s;
-}
-input[type=“text”]:focus { border-bottom-color: var(–accent); }
-input[type=“text”]::placeholder { color: var(–faded); font-size: 13px; }
+  /* Add form */
+  .add-section {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 12px 8px 10px;
+    box-shadow: 0 2px 12px var(--shadow);
+    position: relative;
+  }
+  .add-section::before {
+    content: '+ 追加';
+    position: absolute;
+    top: -11px; left: 10px;
+    background: white;
+    padding: 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+  }
+  .search-section {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 6px 6px;
+    box-shadow: 0 2px 12px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+  .search-icon { font-size: 16px; }
+  .search-section input[type="text"] {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    background: transparent;
+    padding: 2px 0;
+    font-size: 10px;
+    color: var(--ink);
+    outline: none;
+    text-align: center;
+  }
+  .search-section input[type="text"]:focus { border-bottom-color: var(--accent); }
+  .search-section input[type="text"]::placeholder { color: var(--faded); font-size: 11px; }
+  .search-clear {
+    background: none;
+    border: none;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+  }
+  .search-clear:hover { color: var(--accent); }
+  .search-count {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .search-highlight {
+    background: rgba(201,162,39,0.3);
+    border-radius: 2px;
+  }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  input[type="text"] {
+    flex: 1;
+    border: none;
+    border-bottom: 1.5px solid var(--aged);
+    background: transparent;
+    padding: 4px 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-bottom-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--faded); font-size: 12px; }
 
-.add-meta {
-display: flex;
-gap: 8px;
-align-items: center;
-}
-select {
-border: 1px solid var(–aged);
-background: var(–paper);
-padding: 4px 8px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-size: 12px;
-color: var(–ink);
-border-radius: 2px;
-outline: none;
-cursor: pointer;
-flex: 1;
-}
-.priority-btns { display: flex; gap: 4px; }
-.prio-btn {
-border: 1px solid var(–aged);
-background: var(–paper);
-padding: 3px 8px;
-font-size: 11px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-color: var(–faded);
-}
-.prio-btn.active { background: var(–accent); color: white; border-color: var(–accent); }
+  .add-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  select {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 4px 8px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    flex: 1;
+  }
+  .priority-btns { display: flex; gap: 4px; }
+  .prio-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+  }
+  .prio-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-.add-meta-row {
-display: flex;
-gap: 8px;
-align-items: center;
-margin-top: 5px;
-}
-.meta-label {
-font-size: 11px;
-letter-spacing: 0.1em;
-color: var(–faded);
-white-space: nowrap;
-}
-.urg-btn {
-border: 1px solid var(–aged);
-background: var(–paper);
-padding: 3px 8px;
-font-size: 11px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-color: var(–faded);
-}
-.urg-btn.active { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+  .add-meta-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 5px;
+  }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+    white-space: nowrap;
+  }
+  .urg-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+  }
+  .urg-btn.active { background: #8b2c0a; color: white; border-color: #8b2c0a; }
 
-.add-btn {
-background: var(–ink);
-color: var(–gold);
-border: none;
-padding: 5px 16px;
-font-family: ‘Shippori Mincho’, serif;
-font-size: 13px;
-letter-spacing: 0.1em;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.2s;
-white-space: nowrap;
-}
-.add-btn:hover { background: var(–accent); color: white; }
+  .add-btn {
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    padding: 5px 16px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--accent); color: white; }
 
-/* Filter tabs */
-.filter-tabs {
-display: flex;
-justify-content: center;
-gap: 0;
-margin-bottom: 0;
-border-bottom: 1.5px solid var(–aged);
-overflow-x: auto;
-scrollbar-width: none;
-position: sticky;
-top: 0;
-background: var(–paper);
-z-index: 100;
-padding-top: 6px;
-box-shadow: none;
-}
-.filter-tabs::-webkit-scrollbar { display: none; }
-.tab {
-padding: 10px 16px;
-font-size: 12px;
-letter-spacing: 0.1em;
-cursor: pointer;
-border: none;
-background: none;
-color: var(–faded);
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-white-space: nowrap;
-border-bottom: 2px solid transparent;
-margin-bottom: -1.5px;
-transition: all 0.2s;
-}
-.tab.active { color: var(–accent); border-bottom-color: var(–accent); font-weight: 700; }
-.tab:hover:not(.active) { color: var(–ink); }
-.tab-trash { color: #9a8f7a; }
-.tab-trash.active { color: #8b2c0a; border-bottom-color: #8b2c0a; }
+  /* Filter tabs */
+  .filter-tabs {
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 1.5px solid var(--aged);
+    overflow-x: hidden;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 100;
+    padding: 2px 0 0 0;
+    box-shadow: none;
+    width: 100%;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 2px 0 2px;
+    font-size: 20px;
+    letter-spacing: 0;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--faded);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+  .tab:hover:not(.active) { color: var(--ink); }
+  .tab-all { font-size: 20px; padding: 2px 0 2px; }
+  .tab-pct {
+    font-size: 10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    min-height: 11px;
+  }
+  .tab.active .tab-pct { color: var(--accent); }
+  .tab-stat {
+    font-size: 10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    min-height: 11px;
+  }
+  .tab.active .tab-stat { color: var(--accent); }
+  .tab-trash { color: #9a8f7a; }
+  .tab-trash.active { color: #8b2c0a; border-bottom-color: #8b2c0a; }
 
-/* ゴミ箱を空にするボタン */
-.trash-actions {
-display: flex;
-justify-content: flex-end;
-margin-bottom: 12px;
-}
-.empty-trash-btn {
-background: none;
-border: 1px solid var(–accent);
-color: var(–accent);
-padding: 5px 14px;
-font-size: 12px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-letter-spacing: 0.05em;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.2s;
-}
-.empty-trash-btn:hover { background: var(–accent); color: white; }
-.restore-btn {
-background: none;
-border: none;
-color: var(–sage);
-cursor: pointer;
-font-size: 13px;
-padding: 4px;
-line-height: 1;
-transition: color 0.15s;
-flex-shrink: 0;
-}
-.restore-btn:hover { color: #2a5a2a; }
-.item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
+  /* ゴミ箱を空にするボタン */
+  .trash-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+  .empty-trash-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 5px 14px;
+    font-size: 12px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .empty-trash-btn:hover { background: var(--accent); color: white; }
+  .restore-btn {
+    background: none;
+    border: none;
+    color: var(--sage);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .restore-btn:hover { color: #2a5a2a; }
+  .item.trashed { background: #fdf5f5; border-left-color: #e0b0b0 !important; opacity: 0.8; }
 
-/* Items */
-.items-list { display: flex; flex-direction: column; gap: 10px; }
+  /* Items */
+  .items-list { display: flex; flex-direction: column; gap: 10px; padding: 0 4px; }
 
-.item {
-background: white;
-border: 1px solid var(–aged);
-border-left: 3px solid var(–aged);
-border-radius: 2px;
-padding: 14px 16px;
-display: flex;
-align-items: center;
-gap: 12px;
-box-shadow: 0 1px 4px var(–shadow);
-transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
-}
-/* アニメーションなし */
-.item:hover { box-shadow: 0 3px 12px var(–shadow); transform: translateY(-1px); }
-.item.done {
-background: var(–paper);
-border-left-color: var(–sage);
-opacity: 0.75;
-}
-.item.done .item-text { color: var(–faded); }
+  .item {
+    background: white;
+    border: 1px solid var(--aged);
+    border-left: 3px solid var(--aged);
+    border-radius: 2px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 4px var(--shadow);
+    transition: box-shadow 0.3s, background 0.5s, opacity 0.5s, border-left-color 0.5s;
+  }
+  /* アニメーションなし */
+  .item:hover { box-shadow: 0 3px 12px var(--shadow); transform: translateY(-1px); }
+  .item.done {
+    background: var(--paper);
+    border-left-color: var(--sage);
+    opacity: 0.75;
+  }
+  .item.done .item-text { color: var(--faded); }
 
-.item[data-cat=“海外旅行”] { border-left-color: #5b8db8; }
-.item[data-cat=“国内旅行”] { border-left-color: #3a9e7a; }
-.item[data-cat=“食・グルメ”] { border-left-color: #c87941; }
-.item[data-cat=“スキル・学習”] { border-left-color: #7a5bb8; }
-.item[data-cat=“人生の目標”] { border-left-color: var(–accent); }
-.item.done { border-left-color: var(–sage) !important; }
+  .item[data-cat="海外旅行"] { border-left-color: #5b8db8; }
+  .item[data-cat="国内旅行"] { border-left-color: #3a9e7a; }
+  .item[data-cat="食・グルメ"] { border-left-color: #c87941; }
+  .item[data-cat="スキル・学習"] { border-left-color: #7a5bb8; }
+  .item[data-cat="人生の目標"] { border-left-color: var(--accent); }
+  .item.done { border-left-color: var(--sage) !important; }
 
-.check-btn {
-width: 24px; height: 24px;
-border: 1.5px solid var(–aged);
-border-radius: 50%;
-background: none;
-cursor: pointer;
-flex-shrink: 0;
-display: flex; align-items: center; justify-content: center;
-transition: all 0.2s;
-color: transparent;
-font-size: 12px;
-}
-.item.done .check-btn {
-background: var(–sage);
-border-color: var(–sage);
-color: white;
-}
-.check-btn:hover { border-color: var(–sage); }
+  .check-btn {
+    width: 24px; height: 24px;
+    border: 1.5px solid var(--aged);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: transparent;
+    font-size: 12px;
+  }
+  .item.done .check-btn {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+  }
+  .check-btn:hover { border-color: var(--sage); }
 
-.item-body { flex: 1; min-width: 0; }
-.item-text {
-font-size: 17px;
-line-height: 1.4;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-weight: 700;
-}
-.item-meta {
-display: flex;
-gap: 8px;
-margin-top: 4px;
-align-items: center;
-flex-wrap: wrap;
-}
-.cat-tag {
-font-size: 10px;
-letter-spacing: 0.1em;
-color: var(–faded);
-}
-.prio-dot {
-width: 6px; height: 6px;
-border-radius: 50%;
-flex-shrink: 0;
-}
-.prio-dot.高 { background: var(–accent); }
-.prio-dot.中 { background: var(–gold); }
-.prio-dot.低 { background: var(–faded); }
+  .item-body { flex: 1; min-width: 0; }
+  .item-text {
+    font-size: 19px;
+    line-height: 1.4;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-weight: 700;
+  }
+  .item-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .cat-tag {
+    font-size: 10px;
+    letter-spacing: 0;
+    color: var(--ink);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .prio-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .prio-dot.高 { background: var(--accent); }
+  .prio-dot.中 { background: var(--gold); }
+  .prio-dot.低 { background: var(--faded); }
 
-.prio-change-btns {
-display: flex;
-gap: 3px;
-margin-top: 5px;
-}
-.prio-change-btn {
-border: 1px solid var(–aged);
-background: var(–paper);
-padding: 2px 7px;
-font-size: 10px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-color: var(–faded);
-letter-spacing: 0.05em;
-}
-.prio-change-btn:hover { background: var(–aged); color: var(–ink); }
-.prio-change-btn.active-高 { background: var(–accent); color: white; border-color: var(–accent); }
-.prio-change-btn.active-中 { background: var(–gold); color: white; border-color: var(–gold); }
-.prio-change-btn.active-低 { background: var(–faded); color: white; border-color: var(–faded); }
+  .prio-change-btns {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+  }
+  .prio-change-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 2px 4px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .prio-change-btn:hover { background: var(--aged); color: var(--ink); }
+  .prio-change-btn.active-高 { background: var(--accent); color: white; border-color: var(--accent); }
+  .prio-change-btn.active-中 { background: var(--gold); color: white; border-color: var(--gold); }
+  .prio-change-btn.active-低 { background: var(--faded); color: white; border-color: var(--faded); }
 
-.urg-change-btn {
-border: 1px solid var(–aged);
-background: var(–paper);
-padding: 2px 7px;
-font-size: 10px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-color: var(–faded);
-letter-spacing: 0.05em;
-}
-.urg-change-btn:hover { background: var(–aged); color: var(–ink); }
-.urg-change-btn.active-高 { background: #8b2c0a; color: white; border-color: #8b2c0a; }
-.urg-change-btn.active-中 { background: #b84a20; color: white; border-color: #b84a20; }
-.urg-change-btn.active-低 { background: #c8907a; color: white; border-color: #c8907a; }
+  .urg-change-btn {
+    border: 1px solid var(--aged);
+    background: var(--paper);
+    padding: 2px 4px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--faded);
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .urg-change-btn:hover { background: var(--aged); color: var(--ink); }
+  .urg-change-btn.active-高 { background: #8b2c0a; color: white; border-color: #8b2c0a; }
+  .urg-change-btn.active-中 { background: #b84a20; color: white; border-color: #b84a20; }
+  .urg-change-btn.active-低 { background: #c8907a; color: white; border-color: #c8907a; }
 
-.item-badges {
-display: flex;
-gap: 5px;
-margin-top: 4px;
-align-items: center;
-flex-wrap: wrap;
-}
-.badge {
-font-size: 9px;
-padding: 1px 6px;
-border-radius: 2px;
-letter-spacing: 0.08em;
-font-weight: 700;
-}
-.badge-prio-高 { background: rgba(139,44,10,0.12); color: var(–accent); }
-.badge-prio-中 { background: rgba(201,162,39,0.15); color: #a07a10; }
-.badge-prio-低 { background: rgba(154,143,122,0.15); color: var(–faded); }
-.badge-urg-高  { background: rgba(139,44,10,0.15); color: #8b2c0a; }
-.badge-urg-中  { background: rgba(200,100,60,0.13); color: #b84a20; }
-.badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
+  .item-badges {
+    display: flex;
+    gap: 5px;
+    margin-top: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .badge-prio-高 { background: rgba(139,44,10,0.12); color: var(--accent); }
+  .badge-prio-中 { background: rgba(201,162,39,0.15); color: #a07a10; }
+  .badge-prio-低 { background: rgba(154,143,122,0.15); color: var(--faded); }
+  .badge-urg-高  { background: rgba(139,44,10,0.15); color: #8b2c0a; }
+  .badge-urg-中  { background: rgba(200,100,60,0.13); color: #b84a20; }
+  .badge-urg-低  { background: rgba(220,160,140,0.15); color: #b07060; }
 
-/* スコアバッジ：9点が最高、1点が最低 */
-.badge-score { font-weight: 700; letter-spacing: 0.05em; }
-.score-9 { background: rgba(139,44,10,0.18); color: #8b2c0a; border: 1px solid rgba(139,44,10,0.3); }
-.score-6 { background: rgba(201,162,39,0.18); color: #9a7010; border: 1px solid rgba(201,162,39,0.3); }
-.score-4 { background: rgba(90,122,90,0.15); color: #3d6e3d; border: 1px solid rgba(90,122,90,0.25); }
-.score-3 { background: rgba(106,156,191,0.15); color: #3a6ea5; border: 1px solid rgba(106,156,191,0.25); }
-.score-2 { background: rgba(154,143,122,0.12); color: var(–faded); border: 1px solid rgba(154,143,122,0.2); }
-.score-1 { background: rgba(154,143,122,0.08); color: #bbb; border: 1px solid rgba(154,143,122,0.15); }
+  /* スコアバッジ：9点が最高、1点が最低 */
+  .badge-score { font-weight: 700; font-size: 12px; color: var(--ink); letter-spacing: 0; border: 1px solid var(--aged); background: var(--paper); white-space: nowrap; }
+  .score-9 { }
+  .score-6 { }
+  .score-4 { }
+  .score-3 { }
+  .score-2 { }
+  .score-1 { }
 
-.change-row {
-display: flex;
-gap: 10px;
-margin-top: 6px;
-flex-wrap: wrap;
-}
-.change-group {
-display: flex;
-align-items: center;
-gap: 4px;
-}
-.change-group-label {
-font-size: 10px;
-color: var(–faded);
-letter-spacing: 0.05em;
-white-space: nowrap;
-}
+  .change-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    flex-wrap: nowrap;
+  }
+  .change-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .change-group-label {
+    font-size: 10px;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+    white-space: nowrap;
+  }
 
-.delete-btn {
-background: none;
-border: 1px solid var(–aged);
-border-radius: 4px;
-color: var(–faded);
-cursor: pointer;
-font-size: 20px;
-padding: 6px 10px;
-line-height: 1;
-transition: all 0.15s;
-flex-shrink: 0;
-}
-.delete-btn:hover { color: white; background: var(–accent); border-color: var(–accent); }
+  .delete-btn {
+    background: none;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .delete-btn:hover { color: white; background: var(--accent); border-color: var(--accent); }
 
-.edit-btn {
-background: none;
-border: 1px solid var(–aged);
-border-radius: 4px;
-color: var(–faded);
-cursor: pointer;
-font-size: 20px;
-padding: 6px 10px;
-line-height: 1;
-transition: all 0.15s;
-flex-shrink: 0;
-}
-.edit-btn:hover { color: white; background: var(–gold); border-color: var(–gold); }
+  .edit-btn {
+    background: none;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .edit-btn:hover { color: white; background: var(--gold); border-color: var(--gold); }
 
-.detail-btn {
-background: none;
-border: 1px solid var(–aged);
-border-radius: 4px;
-color: var(–faded);
-cursor: pointer;
-font-size: 20px;
-padding: 6px 10px;
-line-height: 1;
-transition: all 0.15s;
-flex-shrink: 0;
-}
-.detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
-.detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+  .detail-btn {
+    background: none;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    color: var(--faded);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .detail-btn:hover { color: white; background: #3a6ea5; border-color: #3a6ea5; }
+  .detail-btn.active { color: white; background: #3a6ea5; border-color: #3a6ea5; }
 
-.item-memo-row {
-margin-top: 8px;
-display: none;
-}
-.item-memo-row.open { display: block; }
-.item-memo-textarea {
-width: 100%;
-border: 1px solid var(–aged);
-border-radius: 4px;
-background: #f9f6f0;
-padding: 8px 10px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-size: 13px;
-color: var(–ink);
-outline: none;
-resize: vertical;
-min-height: 80px;
-transition: border-color 0.2s;
-box-sizing: border-box;
-}
-.item-memo-textarea:focus { border-color: #3a6ea5; }
-.item-memo-textarea::placeholder { color: var(–faded); }
-.item-memo-save {
-background: #3a6ea5;
-color: white;
-border: none;
-padding: 4px 14px;
-font-size: 12px;
-cursor: pointer;
-border-radius: 2px;
-margin-top: 5px;
-transition: all 0.15s;
-}
-.item-memo-save:hover { background: #2a5a8a; }
-.item-memo-preview {
-font-size: 12px;
-color: #3a6ea5;
-margin-top: 4px;
-white-space: pre-wrap;
-line-height: 1.5;
-background: #f0f4fa;
-padding: 6px 10px;
-border-radius: 4px;
-border-left: 3px solid #3a6ea5;
-}
+  .item-btn-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
 
-.item-edit-row {
-display: flex;
-gap: 6px;
-margin-top: 8px;
-align-items: center;
-}
-.item-edit-input {
-flex: 1;
-border: none;
-border-bottom: 1.5px solid var(–gold);
-background: transparent;
-padding: 4px 4px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-font-size: 14px;
-color: var(–ink);
-outline: none;
-}
-.item-edit-save {
-background: var(–ink);
-color: var(–gold);
-border: none;
-padding: 4px 12px;
-font-size: 12px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-white-space: nowrap;
-}
-.item-edit-save:hover { background: var(–sage); color: white; }
-.item-edit-cancel {
-background: none;
-border: 1px solid var(–aged);
-color: var(–faded);
-padding: 4px 10px;
-font-size: 12px;
-cursor: pointer;
-border-radius: 2px;
-transition: all 0.15s;
-}
-.item-edit-cancel:hover { color: var(–ink); border-color: var(–ink); }
+  .item-memo-row {
+    margin-top: 8px;
+    display: none;
+  }
+  .item-memo-row.open { display: block; }
+  .item-memo-textarea {
+    width: 100%;
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    background: #f9f6f0;
+    padding: 8px 10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .item-memo-textarea:focus { border-color: #3a6ea5; }
+  .item-memo-textarea::placeholder { color: var(--faded); }
+  .item-memo-save {
+    background: #3a6ea5;
+    color: white;
+    border: none;
+    padding: 4px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 5px;
+    transition: all 0.15s;
+  }
+  .item-memo-save:hover { background: #2a5a8a; }
+  .item-memo-preview {
+    font-size: 12px;
+    color: #3a6ea5;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    background: #f0f4fa;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border-left: 3px solid #3a6ea5;
+  }
 
-/* Progress */
-.progress-section { margin-bottom: 24px; }
-.progress-label {
-display: flex;
-justify-content: space-between;
-font-size: 11px;
-letter-spacing: 0.1em;
-color: var(–faded);
-margin-bottom: 6px;
-}
-.progress-bar {
-height: 4px;
-background: var(–aged);
-border-radius: 2px;
-overflow: hidden;
-}
-.progress-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–sage), var(–gold));
-border-radius: 2px;
-transition: width 0.5s ease;
-}
+  .item-edit-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .item-edit-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1.5px solid var(--gold);
+    background: transparent;
+    padding: 4px 4px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+  }
+  .item-edit-save {
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .item-edit-save:hover { background: var(--sage); color: white; }
+  .item-edit-cancel {
+    background: none;
+    border: 1px solid var(--aged);
+    color: var(--faded);
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .item-edit-cancel:hover { color: var(--ink); border-color: var(--ink); }
 
-/* Empty state */
-.empty {
-text-align: center;
-padding: 48px 24px;
-color: var(–faded);
-}
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-text { font-family: ‘Shippori Mincho’, serif; font-size: 16px; }
-.empty-sub { font-size: 12px; margin-top: 6px; letter-spacing: 0.05em; }
+  /* Progress */
+  .progress-section { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--aged);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
 
-/* カテゴリー別達成率 */
-.cat-stats {
-background: white;
-border: 1px solid var(–aged);
-border-radius: 2px;
-padding: 14px 16px;
-margin-bottom: 20px;
-box-shadow: 0 1px 4px var(–shadow);
-}
-.cat-stats-title {
-font-size: 10px;
-letter-spacing: 0.2em;
-color: var(–faded);
-margin-bottom: 10px;
-}
-.cat-stat-row {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-bottom: 8px;
-}
-.cat-stat-row:last-child { margin-bottom: 0; }
-.cat-stat-label {
-font-size: 11px;
-color: var(–ink);
-width: 90px;
-flex-shrink: 0;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-.cat-stat-bar-wrap {
-flex: 1;
-height: 6px;
-background: var(–aged);
-border-radius: 3px;
-overflow: hidden;
-}
-.cat-stat-bar-fill {
-height: 100%;
-border-radius: 3px;
-transition: width 0.6s ease;
-}
-.cat-stat-count {
-font-size: 11px;
-color: var(–faded);
-white-space: nowrap;
-width: 60px;
-text-align: right;
-flex-shrink: 0;
-}
-.cat-stat-pct {
-font-size: 11px;
-font-family: ‘Shippori Mincho’, serif;
-color: var(–ink);
-width: 36px;
-text-align: right;
-flex-shrink: 0;
-}
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--faded);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-text { font-family: 'Shippori Mincho', serif; font-size: 16px; }
+  .empty-sub { font-size: 12px; margin-top: 6px; letter-spacing: 0.05em; }
 
-/* Confetti */
-.confetti-piece {
-position: fixed;
-width: 8px; height: 8px;
-pointer-events: none;
-animation: confettiFall 1.5s ease-in forwards;
-z-index: 9999;
-border-radius: 1px;
-}
-@keyframes confettiFall {
-0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
+  /* カテゴリー別達成率 */
+  .cat-stats {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .cat-stats-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    margin-bottom: 10px;
+  }
+  .cat-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .cat-stat-row:last-child { margin-bottom: 0; }
+  .cat-stat-label {
+    font-size: 11px;
+    color: var(--ink);
+    width: 90px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cat-stat-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--aged);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .cat-stat-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .cat-stat-count {
+    font-size: 11px;
+    color: var(--faded);
+    white-space: nowrap;
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .cat-stat-pct {
+    font-size: 11px;
+    font-family: 'Shippori Mincho', serif;
+    color: var(--ink);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
 
-/* 同期ステータス */
-#syncStatus {
-position: fixed;
-bottom: 16px; right: 16px;
-background: var(–ink);
-color: var(–gold);
-font-size: 11px;
-padding: 6px 14px;
-border-radius: 20px;
-letter-spacing: 0.1em;
-z-index: 1000;
-display: none;
-align-items: center;
-gap: 7px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-}
-.sync-dot {
-width: 7px; height: 7px;
-border-radius: 50%;
-background: var(–gold);
-animation: syncPulse 2s infinite;
-}
-.sync-dot.saving { background: var(–sage); animation: none; }
-.sync-dot.error  { background: var(–accent); animation: none; }
-@keyframes syncPulse {
-0%,100% { opacity:1; } 50% { opacity:0.3; }
-}
-/* モードタブ */
-.mode-tabs {
-display: flex;
-overflow-x: auto;
-scrollbar-width: none;
-background: var(–ink);
-border-bottom: 2px solid var(–gold);
-padding: 0 8px;
-}
-.mode-tabs::-webkit-scrollbar { display: none; }
-.mode-btn {
-background: none;
-border: none;
-color: rgba(245,240,232,0.5);
-padding: 10px 12px;
-font-size: 12px;
-font-family: ‘Zen Kaku Gothic New’, sans-serif;
-cursor: pointer;
-white-space: nowrap;
-border-bottom: 2px solid transparent;
-margin-bottom: -2px;
-transition: all 0.2s;
-}
-.mode-btn.active { color: var(–gold); border-bottom-color: var(–gold); }
-.mode-btn:hover:not(.active) { color: var(–paper); }
-/* 訪問記録 */
-.visit-item {
-padding: 6px 10px;
-border: 1px solid var(–aged);
-border-radius: 3px;
-font-size: 12px;
-cursor: pointer;
-background: white;
-transition: all 0.15s;
-text-align: center;
-position: relative;
-}
-.visit-item.visited { background: rgba(139,44,100,0.85); color: white; border-color: rgba(139,44,100,0.85); }
-.visit-item:hover { opacity: 0.8; }
-.visit-year { font-size: 9px; display: block; opacity: 0.85; }
-.visit-history-title { font-size: 11px; letter-spacing: 0.15em; color: var(–faded); padding: 8px 0 4px; border-top: 1px solid var(–aged); margin-top: 8px; }
-.visit-history-year { font-size: 13px; font-weight: 700; color: var(–accent); font-family: ‘Shippori Mincho’, serif; padding: 4px 0 2px; }
-.visit-history-places { padding: 2px 0 6px; font-size: 12px; color: var(–ink); line-height: 1.8; }
-.history-name-btn { cursor: pointer; color: #8b2c6a; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
-/* 大陸グループ */
-.continent-group { width: 100%; margin-bottom: 6px; }
-.continent-label { font-size: 12px; font-weight: 700; color: var(–ink); background: var(–aged); padding: 4px 10px; border-radius: 2px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-.continent-count { font-size: 11px; color: #8b2c6a; font-weight: 700; }
-.continent-items { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 4px 4px; }
-/* 温泉 */
-.onsen-item-wrap { display: flex; flex-direction: column; align-items: stretch; gap: 2px; width: calc(33% - 4px); min-width: 70px; }
-.onsen-btn { flex: 1; line-height: 1.2; padding: 4px 4px 3px; text-align: center; font-size: 10px; font-weight: 700; }
-.onsen-detail-btn { background: #f0f4fa; border: 1px solid #c0cce0; border-radius: 2px; font-size: 9px; padding: 1px 4px; cursor: pointer; color: #3a6ea5; text-align: center; width: 100%; transition: all 0.15s; }
-.onsen-detail-btn:hover { background: #3a6ea5; color: white; }
-.onsen-detail-popup { background: #f0f4fa; border: 1px solid #c0cce0; border-left: 3px solid #3a6ea5; border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #1a1209; margin-top: 4px; line-height: 1.6; }
-.onsen-detail-popup strong { display: block; font-size: 10px; color: #3a6ea5; margin-bottom: 3px; }
-/* SVG地図 */
-#visitMap svg { width: 100%; height: auto; display: block; }
-#visitMap path { fill: #e8dfc8; stroke: #9a8f7a; stroke-width: 0.5; cursor: pointer; transition: fill 0.2s; }
-#visitMap path:hover { opacity: 0.8; }
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 8px;
+    pointer-events: none;
+    animation: confettiFall 1.5s ease-in forwards;
+    z-index: 9999;
+    border-radius: 1px;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* モード切り替えバー */
+  .mode-bar {
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid rgba(201,162,39,0.2);
+  }
+  .mode-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 11px;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .mode-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    font-weight: 700;
+  }
+  .mode-btn:hover:not(.active) { color: var(--paper); }
+
+  /* 訪問記録パネル */
+  .visit-header {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    padding: 12px 16px;
+    margin: 12px 8px 8px;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .visit-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .visit-stats {
+    font-size: 12px;
+    color: var(--faded);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .visit-progress-bar {
+    height: 4px;
+    background: var(--aged);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .visit-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .visit-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+  }
+  .visit-item {
+    border: 1.5px solid var(--aged);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    color: var(--ink);
+    user-select: none;
+    font-weight: 700;
+  }
+  .visit-item.visited {
+    background: #8b2c6a;
+    border-color: #8b2c6a;
+    color: white;
+  }
+  .visit-item:hover { transform: translateY(-1px); box-shadow: 0 2px 6px var(--shadow); }
+  .visit-year {
+    display: block;
+    font-size: 9px;
+    opacity: 0.85;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .visit-map-wrap {
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    margin: 0 8px 8px;
+    padding: 8px;
+    box-shadow: 0 1px 4px var(--shadow);
+    overflow: hidden;
+  }
+  #visitMap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  #visitMap path {
+    fill: #e8dfc8;
+    stroke: #9a8f7a;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.2s;
+  }
+  #visitMap path.map-visited {
+    stroke: #6a1a4a;
+    stroke-width: 0.8;
+  }
+  #visitMap path:hover { opacity: 0.8; }
+  .map-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(26,18,9,0.75);
+    color: var(--gold);
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    line-height: 1.5;
+    text-align: center;
+    pointer-events: none;
+  }
+  .onsen-item-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    width: calc(33% - 4px);
+    min-width: 80px;
+  }
+  .onsen-btn {
+    flex: 1;
+    line-height: 1.3;
+    padding: 6px 6px 4px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .onsen-detail-btn {
+    background: #f0f4fa;
+    border: 1px solid #c0cce0;
+    border-radius: 2px;
+    font-size: 10px;
+    padding: 2px 4px;
+    cursor: pointer;
+    color: #3a6ea5;
+    text-align: center;
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .onsen-detail-btn:hover { background: #3a6ea5; color: white; }
+  .onsen-detail-popup {
+    background: #f0f4fa;
+    border: 1px solid #c0cce0;
+    border-left: 3px solid #3a6ea5;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #1a1209;
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+  .onsen-detail-popup strong {
+    display: block;
+    font-size: 10px;
+    color: #3a6ea5;
+    margin-bottom: 3px;
+  }
+  .continent-group {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .continent-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--aged);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .continent-count {
+    font-size: 11px;
+    color: #8b2c6a;
+    font-weight: 700;
+  }
+  .continent-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 0 4px 4px;
+  }
+  .visit-history {
+    margin: 0 8px 16px;
+    background: white;
+    border: 1px solid var(--aged);
+    border-radius: 2px;
+    box-shadow: 0 1px 4px var(--shadow);
+    overflow: hidden;
+  }
+  .visit-history-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    padding: 8px 14px 4px;
+    border-bottom: 1px solid var(--aged);
+    font-weight: 700;
+  }
+  .visit-history-year {
+    padding: 6px 14px 2px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8b2c6a;
+    border-top: 1px solid var(--aged);
+    margin-top: 4px;
+  }
+  .visit-history-year:first-of-type { border-top: none; margin-top: 0; }
+  .visit-history-places {
+    padding: 2px 14px 6px;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  .history-name-btn {
+    cursor: pointer;
+    color: #8b2c6a;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .history-name-btn:hover { color: #6a1a4a; }
+
+  /* 年選択ダイアログ */
+  .year-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .year-dialog {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .year-dialog-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .year-select-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .year-select {
+    font-size: 22px;
+    font-family: 'Shippori Mincho', serif;
+    border: 2px solid var(--aged);
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: var(--ink);
+    background: var(--paper);
+    text-align: center;
+    width: 120px;
+  }
+  .year-dialog-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .year-dialog-ok {
+    flex: 1;
+    background: #8b2c6a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .year-dialog-ok:hover { background: #6a1a4a; }
+  .year-dialog-cancel {
+    flex: 1;
+    background: none;
+    color: var(--faded);
+    border: 1px solid var(--aged);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    cursor: pointer;
+  }
+  .year-dialog-cancel:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* 同期ステータス */
+  #syncStatus {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: syncPulse 2s infinite;
+  }
+  .sync-dot.saving { background: var(--sage); animation: none; }
+  .sync-dot.error  { background: var(--accent); animation: none; }
+  @keyframes syncPulse {
+    0%,100% { opacity:1; } 50% { opacity:0.3; }
+  }
 </style>
-
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
-
 </head>
 <body>
 <div id="syncStatus">
   <span class="sync-dot" id="syncDot"></span>
   <span id="syncText">接続中…</span>
+</div>
+
+<!-- 年選択ダイアログ -->
+<div class="year-dialog-overlay" id="yearDialog" style="display:none;">
+  <div class="year-dialog">
+    <div class="year-dialog-title" id="yearDialogTitle"></div>
+    <div class="year-select-wrap">
+      <select class="year-select" id="yearSelect"></select>
+    </div>
+    <div class="year-dialog-btns">
+      <button class="year-dialog-ok" onclick="confirmYear()">記録する</button>
+      <button class="year-dialog-cancel" onclick="cancelYear()">キャンセル</button>
+    </div>
+  </div>
 </div>
 
 <header>
@@ -872,9 +1231,8 @@ position: relative;
   </div>
 </div>
 
-<!-- モード切替タブ -->
-
-<div class="mode-tabs">
+<!-- モード切り替えバー -->
+<div class="mode-bar">
   <button class="mode-btn active" onclick="setMode('bucket')">📚 バケットリスト</button>
   <button class="mode-btn" onclick="setMode('onsen')">♨️ 温泉</button>
   <button class="mode-btn" onclick="setMode('japan')">🗾 都道府県</button>
@@ -883,51 +1241,39 @@ position: relative;
 </div>
 
 <!-- 訪問記録パネル -->
-
 <div id="visitPanel" style="display:none;">
-  <div style="max-width:680px;margin:0 auto;padding:12px 16px 0;">
-    <div id="visitTitle" style="font-family:'Shippori Mincho',serif;font-size:16px;font-weight:700;margin-bottom:6px;"></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-      <span id="visitStats" style="font-size:12px;color:var(--faded);"></span>
-    </div>
-    <div style="height:4px;background:var(--aged);border-radius:2px;margin-bottom:12px;">
-      <div id="visitFill" style="height:100%;background:linear-gradient(90deg,#8b2c6a,#c9a227);border-radius:2px;transition:width 0.5s;width:0%;"></div>
-    </div>
-    <div id="visitMap" style="margin-bottom:12px;position:relative;">
-      <div id="mapOverlay" style="position:absolute;top:8px;right:8px;background:rgba(26,18,9,0.75);color:var(--gold);font-family:'Shippori Mincho',serif;font-size:13px;padding:6px 10px;border-radius:4px;text-align:center;line-height:1.4;z-index:10;"></div>
-    </div>
-    <div id="visitGrid" class="visit-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;"></div>
-    <div id="visitHistory"></div>
+  <div class="visit-header">
+    <div class="visit-title" id="visitTitle"></div>
+    <div class="visit-stats" id="visitStats"></div>
+    <div class="visit-progress-bar"><div class="visit-progress-fill" id="visitFill"></div></div>
   </div>
+  <!-- ボタン上・地図下 -->
+  <div class="visit-grid" id="visitGrid"></div>
+  <div class="visit-map-wrap" style="position:relative;">
+    <div id="visitMap"></div>
+    <div class="map-overlay" id="mapOverlay"></div>
+  </div>
+  <!-- 訪問履歴 -->
+  <div class="visit-history" id="visitHistory"></div>
 </div>
 
-<!-- 年選択ダイアログ -->
 
-<div id="yearDialog" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:8px;padding:20px;width:280px;max-width:90vw;">
-    <div id="yearDialogTitle" style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--ink);"></div>
-    <select id="yearSelect" style="width:100%;padding:8px;font-size:16px;border:1px solid var(--aged);border-radius:4px;margin-bottom:14px;"></select>
-    <div style="display:flex;gap:8px;">
-      <button onclick="confirmYear()" style="flex:1;background:var(--ink);color:var(--gold);border:none;padding:10px;border-radius:4px;font-size:14px;cursor:pointer;">記録する</button>
-      <button onclick="cancelYear()" style="flex:1;background:var(--aged);color:var(--ink);border:none;padding:10px;border-radius:4px;font-size:14px;cursor:pointer;">キャンセル</button>
-    </div>
-  </div>
-</div>
 
 <main>
   <!-- Progress -->
-  <!-- Add form -->
-  <div class="add-section">
+  <!-- Add form + Search -->
+  <div style="display:flex; gap:4px; align-items:stretch; margin-bottom:16px; width:100%; box-sizing:border-box; overflow:hidden;">
+  <div class="add-section" style="margin-bottom:0; flex:4; min-width:0; overflow:hidden;">
     <div class="add-row">
       <input type="text" id="newItem" placeholder="やりたいことを入力…" maxlength="60">
       <button class="add-btn" onclick="addItem()">追加</button>
     </div>
     <div class="add-meta-row">
       <select id="catSelect">
-        <option value="海外旅行">✈️ 海外旅行</option>
+        <option value="海外旅行">🌏 海外旅行</option>
         <option value="国内旅行">🗾 国内旅行</option>
         <option value="食・グルメ">🍜 食・グルメ</option>
-        <option value="スキル・学習">📚 スキル・学習</option>
+        <option value="スキル・学習">✏️ スキル・学習</option>
         <option value="人生の目標">⭐ 人生の目標</option>
       </select>
     </div>
@@ -946,23 +1292,29 @@ position: relative;
       </div>
     </div>
   </div>
+  <!-- Search box -->
+  <div class="search-section">
+    <div class="search-icon">🔍</div>
+    <input type="text" id="searchInput" placeholder="検索…" oninput="doSearch(this.value)">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+    <div id="searchCount" class="search-count"></div>
+  </div>
+  </div>
 
   <!-- Filter tabs -->
-
   <div class="filter-tabs">
-    <button class="tab active" onclick="setFilter('全て', this)">全て</button>
-    <button class="tab" onclick="setFilter('海外旅行', this)">✈️ 海外</button>
-    <button class="tab" onclick="setFilter('国内旅行', this)">🗾 国内</button>
-    <button class="tab" onclick="setFilter('食・グルメ', this)">🍜 グルメ</button>
-    <button class="tab" onclick="setFilter('スキル・学習', this)">📚 学習</button>
-    <button class="tab" onclick="setFilter('人生の目標', this)">⭐ 目標</button>
-    <button class="tab" onclick="setFilter('達成済み', this)">✅ 達成</button>
-    <button class="tab tab-trash" onclick="setFilter('ゴミ箱', this)">🗑️ <span id="trashCount"></span></button>
+    <button class="tab tab-all active" onclick="setFilter('全て', this)"><span class="tab-pct" id="pct-all"></span>📚<span class="tab-stat" id="stat-all"></span></button>
+    <button class="tab" onclick="setFilter('海外旅行', this)"><span class="tab-pct" id="pct-海外旅行"></span>🌏<span class="tab-stat" id="stat-海外旅行"></span></button>
+    <button class="tab" onclick="setFilter('国内旅行', this)"><span class="tab-pct" id="pct-国内旅行"></span>🗾<span class="tab-stat" id="stat-国内旅行"></span></button>
+    <button class="tab" onclick="setFilter('食・グルメ', this)"><span class="tab-pct" id="pct-食・グルメ"></span>🍜<span class="tab-stat" id="stat-食・グルメ"></span></button>
+    <button class="tab" onclick="setFilter('スキル・学習', this)"><span class="tab-pct" id="pct-スキル・学習"></span>✏️<span class="tab-stat" id="stat-スキル・学習"></span></button>
+    <button class="tab" onclick="setFilter('人生の目標', this)"><span class="tab-pct" id="pct-人生の目標"></span>⭐<span class="tab-stat" id="stat-人生の目標"></span></button>
+    <button class="tab" onclick="setFilter('達成済み', this)"><span class="tab-pct" id="pct-達成済み"></span>✅<span class="tab-stat" id="stat-達成済み"></span></button>
+    <button class="tab tab-trash" onclick="setFilter('ゴミ箱', this)"><span class="tab-pct"></span>🗑️<span class="tab-stat" id="trashCount"></span></button>
   </div>
 
   <!-- Items -->
-
-  <div class="header-cat-stats" id="headerCatStats"></div>
+  <div class="header-cat-stats" id="headerCatStats" style="display:none;"></div>
   <div class="items-list" id="itemsList"></div>
 </main>
 
@@ -1253,7 +1605,7 @@ const DEFAULT_ITEMS = [
 ];
 
 // バージョン管理でローカルストレージをリセット
-const DATA_VERSION = 'v7_new23';
+const DATA_VERSION = 'v8_onsen111';
 // ===== Firebase REST API =====
 const DB_URL = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app";
 
@@ -1371,21 +1723,992 @@ window.onload = async function() {
       setSyncStatus('synced');
       startPolling();
     } else {
-      // Firebaseにデータがない場合はデフォルトを使用（上書きしない）
+      // 初回：デフォルトデータをFirebaseに書き込む
+      await saveToFirebase();
       setSyncStatus('synced');
       startPolling();
     }
-    // 訪問記録を読み込み
+    // 訪問記録をFirebaseから読み込み
     await loadVisitFromFirebase();
   } catch(e) {
     console.error('Firebase接続エラー:', e);
     document.getElementById('syncStatus').style.display = 'flex';
     document.getElementById('syncDot').className = 'sync-dot error';
     document.getElementById('syncText').textContent = '同期エラー（オフライン動作中）';
-    // オフラインでも訪問記録を試みる
-    try { await loadVisitFromFirebase(); } catch(e2) {}
   }
 };
+
+// ===== 地図SVGデータ =====
+const MAP_SVG = {
+
+japan: `<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+<path data-name="北海道" d="M280,30 L320,25 L370,40 L400,60 L410,90 L390,120 L360,140 L320,150 L290,145 L260,130 L240,110 L245,80 L260,55 Z"/>
+<path data-name="青森" d="M270,155 L310,150 L330,160 L325,185 L300,195 L275,190 L260,175 Z"/>
+<path data-name="岩手" d="M295,195 L330,185 L345,200 L340,235 L315,250 L290,240 L280,220 Z"/>
+<path data-name="宮城" d="M280,240 L315,250 L320,270 L300,285 L275,280 L265,260 Z"/>
+<path data-name="秋田" d="M255,185 L280,190 L285,220 L275,245 L250,250 L232,230 L235,205 Z"/>
+<path data-name="山形" d="M250,250 L275,245 L280,270 L265,290 L242,290 L232,270 Z"/>
+<path data-name="福島" d="M265,285 L300,285 L315,300 L310,325 L280,330 L255,320 L250,300 Z"/>
+<path data-name="茨城" d="M310,310 L335,305 L345,325 L335,345 L310,345 L300,330 Z"/>
+<path data-name="栃木" d="M290,295 L315,290 L320,310 L310,330 L285,328 L278,310 Z"/>
+<path data-name="群馬" d="M268,290 L292,288 L295,310 L280,325 L258,318 L255,300 Z"/>
+<path data-name="埼玉" d="M285,325 L310,322 L315,340 L295,350 L275,345 L272,330 Z"/>
+<path data-name="千葉" d="M318,330 L345,325 L360,345 L355,370 L330,375 L312,355 Z"/>
+<path data-name="東京" d="M295,345 L318,340 L322,358 L305,365 L290,358 Z"/>
+<path data-name="神奈川" d="M278,358 L302,355 L308,372 L288,382 L268,375 Z"/>
+<path data-name="新潟" d="M220,220 L255,215 L265,250 L255,280 L225,285 L205,265 L208,238 Z"/>
+<path data-name="富山" d="M210,285 L238,282 L245,300 L228,315 L208,308 Z"/>
+<path data-name="石川" d="M192,285 L215,282 L218,308 L200,325 L180,315 L178,295 Z"/>
+<path data-name="福井" d="M185,320 L208,315 L215,335 L198,350 L178,342 Z"/>
+<path data-name="山梨" d="M262,345 L285,340 L290,360 L272,372 L252,365 Z"/>
+<path data-name="長野" d="M230,300 L262,295 L270,330 L258,355 L228,352 L215,328 Z"/>
+<path data-name="岐阜" d="M200,325 L232,320 L240,350 L225,372 L198,368 L188,348 Z"/>
+<path data-name="静岡" d="M248,368 L288,365 L298,385 L278,400 L248,395 L235,378 Z"/>
+<path data-name="愛知" d="M215,368 L248,365 L252,388 L230,402 L208,395 L205,375 Z"/>
+<path data-name="三重" d="M205,375 L232,370 L238,398 L222,418 L200,412 L192,392 Z"/>
+<path data-name="滋賀" d="M195,348 L222,342 L228,365 L210,378 L190,370 Z"/>
+<path data-name="京都" d="M175,342 L200,338 L205,362 L188,375 L168,368 Z"/>
+<path data-name="大阪" d="M178,368 L205,362 L210,382 L192,392 L172,385 Z"/>
+<path data-name="兵庫" d="M145,340 L180,335 L185,368 L165,382 L138,372 L132,350 Z"/>
+<path data-name="奈良" d="M192,370 L218,365 L222,388 L202,400 L182,392 Z"/>
+<path data-name="和歌山" d="M182,392 L208,388 L215,412 L195,428 L172,418 Z"/>
+<path data-name="鳥取" d="M128,330 L162,325 L168,345 L145,355 L122,348 Z"/>
+<path data-name="島根" d="M98,328 L135,322 L140,342 L115,352 L92,345 Z"/>
+<path data-name="岡山" d="M135,348 L168,342 L175,362 L152,375 L128,368 Z"/>
+<path data-name="広島" d="M105,348 L140,342 L145,365 L120,378 L98,370 Z"/>
+<path data-name="山口" d="M75,352 L112,345 L118,368 L92,382 L68,372 Z"/>
+<path data-name="徳島" d="M168,378 L200,372 L205,395 L182,408 L158,400 Z"/>
+<path data-name="香川" d="M148,362 L180,355 L185,375 L160,385 L138,378 Z"/>
+<path data-name="愛媛" d="M118,368 L152,362 L158,385 L132,398 L108,390 Z"/>
+<path data-name="高知" d="M128,395 L168,388 L175,412 L148,428 L118,420 Z"/>
+<path data-name="福岡" d="M52,355 L88,348 L92,372 L65,385 L42,375 Z"/>
+<path data-name="佐賀" d="M38,370 L68,362 L72,382 L48,392 L30,385 Z"/>
+<path data-name="長崎" d="M18,368 L48,358 L55,382 L32,398 L12,388 Z"/>
+<path data-name="熊本" d="M50,382 L85,375 L90,400 L62,415 L38,405 Z"/>
+<path data-name="大分" d="M82,362 L118,355 L122,378 L95,392 L68,382 Z"/>
+<path data-name="宮崎" d="M78,398 L115,390 L120,418 L90,435 L62,425 Z"/>
+<path data-name="鹿児島" d="M55,418 L92,410 L98,440 L68,458 L40,445 Z"/>
+<path data-name="沖縄" d="M85,520 L115,515 L118,535 L95,542 L78,535 Z"/>
+</svg>`,
+
+china: `<svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+<path data-name="北京市" d="M355,112 L372,108 L378,120 L368,130 L350,125 Z"/>
+<path data-name="天津市" d="M370,125 L388,120 L392,135 L378,142 L362,138 Z"/>
+<path data-name="河北省" d="M330,95 L390,88 L400,140 L370,158 L325,152 L308,120 Z"/>
+<path data-name="山西省" d="M305,120 L335,115 L342,170 L312,182 L288,165 L285,138 Z"/>
+<path data-name="内モンゴル自治区" d="M220,45 L450,30 L470,95 L400,108 L330,98 L260,105 L210,90 Z"/>
+<path data-name="遼寧省" d="M390,88 L445,80 L460,118 L420,135 L385,125 Z"/>
+<path data-name="吉林省" d="M418,60 L475,52 L488,90 L448,102 L415,90 Z"/>
+<path data-name="黒竜江省" d="M388,22 L500,15 L520,62 L475,75 L420,65 L385,45 Z"/>
+<path data-name="上海市" d="M415,215 L428,210 L432,222 L420,228 Z"/>
+<path data-name="江蘇省" d="M375,175 L420,168 L428,220 L395,230 L365,218 Z"/>
+<path data-name="浙江省" d="M378,218 L418,210 L425,255 L392,268 L362,252 Z"/>
+<path data-name="安徽省" d="M338,175 L378,168 L385,225 L350,238 L318,222 Z"/>
+<path data-name="福建省" d="M375,252 L418,242 L428,288 L395,302 L362,285 Z"/>
+<path data-name="江西省" d="M335,238 L375,228 L382,278 L348,292 L318,275 Z"/>
+<path data-name="山東省" d="M355,148 L408,140 L418,178 L378,188 L345,175 Z"/>
+<path data-name="河南省" d="M308,155 L358,148 L365,198 L328,210 L295,195 Z"/>
+<path data-name="湖北省" d="M295,198 L348,190 L355,238 L315,252 L280,238 Z"/>
+<path data-name="湖南省" d="M295,240 L340,230 L348,280 L312,295 L275,278 Z"/>
+<path data-name="広東省" d="M315,292 L370,282 L378,328 L340,342 L302,325 Z"/>
+<path data-name="海南省" d="M325,348 L355,342 L358,368 L332,375 L312,362 Z"/>
+<path data-name="四川省" d="M215,175 L295,165 L305,238 L252,258 L205,238 L198,200 Z"/>
+<path data-name="貴州省" d="M245,255 L305,242 L312,288 L268,305 L232,290 Z"/>
+<path data-name="雲南省" d="M198,278 L258,262 L272,322 L228,342 L185,318 Z"/>
+<path data-name="陝西省" d="M270,128 L320,120 L330,178 L295,195 L258,178 Z"/>
+<path data-name="甘粛省" d="M168,88 L288,72 L300,128 L265,142 L178,132 Z"/>
+<path data-name="青海省" d="M128,138 L235,118 L248,188 L195,212 L118,192 Z"/>
+<path data-name="チベット自治区" d="M68,175 L205,148 L218,255 L155,285 L58,258 Z"/>
+<path data-name="広西チワン族自治区" d="M268,295 L322,282 L332,328 L292,345 L252,328 Z"/>
+<path data-name="寧夏回族自治区" d="M262,128 L302,120 L308,158 L275,168 L255,152 Z"/>
+<path data-name="新疆ウイグル自治区" d="M35,48 L188,22 L215,130 L155,162 L42,148 Z"/>
+<path data-name="香港" d="M360,330 L372,326 L375,338 L362,342 Z"/>
+<path data-name="マカオ" d="M345,335 L355,330 L357,340 L347,344 Z"/>
+<path data-name="台湾" d="M442,235 L458,228 L465,265 L450,275 L435,258 Z"/>
+</svg>`,
+
+world: `<div id='worldMapD3'></div>`
+
+};
+// ===== 訪問記録 =====
+const JAPAN_PREFS = ['北海道','青森','岩手','宮城','秋田','山形','福島','茨城','栃木','群馬','埼玉','千葉','東京','神奈川','新潟','富山','石川','福井','山梨','長野','岐阜','静岡','愛知','三重','滋賀','京都','大阪','兵庫','奈良','和歌山','鳥取','島根','岡山','広島','山口','徳島','香川','愛媛','高知','福岡','佐賀','長崎','熊本','大分','宮崎','鹿児島','沖縄'];
+
+const CHINA_REGIONS = ['北京市','天津市','上海市','重慶市','河北省','山西省','遼寧省','吉林省','黒竜江省','江蘇省','浙江省','安徽省','福建省','江西省','山東省','河南省','湖北省','湖南省','広東省','海南省','四川省','貴州省','雲南省','陝西省','甘粛省','青海省','内モンゴル自治区','広西チワン族自治区','チベット自治区','寧夏回族自治区','新疆ウイグル自治区','香港','マカオ','台湾'];
+
+
+const ONSEN_DATA = [
+  {key:'北海道登別温泉',pref:'北海道',name:'登別温泉',region:'🌨️ 北海道',stars:3,starStr:'⭐⭐⭐',dayBath:'登別温泉郷滝乃家、祝いの宿登別グランドホテル、第一滝本館'},
+  {key:'北海道湯の川温泉',pref:'北海道',name:'湯の川温泉',region:'🌨️ 北海道',stars:2,starStr:'⭐⭐',dayBath:'湯の川温泉 ホテル万葉、湯の川温泉 温泉ホテル'},
+  {key:'北海道定山渓温泉',pref:'北海道',name:'定山渓温泉',region:'🌨️ 北海道',stars:2,starStr:'⭐⭐',dayBath:'万座ホテル聚楽、万座プリンスホテル、万座温泉 日進舘'},
+  {key:'北海道ニセコ温泉',pref:'北海道',name:'ニセコ温泉',region:'🌨️ 北海道',stars:2,starStr:'⭐⭐',dayBath:'白馬八方温泉 白馬オーロラビレッジホテル、白馬温泉 つきの湯'},
+  {key:'北海道網走温泉',pref:'北海道',name:'網走温泉',region:'🌨️ 北海道',stars:1,starStr:'⭐',dayBath:'美幌峠温泉 望湖台温泉 美幌峠温泉 層雲峡温泉'},
+  {key:'北海道美幌峠温泉',pref:'北海道',name:'美幌峠温泉',region:'🌨️ 北海道',stars:1,starStr:'⭐',dayBath:'阿寒湖温泉 あかん遊久の里鶴雅、鄙の座、阿寒湖温泉 ホテル阿寒湖'},
+  {key:'北海道阿寒湖温泉',pref:'北海道',name:'阿寒湖温泉',region:'🌨️ 北海道',stars:1,starStr:'⭐',dayBath:'屈斜路温泉 屈斜路温泉 レイクホテル屈斜路、屈斜路温泉 湯元鶴雅'},
+  {key:'北海道屈斜路温泉',pref:'北海道',name:'屈斜路温泉',region:'🌨️ 北海道',stars:1,starStr:'⭐',dayBath:'浅虫温泉 浅虫温泉 旅館南宛、浅虫温泉 旅館大佛'},
+  {key:'福島県磐梯熱海温泉',pref:'福島県',name:'磐梯熱海温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'上諏訪温泉 浜の湯、上諏訪温泉 ホテル 霧ヶ峰'},
+  {key:'福島県土湯温泉',pref:'福島県',name:'土湯温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'宇奈月温泉 宇奈月温泉 延対寺荘、黒薙温泉 黒薙温泉旅館'},
+  {key:'青森県酸ヶ湯温泉',pref:'青森県',name:'酸ヶ湯温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'淡路島東浦温泉 ウェスティンホテル淡路、淡路島温泉'},
+  {key:'宮城県鳴子温泉',pref:'宮城県',name:'鳴子温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'四万温泉 四万たむら、四万やまぐち館、四万温泉 積善館'},
+  {key:'山形県蔵王温泉',pref:'山形県',name:'蔵王温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'日光湯元温泉 日光湯元温泉 奥日光高原ホテル、日光温泉 日光奥日光温泉'},
+  {key:'岩手県繫温泉',pref:'岩手県',name:'繫温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'肘折温泉 肘折温泉 旅館松葉、肘折温泉 肘折温泉 大浴場'},
+  {key:'山形県肘折温泉',pref:'山形県',name:'肘折温泉',region:'🍎 東北',stars:2,starStr:'⭐⭐',dayBath:'越後湯沢温泉 越後湯沢温泉ホテル国際、雪國、越後湯沢温泉 矢沢温泉'},
+  {key:'青森県浅虫温泉',pref:'青森県',name:'浅虫温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'大鰐温泉 大鰐温泉 すきや亭、大鰐温泉 星野リゾート 青森屋'},
+  {key:'青森県大鰐温泉',pref:'青森県',name:'大鰐温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'花巻温泉郷 花巻温泉ホテルさか田、花巻温泉 宮大迫温泉'},
+  {key:'岩手県花巻温泉郷',pref:'岩手県',name:'花巻温泉郷',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'会津東山温泉 会津東山温泉 新滝、会津東山温泉 ホテル会津'},
+  {key:'福島県会津東山温泉',pref:'福島県',name:'会津東山温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'月岡温泉 月岡温泉 ホテル泉迎館、月岡温泉 ホテル清風'},
+  {key:'福島県飯坂温泉',pref:'福島県',name:'飯坂温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'塩原温泉 塩原温泉 ホテル塩原、塩原温泉 旅館 彩つむぎ'},
+  {key:'宮城県松島温泉',pref:'宮城県',name:'松島温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'作並温泉 作並温泉 ホテルニュー水戸屋、作並温泉 最上屋旅館'},
+  {key:'宮城県作並温泉',pref:'宮城県',name:'作並温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'玉川温泉 玉川温泉 旅館田中、玉川温泉 湯治宿 玉川温泉旅館組合'},
+  {key:'秋田県玉川温泉',pref:'秋田県',name:'玉川温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'金田一温泉 金田一温泉 旅館 千葉旅館、金田一温泉 旅館 佳松'},
+  {key:'岩手県金田一温泉',pref:'岩手県',name:'金田一温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'いわき湯本温泉 いわき湯本温泉 スパリゾート ハワイアンズ'},
+  {key:'福島県いわき湯本温泉',pref:'福島県',name:'いわき湯本温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'原鶴温泉 原鶴温泉 ホテル原鶴、原鶴温泉 旅館 ひなや'},
+  {key:'岩手県つなぎ温泉',pref:'岩手県',name:'つなぎ温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'湯田温泉 湯田温泉 ホテル湯田、湯田温泉 山陽旅館'},
+  {key:'山形県天童温泉',pref:'山形県',name:'天童温泉',region:'🍎 東北',stars:1,starStr:'⭐',dayBath:'鴨川温泉 鴨川温泉 ホテルグランミラージュ、鴨川温泉 鴨川温泉'},
+  {key:'群馬県草津温泉',pref:'群馬県',name:'草津温泉',region:'🌸 関東',stars:3,starStr:'⭐⭐⭐',dayBath:'大滝乃湯、草津温泉ホテルコサイ、湯宿季の庭'},
+  {key:'神奈川県箱根温泉',pref:'神奈川県',name:'箱根温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'箱根小涌園天悠、強羅花壇、季の湯雪月花、富士屋ホテル'},
+  {key:'群馬県伊香保温泉',pref:'群馬県',name:'伊香保温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'伊香保グランドホテル、木暮旅館、伊香保温泉 ホテル松本'},
+  {key:'群馬県万座温泉',pref:'群馬県',name:'万座温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'磐梯熱海温泉 ホテルハイマート、熱海温泉 福島屋'},
+  {key:'群馬県奥飛騨温泉郷',pref:'群馬県',name:'奥飛騨温泉郷',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'土湯温泉 玉子湯、土湯温泉 あづま'},
+  {key:'栃木県鬼怒川温泉',pref:'栃木県',name:'鬼怒川温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'長門湯本温泉 長門湯本温泉 長門天然温泉、美祢市観光'},
+  {key:'群馬県四万温泉',pref:'群馬県',name:'四万温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'みなかみ18湯温泉 みなかみ町 月夜野温泉郷、猿ヶ京温泉'},
+  {key:'群馬県みなかみ18湯温泉',pref:'群馬県',name:'みなかみ18湯温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'白骨温泉 白骨温泉 湯元齢泉 白骨、白骨温泉 泡の湯'},
+  {key:'栃木県日光湯元温泉',pref:'栃木県',name:'日光湯元温泉',region:'🌸 関東',stars:2,starStr:'⭐⭐',dayBath:'繫温泉 繫温泉 別邸 山の抄、繫温泉 旅館田中'},
+  {key:'栃木県塩原温泉',pref:'栃木県',name:'塩原温泉',region:'🌸 関東',stars:1,starStr:'⭐',dayBath:'鬼怒川上流温泉 鬼怒川上流温泉 ホテル那智の滝'},
+  {key:'埼玉県鬼怒川上流温泉',pref:'埼玉県',name:'鬼怒川上流温泉',region:'🌸 関東',stars:1,starStr:'⭐',dayBath:'勝浦温泉 勝浦温泉 ホテル勝浦、勝浦温泉 丸万旅館'},
+  {key:'千葉県勝浦温泉',pref:'千葉県',name:'勝浦温泉',region:'🌸 関東',stars:1,starStr:'⭐',dayBath:'熱海温泉 熱海後楽園ホテル、古屋旅館、熱海温泉 熱海温泉共同浴場 日の出湯'},
+  {key:'千葉県鴨川温泉',pref:'千葉県',name:'鴨川温泉',region:'🌸 関東',stars:1,starStr:'⭐',dayBath:'西山温泉 西山温泉 慶雲館、西山温泉 西山温泉 遠州の湯'},
+  {key:'栃木県日光温泉',pref:'栃木県',name:'日光温泉',region:'🌸 関東',stars:1,starStr:'⭐',dayBath:'日光温泉 奥日光高原ホテル、日光温泉 ホテルニューパレス、日光湯元温泉 旅館'},
+  {key:'茨城県袋田温泉',pref:'茨城県',name:'袋田温泉',region:'🌸 関東',stars:0,starStr:'',dayBath:'日光温泉 奥日光高原ホテル、日光温泉 ホテルニューパレス、日光温泉 日光温泉旅館'},
+  {key:'東京都奥多摩温泉',pref:'東京都',name:'奥多摩温泉',region:'🌸 関東',stars:0,starStr:'',dayBath:'奥多摩温泉 宿 やまぼうし、奥多摩温泉 ホテル小松'},
+  {key:'岐阜県下呂温泉',pref:'岐阜県',name:'下呂温泉',region:'⛰️ 中部',stars:3,starStr:'⭐⭐⭐',dayBath:'水明館、下呂観光ホテルしょうげつ、小川屋、湯之島館'},
+  {key:'福井県あわら温泉',pref:'福井県',name:'あわら温泉',region:'⛰️ 中部',stars:3,starStr:'⭐⭐⭐',dayBath:'あわら温泉 青雲閣、あわら温泉 福朋プラス'},
+  {key:'石川県和倉温泉',pref:'石川県',name:'和倉温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'和倉温泉 加賀屋、あえの風、加賀屋別邸松乃碧'},
+  {key:'石川県山代温泉',pref:'石川県',name:'山代温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'山代温泉 葉渡莉、山代温泉 日本の宿のと楽'},
+  {key:'長野県野沢温泉',pref:'長野県',name:'野沢温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'野沢温泉 や しおん、野沢温泉 ホテル志賀'},
+  {key:'山梨県富士急温泉',pref:'山梨県',name:'富士急温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'山中温泉 山中温泉 獅子吼、山中温泉 こおろぎ'},
+  {key:'石川県山中温泉',pref:'石川県',name:'山中温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'昼神温泉 竜王の館、昼神温泉 南信州伊那ロイヤルホテル'},
+  {key:'長野県昼神温泉',pref:'長野県',name:'昼神温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'定山渓温泉 定山渓グランドホテル瑞苑、定山渓鶴雅リゾート'},
+  {key:'長野県上諏訪温泉',pref:'長野県',name:'上諏訪温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'こんぴら温泉郷 琴参閣、こんぴら温泉郷 こんぴら温泉華の湯'},
+  {key:'富山県宇奈月温泉',pref:'富山県',name:'宇奈月温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'鬼怒川温泉 鬼怒川温泉ホテル、あさや、鬼怒川温泉 ホテル若木'},
+  {key:'岐阜県飛騨高山温泉',pref:'岐阜県',name:'飛騨高山温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'酸ヶ湯温泉 酸ヶ湯温泉旅館、八甲田ホテル'},
+  {key:'長野県白馬八方温泉',pref:'長野県',name:'白馬八方温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'南紀白浜温泉 南紀白浜温泉ロイヤルホテル、白浜温泉 美浜温泉旅館'},
+  {key:'山梨県下部温泉',pref:'山梨県',name:'下部温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'雄琴温泉 雄琴温泉 琵琶湖マリオットホテル、別邸 浜離宮'},
+  {key:'長野県白骨温泉',pref:'長野県',name:'白骨温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'蔵王温泉 蔵王国際ホテル、深山荘高見屋、蔵王温泉 女性専用高級旅館 松の湯'},
+  {key:'新潟県越後湯沢温泉',pref:'新潟県',name:'越後湯沢温泉',region:'⛰️ 中部',stars:2,starStr:'⭐⭐',dayBath:'天橋立温泉 宮津温泉 ホテル北都、天橋立 温泉'},
+  {key:'新潟県月岡温泉',pref:'新潟県',name:'月岡温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'赤倉温泉 赤倉温泉 ホテルヴィレッジ、赤倉温泉 華翠苑'},
+  {key:'新潟県赤倉温泉',pref:'新潟県',name:'赤倉温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'瀬波温泉 瀬波温泉 ホテル日高、瀬波温泉 瀬波温泉 龍言'},
+  {key:'新潟県瀬波温泉',pref:'新潟県',name:'瀬波温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'黒部峡谷温泉 黒部峡谷温泉 泊 温泉'},
+  {key:'富山県黒部峡谷温泉',pref:'富山県',name:'黒部峡谷温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'戸倉上山田温泉 戸倉上山田温泉 ホテル大日本、戸倉上山田温泉 ホテル国際21'},
+  {key:'長野県戸倉上山田温泉',pref:'長野県',name:'戸倉上山田温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'岡谷温泉 岡谷温泉 ホテル岡谷、岡谷温泉 諏訪湖'},
+  {key:'長野県岡谷温泉',pref:'長野県',name:'岡谷温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'斑尾高原温泉 斑尾高原ホテル、斑尾温泉'},
+  {key:'長野県斑尾高原温泉',pref:'長野県',name:'斑尾高原温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'白川郷温泉 白川郷温泉 お宿 かねや、白川郷温泉 合掌の湯'},
+  {key:'岐阜県白川郷温泉',pref:'岐阜県',name:'白川郷温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'奥日田温泉 奥日田温泉 旅館 中山館、奥日田温泉 泊り木'},
+  {key:'静岡県熱海温泉',pref:'静岡県',name:'熱海温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'伊東温泉 伊東温泉ホテルきらら、ホテルニューアカオ、伊東温泉 ホテル石庭'},
+  {key:'静岡県伊東温泉',pref:'静岡県',name:'伊東温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'浜名湖かんざんじ温泉 浜名湖かんざんじ温泉 ホテルウェルシーズン浜名湖'},
+  {key:'静岡県浜名湖かんざんじ温泉',pref:'静岡県',name:'浜名湖かんざんじ温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'木曽路温泉 木曽路温泉 ホテル木曽路、木曽路温泉 旅館 やまと'},
+  {key:'長野県木曽路温泉',pref:'長野県',name:'木曽路温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'松島温泉 松島温泉 ホテル海風土、松島温泉 ホテル松島'},
+  {key:'長野県別所温泉',pref:'長野県',name:'別所温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'天童温泉 天童温泉 ホテル天童、天童温泉 旅館 こんや'},
+  {key:'山梨県西山温泉',pref:'山梨県',name:'西山温泉',region:'⛰️ 中部',stars:1,starStr:'⭐',dayBath:'日光温泉 日光温泉 奥日光高原ホテル、日光温泉 ホテルニューパレス'},
+  {key:'愛知県南知多温泉郷',pref:'愛知県',name:'南知多温泉郷',region:'⛰️ 中部',stars:0,starStr:'',dayBath:'南知多温泉郷 ホテル南知多、南知多温泉 旅館'},
+  {key:'兵庫県有馬温泉',pref:'兵庫県',name:'有馬温泉',region:'🦌 近畿',stars:3,starStr:'⭐⭐⭐',dayBath:'有馬温泉 大黒屋、有馬温泉 兆楽'},
+  {key:'兵庫県城崎温泉',pref:'兵庫県',name:'城崎温泉',region:'🦌 近畿',stars:3,starStr:'⭐⭐⭐',dayBath:'西村屋本館、西村屋ホテル招月庭、城崎温泉 泉翠'},
+  {key:'兵庫県淡路島東浦温泉',pref:'兵庫県',name:'淡路島東浦温泉',region:'🦌 近畿',stars:2,starStr:'⭐⭐',dayBath:'福岡温泉 福岡温泉 博多の湯、福岡温泉 天然温泉'},
+  {key:'和歌山県南紀白浜温泉',pref:'和歌山県',name:'南紀白浜温泉',region:'🦌 近畿',stars:2,starStr:'⭐⭐',dayBath:'下部温泉 下部温泉郷 湯之奥鉱泉館、下部温泉 古湯坊'},
+  {key:'滋賀県雄琴温泉',pref:'滋賀県',name:'雄琴温泉',region:'🦌 近畿',stars:2,starStr:'⭐⭐',dayBath:'鳴子温泉 鳴子温泉 旅館あづま、大沼旅館'},
+  {key:'京都府天橋立温泉',pref:'京都府',name:'天橋立温泉',region:'🦌 近畿',stars:2,starStr:'⭐⭐',dayBath:'宮島温泉 宮島グランドホテル有もと、宮島温泉 星の宿'},
+  {key:'滋賀県奥びわ温泉',pref:'滋賀県',name:'奥びわ温泉',region:'🦌 近畿',stars:1,starStr:'⭐',dayBath:'泉南トルマリン温泉 泉南トルマリン温泉 ゆりの湯'},
+  {key:'大阪府泉南トルマリン温泉',pref:'大阪府',name:'泉南トルマリン温泉',region:'🦌 近畿',stars:1,starStr:'⭐',dayBath:'丹後温泉 丹後温泉 ホテル北都、丹後温泉 琴引浜'},
+  {key:'京都府丹後温泉',pref:'京都府',name:'丹後温泉',region:'🦌 近畿',stars:1,starStr:'⭐',dayBath:'田辺温泉 田辺温泉 ホテル季楽、田辺温泉 うめ乃湯'},
+  {key:'和歌山県田辺温泉',pref:'和歌山県',name:'田辺温泉',region:'🦌 近畿',stars:1,starStr:'⭐',dayBath:'高松温泉 高松温泉 スパイラル高松、高松温泉 讃岐湯元温泉'},
+  {key:'三重県志摩温泉',pref:'三重県',name:'志摩温泉',region:'🦌 近畿',stars:0,starStr:'',dayBath:'志摩温泉 志摩観光ホテル、志摩温泉 旅館'},
+  {key:'奈良県洞川温泉',pref:'奈良県',name:'洞川温泉',region:'🦌 近畿',stars:0,starStr:'',dayBath:'洞川温泉 旅館 渓山、洞川温泉 旅館 杉の湯'},
+  {key:'愛媛県道後温泉',pref:'愛媛県',name:'道後温泉',region:'⛩️ 中国・四国',stars:3,starStr:'⭐⭐⭐',dayBath:'道後舘、花ゆづき、別邸朧月夜、ホテル椿館'},
+  {key:'香川県こんぴら温泉郷',pref:'香川県',name:'こんぴら温泉郷',region:'⛩️ 中国・四国',stars:2,starStr:'⭐⭐',dayBath:'奥飛騨ガーデンホテル焼岳、穂高荘山のホテル、奥飛騨温泉郷 新穂高温泉'},
+  {key:'山口県長門湯本温泉',pref:'山口県',name:'長門湯本温泉',region:'⛩️ 中国・四国',stars:2,starStr:'⭐⭐',dayBath:'飛騨高山温泉 飛騨亭花扇、ホテルアソシア高山リゾート'},
+  {key:'広島県宮島温泉',pref:'広島県',name:'宮島温泉',region:'⛩️ 中国・四国',stars:2,starStr:'⭐⭐',dayBath:'網走温泉 ホテル網走、網走温泉 能登屋ホテル'},
+  {key:'香川県高松温泉',pref:'香川県',name:'高松温泉',region:'⛩️ 中国・四国',stars:1,starStr:'⭐',dayBath:'祖谷温泉 祖谷温泉 ホテル祖谷温泉、祖谷温泉 和の宿 ホテル祖谷'},
+  {key:'徳島県祖谷温泉',pref:'徳島県',name:'祖谷温泉',region:'⛩️ 中国・四国',stars:1,starStr:'⭐',dayBath:'北条温泉 北条温泉 ホテルしおさい北条、北条温泉 温泉'},
+  {key:'愛媛県北条温泉',pref:'愛媛県',name:'北条温泉',region:'⛩️ 中国・四国',stars:1,starStr:'⭐',dayBath:'二日市温泉 二日市温泉 太宰府温泉 観光'},
+  {key:'山口県湯田温泉',pref:'山口県',name:'湯田温泉',region:'⛩️ 中国・四国',stars:1,starStr:'⭐',dayBath:'別所温泉 別所温泉 旅館 中屋、別所温泉 湯宿 上松屋'},
+  {key:'鳥取県三朝温泉',pref:'鳥取県',name:'三朝温泉',region:'⛩️ 中国・四国',stars:0,starStr:'',dayBath:'三朝温泉 ホテル泉都、三朝温泉 旅館 大橋'},
+  {key:'島根県玉造温泉',pref:'島根県',name:'玉造温泉',region:'⛩️ 中国・四国',stars:0,starStr:'',dayBath:'玉造温泉 佳翠苑皆美、玉造温泉 ホテル玉泉'},
+  {key:'岡山県湯郷温泉',pref:'岡山県',name:'湯郷温泉',region:'⛩️ 中国・四国',stars:0,starStr:'',dayBath:'湯郷温泉 ホテル東亜、湯郷温泉 旅館 ひらたや'},
+  {key:'高知県いの町温泉',pref:'高知県',name:'いの町温泉',region:'⛩️ 中国・四国',stars:0,starStr:'',dayBath:'いの町温泉 ホテル、いの町温泉 旅館'},
+  {key:'大分県別府八湯温泉',pref:'大分県',name:'別府八湯温泉',region:'🌺 九州・沖縄',stars:3,starStr:'⭐⭐⭐',dayBath:'杉乃井ホテル、別府温泉ホテル、竹瓦温泉'},
+  {key:'鹿児島県指宿温泉',pref:'鹿児島県',name:'指宿温泉',region:'🌺 九州・沖縄',stars:3,starStr:'⭐⭐⭐',dayBath:'いぶすき秀水園、指宿白水館、指宿温泉 吟松'},
+  {key:'熊本県黒川温泉',pref:'熊本県',name:'黒川温泉',region:'🌺 九州・沖縄',stars:3,starStr:'⭐⭐⭐',dayBath:'黒川荘、山みず木、旅館山河、黒川温泉 新明館'},
+  {key:'大分県由布院温泉',pref:'大分県',name:'由布院温泉',region:'🌺 九州・沖縄',stars:2,starStr:'⭐⭐',dayBath:'亀の井別荘、由布院玉の湯、由布院温泉 湯布院 観光荘'},
+  {key:'福岡県福岡温泉',pref:'福岡県',name:'福岡温泉',region:'🌺 九州・沖縄',stars:2,starStr:'⭐⭐',dayBath:'ニセコ温泉 ニセコパークテラスホテル、グラフィア'},
+  {key:'大分県奥日田温泉',pref:'大分県',name:'奥日田温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'奥びわ温泉 奥びわ温泉 ホテル湖南、奥びわ温泉 琵琶湖'},
+  {key:'福岡県二日市温泉',pref:'福岡県',name:'二日市温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'嬉野温泉 嬉野温泉 ホテル桜、嬉野温泉 旅館 大村屋'},
+  {key:'佐賀県嬉野温泉',pref:'佐賀県',name:'嬉野温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'小浜温泉 小浜温泉 ホテル小浜、小浜温泉 しおさい小浜'},
+  {key:'長崎県小浜温泉',pref:'長崎県',name:'小浜温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'菊池温泉 菊池温泉 ホテルパレス、菊池温泉 菊池温泉旅館'},
+  {key:'熊本県菊池温泉',pref:'熊本県',name:'菊池温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'玉名温泉 玉名温泉 ホテルメイ、玉名温泉 玉名温泉旅館'},
+  {key:'熊本県玉名温泉',pref:'熊本県',name:'玉名温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'飯坂温泉 飯坂温泉 旅館大亀、飯坂温泉 ホテル福の湯'},
+  {key:'福岡県原鶴温泉',pref:'福岡県',name:'原鶴温泉',region:'🌺 九州・沖縄',stars:1,starStr:'⭐',dayBath:'つなぎ温泉 つなぎ温泉 つなぎ温泉 ホテル紫苑、つなぎ温泉 旅館'},
+  {key:'宮崎県霧島温泉郷',pref:'宮崎県',name:'霧島温泉郷',region:'🌺 九州・沖縄',stars:0,starStr:'',dayBath:'霧島温泉郷 霧島ホテル、霧島温泉郷 旅館 雄山荘'},
+  {key:'沖縄県那覇温泉',pref:'沖縄県',name:'那覇温泉',region:'🌺 九州・沖縄',stars:0,starStr:'',dayBath:'那覇温泉 ホテル那覇、那覇温泉 瀬長島温泉'}
+];
+const ONSEN_LIST = ONSEN_DATA.map(o => o.key);
+const WORLD_CONTINENTS = {
+  '🌏 東アジア': ['日本','韓国','中国','台湾','香港','マカオ','モンゴル'],
+  '🌴 東南アジア': ['ベトナム','タイ','カンボジア','ラオス','ミャンマー','マレーシア','シンガポール','インドネシア','フィリピン','ブルネイ','東ティモール'],
+  '🕌 南アジア・中東': ['インド','パキスタン','バングラデシュ','スリランカ','ネパール','ブータン','モルディブ','アフガニスタン','イラン','イラク','サウジアラビア','UAE','カタール','クウェート','バーレーン','オマーン','イエメン','ヨルダン','レバノン','シリア','イスラエル','トルコ'],
+  '🏔️ 中央アジア': ['カザフスタン','ウズベキスタン','キルギス','タジキスタン','トルクメニスタン','アゼルバイジャン','グルジア','アルメニア'],
+  '🏰 ヨーロッパ': ['ロシア','ウクライナ','ベラルーシ','モルドバ','ポーランド','チェコ','スロバキア','ハンガリー','オーストリア','ドイツ','スイス','リヒテンシュタイン','フランス','ベルギー','オランダ','ルクセンブルク','デンマーク','スウェーデン','ノルウェー','フィンランド','アイスランド','英国','アイルランド','スペイン','ポルトガル','イタリア','バチカン','サンマリノ','モナコ','ギリシャ','マルタ','スロベニア','クロアチア','ボスニア・ヘルツェゴビナ','セルビア','モンテネグロ','北マケドニア','アルバニア','コソボ','ルーマニア','ブルガリア','エストニア','ラトビア','リトアニア','アンドラ'],
+  '🌍 アフリカ': ['モロッコ','アルジェリア','チュニジア','リビア','エジプト','スーダン','南スーダン','エチオピア','エリトリア','ジブチ','ソマリア','ケニア','タンザニア','ウガンダ','ルワンダ','ブルンジ','コンゴ民主共和国','コンゴ共和国','中央アフリカ','カメルーン','ナイジェリア','ガーナ','コートジボワール','セネガル','マリ','ブルキナファソ','ニジェール','チャド','ガボン','赤道ギニア','サントメ・プリンシペ','カーボベルデ','モーリタニア','ギニア','ギニアビサウ','シエラレオネ','リベリア','トーゴ','ベナン','ガンビア','南アフリカ','ナミビア','ボツワナ','ジンバブエ','ザンビア','モザンビーク','マラウイ','アンゴラ','マダガスカル','コモロ','セーシェル','モーリシャス','レソト','エスワティニ'],
+  '🌎 北中米': ['カナダ','アメリカ','メキシコ','グアテマラ','ベリーズ','ホンジュラス','エルサルバドル','ニカラグア','コスタリカ','パナマ','キューバ','ジャマイカ','ハイチ','ドミニカ共和国','トリニダード・トバゴ','バルバドス'],
+  '🌎 南米': ['コロンビア','ベネズエラ','ガイアナ','スリナム','ブラジル','エクアドル','ペルー','ボリビア','チリ','アルゼンチン','ウルグアイ','パラグアイ'],
+  '🦘 オセアニア': ['オーストラリア','ニュージーランド','パプアニューギニア','フィジー','ソロモン諸島','バヌアツ','サモア','トンガ','キリバス','ミクロネシア','マーシャル諸島','パラオ','ナウル','ツバル']
+};
+const WORLD_COUNTRIES = Object.values(WORLD_CONTINENTS).flat();
+
+// visitData構造: { japan: { '北海道': 2023, '東京': 2024 }, china: {...}, world: {...} }
+let currentMode = 'bucket';
+let visitData = {};
+
+async function loadVisitFromFirebase() {
+  try {
+    const res = await fetch(DB_URL + '/visitData.json');
+    const data = await res.json();
+    if (data && typeof data === 'object') visitData = data;
+  } catch(e) { console.error('visitData読み込みエラー:', e); }
+}
+
+async function saveVisitToFirebase() {
+  try {
+    await fetch(DB_URL + '/visitData.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(visitData)
+    });
+  } catch(e) { console.error('visitData保存エラー:', e); }
+}
+
+function saveVisit() { saveVisitToFirebase(); }
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    if (b.textContent.includes(mode === 'bucket' ? 'バケット' : mode === 'japan' ? '都道府県' : mode === 'onsen' ? '温泉' : mode === 'china' ? '中国' : '世界')) {
+      b.classList.add('active');
+    }
+  });
+  const mainEl = document.querySelector('main');
+  const visitPanel = document.getElementById('visitPanel');
+  if (mode === 'bucket') {
+    mainEl.style.display = '';
+    visitPanel.style.display = 'none';
+  } else {
+    mainEl.style.display = 'none';
+    visitPanel.style.display = 'block';
+    renderVisit(mode);
+  }
+}
+
+function renderVisit(mode) {
+  const titleEl = document.getElementById('visitTitle');
+  const statsEl = document.getElementById('visitStats');
+  const fillEl  = document.getElementById('visitFill');
+  const gridEl  = document.getElementById('visitGrid');
+
+  let list, title, key;
+  if (mode === 'japan') {
+    list = JAPAN_PREFS; title = '🗾 日本 都道府県'; key = 'japan';
+  } else if (mode === 'onsen') {
+    list = ONSEN_LIST; title = '♨️ にっぽんの温泉100選 <span style="font-size:12px;color:var(--accent);font-weight:700;">+11特別追加</span>'; key = 'onsen';
+  } else if (mode === 'china') {
+    list = CHINA_REGIONS; title = '🇨🇳 中国 省・自治区・直轄市'; key = 'china';
+  } else {
+    list = WORLD_COUNTRIES; title = '🌍 世界の国々'; key = 'world';
+  }
+
+  const visited = visitData[key] || {};
+  const count = Object.keys(visited).length;
+  const total = list.length;
+  const pct = total ? Math.round(count / total * 100) : 0;
+
+  titleEl.innerHTML = title;
+  statsEl.textContent = `訪問済み ${count} / ${total}ヶ所　達成率 ${pct}%`;
+  fillEl.style.width = pct + '%';
+  const overlayEl = document.getElementById('mapOverlay');
+  if (overlayEl) overlayEl.innerHTML = `${count}/${total}<br>${pct}%`;
+
+  // 地図を表示
+  const mapEl = document.getElementById('visitMap');
+  const currentYear = new Date().getFullYear();
+
+  if (key === 'world' || key === 'japan' || key === 'china' || key === 'onsen') {
+    // D3.js で地図を描画
+    mapEl.innerHTML = '<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>';
+    renderMapD3(key, visited, currentYear);
+  } else {
+    mapEl.innerHTML = MAP_SVG[key];
+    // 地図の各pathに色を適用
+    mapEl.querySelectorAll('path[data-name]').forEach(path => {
+      const name = path.getAttribute('data-name');
+      const year = visited[name];
+      if (year !== undefined) {
+        const age = currentYear - (year || currentYear);
+        const opacity = Math.max(0.4, 1 - age * 0.06);
+        path.style.fill = `rgba(139,44,100,${opacity})`;
+        path.classList.add('map-visited');
+        path.title = `${name}（${year || currentYear}年）`;
+      }
+      // 地図クリックでもトグル
+      path.addEventListener('click', () => {
+        const gridItem = [...document.querySelectorAll('.visit-item')].find(el => el.textContent.startsWith(name));
+        if (gridItem) {
+          toggleVisit(key, name, gridItem);
+          if (visitData[key] && visitData[key][name] !== undefined) {
+            const y = visitData[key][name];
+            const age2 = currentYear - (y || currentYear);
+            const op = Math.max(0.4, 1 - age2 * 0.06);
+            path.style.fill = `rgba(139,44,100,${op})`;
+            path.classList.add('map-visited');
+          } else {
+            path.style.fill = '';
+            path.classList.remove('map-visited');
+          }
+        }
+      });
+    });
+  }
+
+  // ボタン表示（世界は大陸別グループ）
+  if (key === 'world') {
+    let html = '';
+    Object.entries(WORLD_CONTINENTS).forEach(([continent, countries]) => {
+      const doneCount = countries.filter(n => visited[n] !== undefined).length;
+      html += `<div class="continent-group">
+        <div class="continent-label">${continent} <span class="continent-count">${doneCount}/${countries.length}</span></div>
+        <div class="continent-items">`;
+      countries.forEach(name => {
+        const year = visited[name];
+        const isVisited = year !== undefined;
+        let style = '';
+        if (isVisited && year) {
+          const age = currentYear - year;
+          const opacity = Math.max(0.4, 1 - age * 0.06);
+          style = `style="background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;"`;
+        }
+        const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+        html += `<div class="visit-item${isVisited ? ' visited' : ''}" data-vkey="${name}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
+      });
+      html += `</div></div>`;
+    });
+    gridEl.innerHTML = html;
+  } else if (key === 'onsen') {
+    // 地方別グループ表示
+    const REGION_ORDER_LOCAL = ['🌨️ 北海道','🍎 東北','🌸 関東','⛰️ 中部','🦌 近畿','⛩️ 中国・四国','🌺 九州・沖縄'];
+    let html = '';
+    REGION_ORDER_LOCAL.forEach(region => {
+      const regionItems = ONSEN_DATA.filter(o => o.region === region);
+      if (regionItems.length === 0) return;
+      const doneCount = regionItems.filter(o => visited[o.key] !== undefined).length;
+      html += `<div class="continent-group">
+        <div class="continent-label">${region} <span class="continent-count">${doneCount}/${regionItems.length}</span></div>
+        <div class="continent-items">`;
+      regionItems.forEach(onsen => {
+        const year = visited[onsen.key];
+        const isVisited = year !== undefined;
+        let btnStyle = '';
+        if (isVisited && year) {
+          const age = currentYear - year;
+          const opacity = Math.max(0.4, 1 - age * 0.06);
+          btnStyle = `background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;`;
+        }
+        const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+        const starDisp = onsen.starStr ? `<span style="font-size:9px;display:block;line-height:1.3;">${onsen.starStr}</span>` : '';
+        html += `<div class="onsen-item-wrap">
+          <div class="visit-item onsen-btn${isVisited ? ' visited' : ''}" data-vkey="${onsen.key}" style="${btnStyle}" onclick="toggleVisitAndMap('${key}','${onsen.key}',this)">
+            <span style="font-size:9px;opacity:0.75;display:block;line-height:1.2;">${onsen.pref}</span>
+            ${onsen.name}${starDisp}${yearLabel}
+          </div>
+          ${onsen.dayBath ? `<button class="onsen-detail-btn" onclick="toggleOnsenDetail(this,'${onsen.dayBath.replace(/'/g,"\\'")}','${onsen.name}')">🛁</button>` : ''}
+        </div>`;
+      });
+      html += `</div></div>`;
+    });
+    gridEl.innerHTML = html;
+  } else {
+    gridEl.innerHTML = list.map(name => {
+      const year = visited[name];
+      const isVisited = year !== undefined;
+      let style = '';
+      if (isVisited && year) {
+        const age = currentYear - year;
+        const opacity = Math.max(0.4, 1 - age * 0.06);
+        style = `style="background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;"`;
+      }
+      const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+      return `<div class="visit-item${isVisited ? ' visited' : ''}" data-vkey="${name}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
+    }).join('');
+  }
+  renderVisitHistory(key);
+}
+
+function toggleVisitAndMap(key, name, el) {
+  toggleVisit(key, name, el);
+}
+
+// 年選択ダイアログ用の一時変数
+let _yearDialogKey = '';
+let _yearDialogName = '';
+let _yearDialogEl = null;
+
+function showYearDialog(key, name, el) {
+  _yearDialogKey = key;
+  _yearDialogName = name;
+  _yearDialogEl = el;
+  const currentYear = new Date().getFullYear();
+  const sel = document.getElementById('yearSelect');
+  sel.innerHTML = '';
+  for (let y = currentYear; y >= 1950; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+  sel.value = currentYear;
+  document.getElementById('yearDialogTitle').textContent = `「${name}」を訪問した年`;
+  document.getElementById('yearDialog').style.display = 'flex';
+}
+
+function confirmYear() {
+  const year = parseInt(document.getElementById('yearSelect').value);
+  const key = _yearDialogKey;
+  const name = _yearDialogName;
+  const el = _yearDialogEl;
+  document.getElementById('yearDialog').style.display = 'none';
+
+  if (!visitData[key]) visitData[key] = {};
+  visitData[key][name] = year;
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - year;
+  const opacity = Math.max(0.4, 1 - age * 0.06);
+  el.classList.add('visited');
+  el.style = `background:rgba(139,44,100,${opacity});border-color:rgba(139,44,100,${opacity});color:white;`;
+  let yearEl = el.querySelector('.visit-year');
+  if (!yearEl) {
+    yearEl = document.createElement('span');
+    yearEl.className = 'visit-year';
+    el.appendChild(yearEl);
+  }
+  yearEl.textContent = year;
+  saveVisit();
+  updateVisitStats(key, el);
+  // 地図も更新
+  updateMapColor(key, name, opacity);
+}
+
+function cancelYear() {
+  document.getElementById('yearDialog').style.display = 'none';
+}
+
+function updateMapColor(key, name, opacity) {
+  const fill = opacity !== null ? `rgba(139,44,100,${opacity})` : '#e8dfc8';
+  if (key === 'world') {
+    const code = COUNTRY_CODE_MAP[name];
+    if (!code) return;
+    d3.select(`#worldD3svg path[data-code="${code}"]`).style('fill', fill);
+    return;
+  }
+  if (key === 'japan') {
+    d3.selectAll(`#worldD3svg path[data-pref="${name}"]`).style('fill', fill);
+    return;
+  }
+  if (key === 'onsen') {
+    // 温泉は都道府県名でpathを色付け
+    const onsenItem = ONSEN_DATA.find(o => o.key === name);
+    if (onsenItem) {
+      const pref = JP_KANJI_MAP_GLOBAL[onsenItem.pref] || onsenItem.pref.replace(/[都道府県]$/, '');
+      d3.selectAll(`#worldD3svg path[data-pref="${pref}"]`).style('fill', fill);
+    }
+    return;
+  }
+  if (key === 'china') {
+    d3.selectAll(`#worldD3svg path[data-province="${name}"]`).style('fill', fill);
+    return;
+  }
+  const mapEl = document.getElementById('visitMap');
+  if (!mapEl) return;
+  const path = mapEl.querySelector(`path[data-name="${name}"]`);
+  if (!path) return;
+  if (opacity !== null) {
+    path.style.fill = fill;
+    path.classList.add('map-visited');
+  } else {
+    path.style.fill = '';
+    path.classList.remove('map-visited');
+  }
+}
+
+// 日本語国名 → ISO 3166-1 numeric コードのマッピング
+const JP_KANJI_MAP_GLOBAL = {
+  '北海道':'北海道','青森県':'青森','岩手県':'岩手','宮城県':'宮城','秋田県':'秋田',
+  '山形県':'山形','福島県':'福島','茨城県':'茨城','栃木県':'栃木','群馬県':'群馬',
+  '埼玉県':'埼玉','千葉県':'千葉','東京都':'東京','神奈川県':'神奈川','新潟県':'新潟',
+  '富山県':'富山','石川県':'石川','福井県':'福井','山梨県':'山梨','長野県':'長野',
+  '岐阜県':'岐阜','静岡県':'静岡','愛知県':'愛知','三重県':'三重','滋賀県':'滋賀',
+  '京都府':'京都','大阪府':'大阪','兵庫県':'兵庫','奈良県':'奈良','和歌山県':'和歌山',
+  '鳥取県':'鳥取','島根県':'島根','岡山県':'岡山','広島県':'広島','山口県':'山口',
+  '徳島県':'徳島','香川県':'香川','愛媛県':'愛媛','高知県':'高知','福岡県':'福岡',
+  '佐賀県':'佐賀','長崎県':'長崎','熊本県':'熊本','大分県':'大分','宮崎県':'宮崎',
+  '鹿児島県':'鹿児島','沖縄県':'沖縄'
+};
+
+const COUNTRY_CODE_MAP = {
+  '日本':'392','韓国':'410','中国':'156','台湾':'158','香港':'344','マカオ':'446','モンゴル':'496',
+  'ベトナム':'704','タイ':'764','カンボジア':'116','ラオス':'418','ミャンマー':'104',
+  'マレーシア':'458','シンガポール':'702','インドネシア':'360','フィリピン':'608',
+  'ブルネイ':'096','東ティモール':'626','インド':'356','パキスタン':'586',
+  'バングラデシュ':'050','スリランカ':'144','ネパール':'524','ブータン':'064',
+  'モルディブ':'462','アフガニスタン':'004','イラン':'364','イラク':'368',
+  'サウジアラビア':'682','UAE':'784','カタール':'634','クウェート':'414',
+  'バーレーン':'048','オマーン':'512','イエメン':'887','ヨルダン':'400',
+  'レバノン':'422','シリア':'760','イスラエル':'376','トルコ':'792',
+  'カザフスタン':'398','ウズベキスタン':'860','キルギス':'417','タジキスタン':'762',
+  'トルクメニスタン':'795','アゼルバイジャン':'031','グルジア':'268','アルメニア':'051',
+  'ロシア':'643','ウクライナ':'804','ベラルーシ':'112','モルドバ':'498',
+  'ポーランド':'616','チェコ':'203','スロバキア':'703','ハンガリー':'348',
+  'オーストリア':'040','ドイツ':'276','スイス':'756','リヒテンシュタイン':'438',
+  'フランス':'250','ベルギー':'056','オランダ':'528','ルクセンブルク':'442',
+  'デンマーク':'208','スウェーデン':'752','ノルウェー':'578','フィンランド':'246',
+  'アイスランド':'352','英国':'826','アイルランド':'372','スペイン':'724',
+  'ポルトガル':'620','イタリア':'380','バチカン':'336','サンマリノ':'674',
+  'モナコ':'492','ギリシャ':'300','マルタ':'470','スロベニア':'705',
+  'クロアチア':'191','ボスニア・ヘルツェゴビナ':'070','セルビア':'688',
+  'モンテネグロ':'499','北マケドニア':'807','アルバニア':'008','コソボ':'383',
+  'ルーマニア':'642','ブルガリア':'100','エストニア':'233','ラトビア':'428',
+  'リトアニア':'440','アンドラ':'020',
+  'モロッコ':'504','アルジェリア':'012','チュニジア':'788','リビア':'434',
+  'エジプト':'818','スーダン':'729','南スーダン':'728','エチオピア':'231',
+  'エリトリア':'232','ジブチ':'262','ソマリア':'706','ケニア':'404',
+  'タンザニア':'834','ウガンダ':'800','ルワンダ':'646','ブルンジ':'108',
+  'コンゴ民主共和国':'180','コンゴ共和国':'178','中央アフリカ':'140',
+  'カメルーン':'120','ナイジェリア':'566','ガーナ':'288','コートジボワール':'384',
+  'セネガル':'686','マリ':'466','ブルキナファソ':'854','ニジェール':'562',
+  'チャド':'148','ガボン':'266','赤道ギニア':'226','サントメ・プリンシペ':'678',
+  'カーボベルデ':'132','モーリタニア':'478','ギニア':'324','ギニアビサウ':'624',
+  'シエラレオネ':'694','リベリア':'430','トーゴ':'768','ベナン':'204',
+  'ガンビア':'270','南アフリカ':'710','ナミビア':'516','ボツワナ':'072',
+  'ジンバブエ':'716','ザンビア':'894','モザンビーク':'508','マラウイ':'454',
+  'アンゴラ':'024','マダガスカル':'450','コモロ':'174','セーシェル':'690',
+  'モーリシャス':'480','レソト':'426','エスワティニ':'748',
+  'カナダ':'124','アメリカ':'840','メキシコ':'484','グアテマラ':'320',
+  'ベリーズ':'084','ホンジュラス':'340','エルサルバドル':'222','ニカラグア':'558',
+  'コスタリカ':'188','パナマ':'591','キューバ':'192','ジャマイカ':'388',
+  'ハイチ':'332','ドミニカ共和国':'214','トリニダード・トバゴ':'780',
+  'バルバドス':'052','コロンビア':'170','ベネズエラ':'862','ガイアナ':'328',
+  'スリナム':'740','ブラジル':'076','エクアドル':'218','ペルー':'604',
+  'ボリビア':'068','チリ':'152','アルゼンチン':'032','ウルグアイ':'858',
+  'パラグアイ':'600','オーストラリア':'036','ニュージーランド':'554',
+  'パプアニューギニア':'598','フィジー':'242','ソロモン諸島':'090',
+  'バヌアツ':'548','サモア':'882','トンガ':'776','キリバス':'296',
+  'ミクロネシア':'583','マーシャル諸島':'584','パラオ':'585','ナウル':'520','ツバル':'798'
+};
+const CODE_COUNTRY_MAP = Object.fromEntries(Object.entries(COUNTRY_CODE_MAP).map(([k,v])=>[v,k]));
+
+async function renderMapD3(key, visited, currentYear) {
+  const mapEl = document.getElementById('visitMap');
+  const w = mapEl.clientWidth || 800;
+
+  if (key === 'world') {
+    const h = Math.round(w * 0.5);
+    const svg = d3.select('#worldD3svg').attr('viewBox', `0 0 ${w} ${h}`);
+    svg.selectAll('*').remove();
+    const projection = d3.geoNaturalEarth1()
+      .scale(w / 5.8)
+      .rotate([-150, 0])
+      .translate([w / 2, h / 2]);
+    const pathGen = d3.geoPath().projection(projection);
+    try {
+      const world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+      const countries = topojson.feature(world, world.objects.countries);
+      svg.selectAll('path')
+        .data(countries.features)
+        .join('path')
+        .attr('d', pathGen)
+        .attr('data-code', d => String(d.id))
+        .style('fill', d => {
+          const name = CODE_COUNTRY_MAP[String(d.id)];
+          if (name && visited[name] !== undefined) {
+            const age = currentYear - (visited[name] || currentYear);
+            const opacity = Math.max(0.4, 1 - age * 0.06);
+            return `rgba(139,44,100,${opacity})`;
+          }
+          return '#e8dfc8';
+        })
+        .attr('stroke', '#9a8f7a')
+        .attr('stroke-width', 0.4)
+        .style('cursor', 'pointer')
+        .on('click', function(event, d) {
+          const name = CODE_COUNTRY_MAP[String(d.id)];
+          if (!name) return;
+          const gridItem = [...document.querySelectorAll('.visit-item')].find(el => el.textContent.startsWith(name));
+          const targetEl = gridItem || document.createElement('div');
+          toggleVisit(key, name, targetEl);
+          const yr = visitData[key] && visitData[key][name];
+          d3.select(this).attr('fill', yr !== undefined
+            ? `rgba(139,44,100,${Math.max(0.4, 1-(currentYear-(yr||currentYear))*0.06)})`
+            : '#e8dfc8');
+        });
+      // 描画完了後に全色を再適用
+      setTimeout(() => reapplyAllMapColors(key, visited, currentYear), 100);
+    } catch(e) {
+      mapEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--faded);">地図の読み込みに失敗しました</div>';
+    }
+
+  } else if (key === 'japan' || key === 'onsen') {
+    const h = Math.round(w * 0.85);
+    const svg = d3.select('#worldD3svg').attr('viewBox', `0 0 ${w} ${h}`);
+    svg.selectAll('*').remove();
+    // clipExtentで本州中心にクロップ（離島カット）
+    const projection = d3.geoMercator()
+      .center([136.5, 37.5])
+      .scale(w * 2.0)
+      .translate([w / 2, h / 2])
+      .clipExtent([[0, 0], [w, h]]);
+    const pathGen = d3.geoPath().projection(projection);
+    try {
+      const japanData = await d3.json('https://eternalflame1001-sudo.github.io/bucket-list/japan.json');
+      // TopoJSONかGeoJSONか判定
+      let features;
+      if (japanData.type === 'Topology') {
+        const prefKey = Object.keys(japanData.objects)[0];
+        features = topojson.feature(japanData, japanData.objects[prefKey]).features;
+      } else {
+        features = japanData.features || [];
+      }
+      const JP_KANJI_MAP = {
+        '北海道':'北海道','青森県':'青森','岩手県':'岩手','宮城県':'宮城','秋田県':'秋田',
+        '山形県':'山形','福島県':'福島','茨城県':'茨城','栃木県':'栃木','群馬県':'群馬',
+        '埼玉県':'埼玉','千葉県':'千葉','東京都':'東京','神奈川県':'神奈川','新潟県':'新潟',
+        '富山県':'富山','石川県':'石川','福井県':'福井','山梨県':'山梨','長野県':'長野',
+        '岐阜県':'岐阜','静岡県':'静岡','愛知県':'愛知','三重県':'三重','滋賀県':'滋賀',
+        '京都府':'京都','大阪府':'大阪','兵庫県':'兵庫','奈良県':'奈良','和歌山県':'和歌山',
+        '鳥取県':'鳥取','島根県':'島根','岡山県':'岡山','広島県':'広島','山口県':'山口',
+        '徳島県':'徳島','香川県':'香川','愛媛県':'愛媛','高知県':'高知','福岡県':'福岡',
+        '佐賀県':'佐賀','長崎県':'長崎','熊本県':'熊本','大分県':'大分','宮崎県':'宮崎',
+        '鹿児島県':'鹿児島','沖縄県':'沖縄'
+      };
+      const JP_NAME_MAP = {
+        '1':'北海道','2':'青森','3':'岩手','4':'宮城','5':'秋田',
+        '6':'山形','7':'福島','8':'茨城','9':'栃木','10':'群馬',
+        '11':'埼玉','12':'千葉','13':'東京','14':'神奈川','15':'新潟',
+        '16':'富山','17':'石川','18':'福井','19':'山梨','20':'長野',
+        '21':'岐阜','22':'静岡','23':'愛知','24':'三重','25':'滋賀',
+        '26':'京都','27':'大阪','28':'兵庫','29':'奈良','30':'和歌山',
+        '31':'鳥取','32':'島根','33':'岡山','34':'広島','35':'山口',
+        '36':'徳島','37':'香川','38':'愛媛','39':'高知','40':'福岡',
+        '41':'佐賀','42':'長崎','43':'熊本','44':'大分','45':'宮崎',
+        '46':'鹿児島','47':'沖縄'
+      };
+      function getJpName(d) {
+        const p = d.properties || {};
+        // nam_jaプロパティを優先使用（例：「京都府」→「京都」）
+        if (p.nam_ja) return JP_KANJI_MAP[p.nam_ja] || p.nam_ja.replace(/[都道府県]$/, '');
+        // idで検索
+        const code = parseInt(p.id || d.id || 0);
+        return JP_NAME_MAP[code] || '';
+      }
+      svg.selectAll('path')
+        .data(features)
+        .join('path')
+        .attr('d', pathGen)
+        .attr('data-pref', d => getJpName(d))
+        .style('fill', d => {
+          const name = getJpName(d);
+          if (name && visited[name] !== undefined) {
+            const age = currentYear - (visited[name] || currentYear);
+            return `rgba(139,44,100,${Math.max(0.4, 1 - age * 0.06)})`;
+          }
+          return '#e8dfc8';
+        })
+        .attr('stroke', '#9a8f7a').attr('stroke-width', 0.5)
+        .style('cursor', 'pointer')
+        .on('click', function(event, d) {
+          const name = getJpName(d);
+          if (!name) return;
+          const gridItem = [...document.querySelectorAll('.visit-item')].find(el => el.textContent.startsWith(name));
+          const targetEl = gridItem || document.createElement('div');
+          toggleVisit(key, name, targetEl);
+          const yr = visitData[key]?.[name];
+          d3.select(this).attr('fill', yr !== undefined
+            ? `rgba(139,44,100,${Math.max(0.4, 1-(currentYear-(yr||currentYear))*0.06)})`
+            : '#e8dfc8');
+        });
+      // 描画完了後に全色を再適用
+      setTimeout(() => reapplyAllMapColors(key, visited, currentYear), 100);
+    } catch(e) {
+      console.error('日本地図エラー:', e);
+      mapEl.innerHTML = MAP_SVG['japan'];
+      applyMapColors('japan', visited, currentYear);
+    }
+
+  } else if (key === 'china') {
+    const h = Math.round(w * 0.8);
+    const svg = d3.select('#worldD3svg').attr('viewBox', `0 0 ${w} ${h}`);
+    svg.selectAll('*').remove();
+    const projection = d3.geoMercator()
+      .center([104, 35])
+      .scale(w * 0.9)
+      .translate([w / 2, h / 2]);
+    const pathGen = d3.geoPath().projection(projection);
+    try {
+      const chinaData = await d3.json('https://eternalflame1001-sudo.github.io/bucket-list/china.json');
+      let cnFeatures;
+      if (chinaData.type === 'Topology') {
+        const provKey = Object.keys(chinaData.objects)[0];
+        cnFeatures = topojson.feature(chinaData, chinaData.objects[provKey]).features;
+      } else {
+        cnFeatures = chinaData.features || [];
+      }
+      const CN_JP_MAP = {
+        '北京市':'北京市','天津市':'天津市','上海市':'上海市','重庆市':'重慶市',
+        '河北省':'河北省','山西省':'山西省','辽宁省':'遼寧省','吉林省':'吉林省',
+        '黑龙江省':'黒竜江省','江苏省':'江蘇省','浙江省':'浙江省','安徽省':'安徽省',
+        '福建省':'福建省','江西省':'江西省','山东省':'山東省','河南省':'河南省',
+        '湖北省':'湖北省','湖南省':'湖南省','广东省':'広東省','海南省':'海南省',
+        '四川省':'四川省','贵州省':'貴州省','云南省':'雲南省','陕西省':'陝西省',
+        '甘肃省':'甘粛省','青海省':'青海省','内蒙古自治区':'内モンゴル自治区',
+        '广西壮族自治区':'広西チワン族自治区','西藏自治区':'チベット自治区',
+        '宁夏回族自治区':'寧夏回族自治区','新疆维吾尔自治区':'新疆ウイグル自治区',
+        '香港特别行政区':'香港','澳门特别行政区':'マカオ','台湾省':'台湾'
+      };
+      svg.selectAll('path')
+        .data(cnFeatures)
+        .join('path')
+        .attr('d', pathGen)
+        .attr('data-province', d => {
+          const cnName = (d.properties || {}).name || '';
+          return CN_JP_MAP[cnName] || cnName;
+        })
+        .style('fill', d => {
+          const props = d.properties || {};
+          const cnName = props.name || '';
+          const jpName = CN_JP_MAP[cnName] || cnName;
+          if (visited[jpName] !== undefined) {
+            const age = currentYear - (visited[jpName] || currentYear);
+            return `rgba(139,44,100,${Math.max(0.4, 1 - age * 0.06)})`;
+          }
+          return '#e8dfc8';
+        })
+        .attr('stroke', '#9a8f7a').attr('stroke-width', 0.5)
+        .style('cursor', 'pointer')
+        .on('click', function(event, d) {
+          const props = d.properties || {};
+          const cnName = props.name || '';
+          const jpName = CN_JP_MAP[cnName] || cnName;
+          const gridItem = [...document.querySelectorAll('.visit-item')].find(el => el.textContent.startsWith(jpName));
+          const targetEl = gridItem || document.createElement('div');
+          toggleVisit(key, jpName, targetEl);
+          const yr = visitData[key]?.[jpName];
+          d3.select(this).attr('fill', yr !== undefined
+            ? `rgba(139,44,100,${Math.max(0.4, 1-(currentYear-(yr||currentYear))*0.06)})`
+            : '#e8dfc8');
+        });
+      // 描画完了後に全色を再適用
+      setTimeout(() => reapplyAllMapColors(key, visited, currentYear), 100);
+    } catch(e) {
+      console.error('中国地図エラー:', e);
+      mapEl.innerHTML = MAP_SVG['china'];
+      applyMapColors('china', visited, currentYear);
+    }
+  }
+}
+
+function reapplyAllMapColors(key, visited, currentYear) {
+  const entries = Object.entries(visited || {});
+  if (entries.length === 0) return;
+  entries.forEach(([name, year]) => {
+    const age = currentYear - (year || currentYear);
+    const opacity = Math.max(0.4, 1 - age * 0.06);
+    const fill = `rgba(139,44,100,${opacity})`;
+    if (key === 'world') {
+      const code = COUNTRY_CODE_MAP[name];
+      if (!code) return;
+      let sel = d3.select(`#worldD3svg path[data-code="${code}"]`);
+      if (sel.empty()) sel = d3.select(`#worldD3svg path[data-code="${parseInt(code)}"]`);
+      if (!sel.empty()) sel.style('fill', fill);
+    } else if (key === 'japan') {
+      d3.selectAll(`#worldD3svg path[data-pref="${name}"]`).style('fill', fill);
+    } else if (key === 'onsen') {
+      const onsenItem = ONSEN_DATA.find(o => o.key === name);
+      if (onsenItem) {
+        const pref = JP_KANJI_MAP_GLOBAL[onsenItem.pref] || onsenItem.pref.replace(/[都道府県]$/, '');
+        d3.selectAll(`#worldD3svg path[data-pref="${pref}"]`).style('fill', fill);
+      }
+    } else if (key === 'china') {
+      d3.selectAll(`#worldD3svg path[data-province="${name}"]`).style('fill', fill);
+    }
+  });
+}
+
+function applyMapColors(key, visited, currentYear) {
+  const mapEl = document.getElementById('visitMap');
+  mapEl.querySelectorAll('path[data-name]').forEach(path => {
+    const name = path.getAttribute('data-name');
+    const year = visited[name];
+    if (year !== undefined) {
+      const age = currentYear - (year || currentYear);
+      path.style.fill = `rgba(139,44,100,${Math.max(0.4, 1 - age * 0.06)})`;
+    }
+  });
+}
+
+function renderVisitHistory(key) {
+  const historyEl = document.getElementById('visitHistory');
+  if (!historyEl) return;
+  const visited = visitData[key] || {};
+  const entries = Object.entries(visited);
+  if (entries.length === 0) {
+    historyEl.innerHTML = '';
+    return;
+  }
+  const byYear = {};
+  entries.forEach(([name, year]) => {
+    const y = year || new Date().getFullYear();
+    if (!byYear[y]) byYear[y] = [];
+    byYear[y].push(name);
+  });
+  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+  let html = '<div class="visit-history-title">📅 訪問履歴（名前をタップで年変更）</div>';
+  years.forEach(year => {
+    html += `<div class="visit-history-year">${year}年</div>`;
+    html += `<div class="visit-history-places">`;
+    byYear[year].forEach((name, i) => {
+      if (i > 0) html += '　／　';
+      html += `<span class="history-name-btn" onclick="changeVisitYear('${key}','${name}')">${name}</span>`;
+    });
+    html += `</div>`;
+  });
+  historyEl.innerHTML = html;
+}
+
+function toggleOnsenDetail(btn, dayBath, name) {
+  // 既存のポップアップを探す
+  const wrap = btn.closest('.onsen-item-wrap');
+  let popup = wrap.querySelector('.onsen-detail-popup');
+  if (popup) {
+    popup.remove();
+    btn.textContent = '🛁';
+    return;
+  }
+  popup = document.createElement('div');
+  popup.className = 'onsen-detail-popup';
+  popup.innerHTML = `<strong>🛁 日帰り入浴できる宿</strong>${dayBath}`;
+  wrap.appendChild(popup);
+  btn.textContent = '✕';
+}
+
+function changeVisitYear(key, name) {
+  // 年変更ダイアログを表示（elはダミー）
+  _yearDialogKey = key;
+  _yearDialogName = name;
+  // 既存の年をデフォルトに設定
+  const currentYear = new Date().getFullYear();
+  const existingYear = (visitData[key] || {})[name] || currentYear;
+  const sel = document.getElementById('yearSelect');
+  sel.innerHTML = '';
+  for (let y = currentYear; y >= 1950; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    sel.appendChild(opt);
+  }
+  sel.value = existingYear;
+  document.getElementById('yearDialogTitle').textContent = `「${name}」の訪問年を変更`;
+  _yearDialogEl = [...document.querySelectorAll('.visit-item')].find(e => e.textContent.startsWith(name)) || document.createElement('div');
+  document.getElementById('yearDialog').style.display = 'flex';
+}
+
+function updateVisitStats(key, el) {
+  const visited = Object.keys(visitData[key] || {}).length;
+  const grid = el.closest('.visit-grid');
+  const total = grid ? grid.children.length : 1;
+  const pct = Math.round(visited / total * 100);
+  document.getElementById('visitStats').textContent = `訪問済み ${visited} / ${total}ヶ所　達成率 ${pct}%`;
+  document.getElementById('visitFill').style.width = pct + '%';
+  const overlayEl = document.getElementById('mapOverlay');
+  if (overlayEl) overlayEl.innerHTML = `${visited}/${total}<br>${pct}%`;
+  renderVisitHistory(key);
+}
+
+function toggleVisit(key, name, el) {
+  if (!visitData[key]) visitData[key] = {};
+  if (visitData[key][name] !== undefined) {
+    // 削除確認
+    const displayName = key === 'onsen'
+      ? (ONSEN_DATA.find(o => o.key === name)?.name || name)
+      : name;
+    if (!confirm(`「${displayName}」の訪問歴を削除してもよいですか？`)) return;
+    delete visitData[key][name];
+    // elを直接更新
+    if (el && el.classList) {
+      el.classList.remove('visited');
+      el.removeAttribute('style');
+      const yearEl = el.querySelector('.visit-year');
+      if (yearEl) yearEl.remove();
+    }
+    // data-vkey属性で対応ボタンを探す
+    const gridItem = document.querySelector(`.visit-item[data-vkey="${CSS.escape(name)}"]`);
+    if (gridItem && gridItem !== el) {
+      gridItem.classList.remove('visited');
+      gridItem.removeAttribute('style');
+      const y = gridItem.querySelector('.visit-year');
+      if (y) y.remove();
+    }
+    saveVisit();
+    updateVisitStats(key, el || gridItem || document.createElement('div'));
+    updateMapColor(key, name, null);
+    renderVisit(key);
+  } else {
+    const targetEl = (el && el.classList) ? el : (document.querySelector(`.visit-item[data-vkey="${CSS.escape(name)}"]`) || document.createElement('div'));
+    showYearDialog(key, name, targetEl);
+  }
+}
+
+let searchQuery = '';
+
+function doSearch(val) {
+  searchQuery = val.trim();
+  const clearBtn = document.getElementById('searchClear');
+  const countEl  = document.getElementById('searchCount');
+  if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+  if (searchQuery) {
+    render();
+    // 件数表示
+    const hits = items.filter(item =>
+      item.text.includes(searchQuery) || (item.memo || '').includes(searchQuery)
+    );
+    if (countEl) countEl.textContent = `${hits.length}件`;
+  } else {
+    if (countEl) countEl.textContent = '';
+    render();
+  }
+}
+
+function clearSearch() {
+  searchQuery = '';
+  const input = document.getElementById('searchInput');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById('searchClear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  const countEl = document.getElementById('searchCount');
+  if (countEl) countEl.textContent = '';
+  render();
+}
+
+function highlightText(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(escaped, 'gi'), match =>
+    `<span class="search-highlight">${match}</span>`
+  );
+}
 
 function setPrio(btn) {
   document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
@@ -1554,715 +2877,211 @@ function updateStats() {
   document.getElementById('totalCount').textContent = total;
   document.getElementById('doneCount').textContent = doneCount;
   document.getElementById('remainCount').textContent = total - doneCount;
-  const pct = total ? Math.round(doneCount / total * 100) : 0;
 
-  const cats = [
-    { key: '海外旅行',    label: '✈️ 海外旅行',    color: '#5b8db8' },
-    { key: '国内旅行',    label: '🗾 国内旅行',    color: '#3a9e7a' },
-    { key: '食・グルメ',  label: '🍜 食・グルメ',  color: '#c87941' },
-    { key: 'スキル・学習',label: '📚 スキル・学習', color: '#7a5bb8' },
-    { key: '人生の目標',  label: '⭐ 人生の目標',  color: '#8b2c0a' },
-  ];
+  // タブの統計を更新
+  const cats = ['海外旅行', '国内旅行', '食・グルメ', 'スキル・学習', '人生の目標'];
+  cats.forEach(cat => {
+    const statEl = document.getElementById(`stat-${cat}`);
+    const pctEl  = document.getElementById(`pct-${cat}`);
+    if (!statEl) return;
+    const ci = items.filter(x => x.cat === cat);
+    const ct = ci.length, cd = ci.filter(x => x.done).length;
+    const cp = ct ? Math.round(cd / ct * 100) : 0;
+    statEl.textContent = `${cd}/${ct}`;
+    if (pctEl) pctEl.textContent = `${cp}%`;
+  });
 
-  // フィルタータブ下の一覧は削除済み
+  // 全て
+  const allStat = document.getElementById('stat-all');
+  const allPct  = document.getElementById('pct-all');
+  if (allStat) {
+    const pct = total ? Math.round(doneCount / total * 100) : 0;
+    allStat.textContent = `${doneCount}/${total}`;
+    if (allPct) allPct.textContent = `${pct}%`;
+  }
 
-  // ヘッダーのコンパクト版
-  const headerEl = document.getElementById('headerCatStats');
-  // アイコンだけ抽出（絵文字部分）
-  const icons = { '海外旅行':'✈️', '国内旅行':'🗾', '食・グルメ':'🍜', 'スキル・学習':'📚', '人生の目標':'⭐' };
-  headerEl.innerHTML = `<div class="header-cat-grid">` +
-    cats.map(c => {
-      const ci = items.filter(x => x.cat === c.key);
-      const ct = ci.length, cd = ci.filter(x => x.done).length;
-      const cp = ct ? Math.round(cd / ct * 100) : 0;
-      return `<div class="header-cat-item">
-        <span class="header-cat-icon">${icons[c.key]}</span>
-        <span class="header-cat-fraction">${cd}/${ct}</span>
-        <span class="header-cat-pct">${cp}%</span>
-      </div>`;
-    }).join('') +
-    `<div class="header-cat-item header-cat-total">
-      <span class="header-cat-icon" style="color:#5a7a5a;">✓</span>
-      <span class="header-cat-fraction">${items.filter(x=>x.done).length}/${items.length}</span>
-      <span class="header-cat-pct">${items.length ? Math.round(items.filter(x=>x.done).length/items.length*100) : 0}%</span>
-    </div>` +
-    `</div>`;
+  // 達成済み
+  const doneStat = document.getElementById('stat-達成済み');
+  const donePct  = document.getElementById('pct-達成済み');
+  if (doneStat) doneStat.textContent = `${doneCount}件`;
+  if (donePct)  donePct.textContent = '';
+}
+
+function toFullWidth(n) {
+  return String(n).replace(/[0-9]/g, c => '０１２３４５６７８９'[c]);
 }
 
 function buildItemHTML(item) {
   return `<div class="item ${item.done ? 'done' : ''}" data-cat="${item.cat}" data-idx="${item._i}">
     <button class="check-btn" onclick="toggle(${item._i})">✓</button>
     <div class="item-body">
-      <div class="item-text" id="item-text-${item._i}">${item.text}</div>
+      <div class="item-text" id="item-text-${item._i}">${highlightText(item.text, searchQuery)}</div>
       <div class="item-edit-row" id="edit-row-${item._i}" style="display:none;">
         <input class="item-edit-input" id="edit-input-${item._i}" type="text" maxlength="60"
           onkeydown="if(event.key==='Enter')saveEdit(${item._i});if(event.key==='Escape')cancelEdit(${item._i})">
         <button class="item-edit-save" onclick="saveEdit(${item._i})">保存</button>
         <button class="item-edit-cancel" onclick="cancelEdit(${item._i})">取消</button>
       </div>
-      <div class="item-badges">
-        <span class="cat-tag">${item.cat}</span>
-        <span class="badge badge-urg badge-urg-${item.urg}">緊急度 ${item.urg}</span>
-        <span class="badge badge-prio badge-prio-${item.prio}">重要度 ${item.prio}</span>
-        <span class="badge badge-score score-${item.score}" title="重要度×緊急度">スコア ${item.score}</span>
-      </div>
       <div class="change-row" ${item.done ? 'style="display:none"' : ''}>
+        <span class="cat-tag">${item.cat}</span>
+        <span class="badge badge-score score-${item.score}" title="重要度×緊急度">${toFullWidth(item.score)}</span>
         <div class="change-group">
           <span class="change-group-label">緊急度</span>
-          <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高(3)</button>
-          <button class="urg-change-btn${item.urg==='中'?' active-中':''}" data-v="中" onclick="changeUrg(${item._i},'中')">中(2)</button>
-          <button class="urg-change-btn${item.urg==='低'?' active-低':''}" data-v="低" onclick="changeUrg(${item._i},'低')">低(1)</button>
+          <button class="urg-change-btn${item.urg==='高'?' active-高':''}" data-v="高" onclick="changeUrg(${item._i},'高')">高</button>
+          <button class="urg-change-btn${item.urg==='中'?' active-中':''}" data-v="中" onclick="changeUrg(${item._i},'中')">中</button>
+          <button class="urg-change-btn${item.urg==='低'?' active-低':''}" data-v="低" onclick="changeUrg(${item._i},'低')">低</button>
         </div>
         <div class="change-group">
           <span class="change-group-label">重要度</span>
-          <button class="prio-change-btn${item.prio==='高'?' active-高':''}" data-v="高" onclick="changePrio(${item._i},'高')">高(3)</button>
-          <button class="prio-change-btn${item.prio==='中'?' active-中':''}" data-v="中" onclick="changePrio(${item._i},'中')">中(2)</button>
-          <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低(1)</button>
+          <button class="prio-change-btn${item.prio==='高'?' active-高':''}" data-v="高" onclick="changePrio(${item._i},'高')">高</button>
+          <button class="prio-change-btn${item.prio==='中'?' active-中':''}" data-v="中" onclick="changePrio(${item._i},'中')">中</button>
+          <button class="prio-change-btn${item.prio==='低'?' active-低':''}" data-v="低" onclick="changePrio(${item._i},'低')">低</button>
         </div>
       </div>
       <div class="item-memo-row${item.memo ? ' open' : ''}" id="memo-row-${item._i}">
         <textarea class="item-memo-textarea" id="memo-input-${item._i}" placeholder="詳細メモを入力…"
           onblur="saveMemo(${item._i})">${item.memo || ''}</textarea>
-
-```
-  </div>
-</div>
-<button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
-<button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
-<button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
-```
-
+      </div>
+    </div>
+    <div class="item-btn-col">
+      <button class="detail-btn${item.memo ? ' active' : ''}" onclick="toggleMemo(${item._i})" title="詳細">📝</button>
+      <button class="edit-btn" onclick="editItem(${item._i})" title="編集">✎</button>
+      <button class="delete-btn" onclick="remove(${item._i})" title="削除">×</button>
+    </div>
   </div>`;
 }
 
 function render() {
-const list = document.getElementById(‘itemsList’);
+  const list = document.getElementById('itemsList');
 
-// ゴミ箱表示
-if (currentFilter === ‘ゴミ箱’) {
-updateStats();
-updateTrashCount();
-if (trash.length === 0) {
-list.innerHTML = `<div class="empty"><div class="empty-icon">🗑️</div><div class="empty-text">ゴミ箱は空です</div></div>`;
-return;
-}
-const parts = [`<div class="trash-actions"><button class="empty-trash-btn" onclick="emptyTrash()">🗑️ ゴミ箱を空にする（${trash.length}件完全削除）</button></div>`];
-parts.push(…trash.map((item, i) => {
-const pts = { ‘高’: 3, ‘中’: 2, ‘低’: 1 };
-const urg = item.urg || ‘中’;
-const score = pts[item.prio] * pts[urg];
-return `<div class="item trashed" data-cat="${item.cat}"> <div class="item-body"> <div class="item-text" style="color:var(--faded);">${item.text}</div> <div class="item-badges"> <span class="cat-tag">${item.cat}</span> <span class="badge badge-urg-${urg}">緊急度 ${urg}</span> <span class="badge badge-prio-${item.prio}">重要度 ${item.prio}</span> <span class="badge badge-score score-${score}">スコア ${score}</span> </div> </div> <button class="restore-btn" onclick="restoreFromTrash(${i})" title="元に戻す">↩️</button> <button class="delete-btn" onclick="removeFromTrash(${i})" title="完全削除">×</button> </div>`;
-}));
-list.innerHTML = parts.join(’’);
-return;
-}
+  // ゴミ箱表示
+  if (currentFilter === 'ゴミ箱') {
+    updateStats();
+    updateTrashCount();
+    if (trash.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="empty-icon">🗑️</div><div class="empty-text">ゴミ箱は空です</div></div>`;
+      return;
+    }
+    const parts = [`<div class="trash-actions"><button class="empty-trash-btn" onclick="emptyTrash()">🗑️ ゴミ箱を空にする（${trash.length}件完全削除）</button></div>`];
+    parts.push(...trash.map((item, i) => {
+      const pts = { '高': 3, '中': 2, '低': 1 };
+      const urg = item.urg || '中';
+      const score = pts[item.prio] * pts[urg];
+      return `<div class="item trashed" data-cat="${item.cat}">
+        <div class="item-body">
+          <div class="item-text" style="color:var(--faded);">${item.text}</div>
+          <div class="item-badges">
+            <span class="cat-tag">${item.cat}</span>
+            <span class="badge badge-urg-${urg}">緊急度 ${urg}</span>
+            <span class="badge badge-prio-${item.prio}">重要度 ${item.prio}</span>
+            <span class="badge badge-score score-${score}">スコア ${score}</span>
+          </div>
+        </div>
+        <button class="restore-btn" onclick="restoreFromTrash(${i})" title="元に戻す">↩️</button>
+        <button class="delete-btn" onclick="removeFromTrash(${i})" title="完全削除">×</button>
+      </div>`;
+    }));
+    list.innerHTML = parts.join('');
+    return;
+  }
 
-const pts = { ‘高’: 3, ‘中’: 2, ‘低’: 1 };
-const mapped = items.map((item, i) => ({
-…item, urg: item.urg || ‘中’,
-score: pts[item.prio] * pts[item.urg || ‘中’], _i: i
-}));
-let active, done;
-if (currentFilter === ‘達成済み’) {
-active = [];
-done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
-} else if (currentFilter === ‘全て’) {
-active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
-done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
-} else {
-active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
-done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
-}
-updateStats();
-updateTrashCount();
-if ([…active,…done].length === 0) {
-list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
-return;
-}
-const parts = [];
-if (active.length > 0 && done.length > 0) {
-parts.push(…active.map(item => buildItemHTML(item)));
-parts.push(`<div class="done-separator" style="text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;">✅ 達成済み</div>`);
-parts.push(…done.map(item => buildItemHTML(item)));
-} else {
-parts.push(…[…active,…done].map(item => buildItemHTML(item)));
-}
-list.innerHTML = parts.join(’’);
+  const pts = { '高': 3, '中': 2, '低': 1 };
+  let mapped = items.map((item, i) => ({
+    ...item, urg: item.urg || '中',
+    score: pts[item.prio] * pts[item.urg || '中'], _i: i
+  }));
+
+  // 検索フィルタリング
+  if (searchQuery) {
+    mapped = mapped.filter(x =>
+      x.text.includes(searchQuery) || (x.memo || '').includes(searchQuery)
+    );
+  }
+
+  let active, done;
+  if (currentFilter === '達成済み') {
+    active = [];
+    done = mapped.filter(x => x.done).sort((a,b) => b.score - a.score);
+  } else if (currentFilter === '全て') {
+    active = mapped.filter(x => !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x =>  x.done).sort((a,b) => b.score - a.score);
+  } else {
+    active = mapped.filter(x => x.cat === currentFilter && !x.done).sort((a,b) => b.score - a.score);
+    done   = mapped.filter(x => x.cat === currentFilter &&  x.done).sort((a,b) => b.score - a.score);
+  }
+  updateStats();
+  updateTrashCount();
+  if ([...active,...done].length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">まだ何もありません</div><div class="empty-sub">夢を追加してみましょう</div></div>`;
+    return;
+  }
+  const parts = [];
+  if (active.length > 0 && done.length > 0) {
+    parts.push(...active.map(item => buildItemHTML(item)));
+    parts.push(`<div class="done-separator" style="text-align:center;padding:10px 0 6px;font-size:11px;letter-spacing:0.2em;color:var(--faded);border-top:1px dashed var(--aged);margin-top:4px;">✅ 達成済み</div>`);
+    parts.push(...done.map(item => buildItemHTML(item)));
+  } else {
+    parts.push(...[...active,...done].map(item => buildItemHTML(item)));
+  }
+  list.innerHTML = parts.join('');
 }
 
 function toggleMemo(i) {
-const row = document.getElementById(`memo-row-${i}`);
-const btn = row ? row.closest(’.item’).querySelector(’.detail-btn’) : null;
-if (!row) return;
-const isOpen = row.classList.toggle(‘open’);
-if (btn) btn.classList.toggle(‘active’, isOpen);
-if (isOpen) {
-const ta = document.getElementById(`memo-input-${i}`);
-if (ta) ta.focus();
-}
+  const row = document.getElementById(`memo-row-${i}`);
+  const btn = row ? row.closest('.item').querySelector('.detail-btn') : null;
+  if (!row) return;
+  const isOpen = row.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', isOpen);
+  if (isOpen) {
+    const ta = document.getElementById(`memo-input-${i}`);
+    if (ta) ta.focus();
+  }
 }
 
 function saveMemo(i) {
-const ta = document.getElementById(`memo-input-${i}`);
-if (!ta) return;
-items[i].memo = ta.value;
-// メモがあればボタンをactive状態に
-const btn = ta.closest(’.item’).querySelector(’.detail-btn’);
-if (btn) btn.classList.toggle(‘active’, !!ta.value);
-save();
+  const ta = document.getElementById(`memo-input-${i}`);
+  if (!ta) return;
+  items[i].memo = ta.value;
+  // メモがあればボタンをactive状態に
+  const btn = ta.closest('.item').querySelector('.detail-btn');
+  if (btn) btn.classList.toggle('active', !!ta.value);
+  save();
 }
 
 function editItem(i) {
-const el = document.getElementById(`edit-row-${i}`);
-const textEl = document.getElementById(`item-text-${i}`);
-if (el.style.display === ‘flex’) {
-cancelEdit(i);
-} else {
-el.style.display = ‘flex’;
-const input = document.getElementById(`edit-input-${i}`);
-input.value = items[i].text;
-input.focus();
-input.select();
-textEl.style.opacity = ‘0.4’;
-}
+  const el = document.getElementById(`edit-row-${i}`);
+  const textEl = document.getElementById(`item-text-${i}`);
+  if (el.style.display === 'flex') {
+    cancelEdit(i);
+  } else {
+    el.style.display = 'flex';
+    const input = document.getElementById(`edit-input-${i}`);
+    input.value = items[i].text;
+    input.focus();
+    input.select();
+    textEl.style.opacity = '0.4';
+  }
 }
 
 function saveEdit(i) {
-const input = document.getElementById(`edit-input-${i}`);
-const val = input.value.trim();
-if (val) { items[i].text = val; save(); }
-render();
+  const input = document.getElementById(`edit-input-${i}`);
+  const val = input.value.trim();
+  if (val) { items[i].text = val; save(); }
+  render();
 }
 
 function cancelEdit(i) {
-const el = document.getElementById(`edit-row-${i}`);
-const textEl = document.getElementById(`item-text-${i}`);
-el.style.display = ‘none’;
-textEl.style.opacity = ‘1’;
+  const el = document.getElementById(`edit-row-${i}`);
+  const textEl = document.getElementById(`item-text-${i}`);
+  el.style.display = 'none';
+  textEl.style.opacity = '1';
 }
 
-document.getElementById(‘newItem’).addEventListener(‘keydown’, e => {
-if (e.key === ‘Enter’) addItem();
+
+document.getElementById('newItem').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
 });
-
-// ===== 訪問記録機能 =====
-let visitData = {};
-let currentMode = ‘bucket’;
-
-const DB_VISIT_URL = “https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app”;
-
-async function loadVisitFromFirebase() {
-try {
-const res = await fetch(DB_VISIT_URL + ‘/visitData.json’, {cache:‘no-store’});
-const data = await res.json();
-if (data && typeof data === ‘object’) visitData = data;
-} catch(e) { console.error(‘visitData読み込みエラー:’, e); }
-}
-
-async function saveVisit() {
-try {
-await fetch(DB_VISIT_URL + ‘/visitData.json’, {
-method: ‘PUT’, headers: {‘Content-Type’:‘application/json’},
-body: JSON.stringify(visitData)
-});
-} catch(e) { console.error(‘visitData保存エラー:’, e); }
-}
-
-function setMode(mode) {
-currentMode = mode;
-document.querySelectorAll(’.mode-btn’).forEach(b => b.classList.remove(‘active’));
-document.querySelectorAll(’.mode-btn’).forEach(b => {
-const labels = {bucket:‘バケット’,onsen:‘温泉’,japan:‘都道府県’,china:‘中国’,world:‘世界’};
-if (b.textContent.includes(labels[mode])) b.classList.add(‘active’);
-});
-const mainEl = document.querySelector(‘main’);
-const visitPanel = document.getElementById(‘visitPanel’);
-if (mode === ‘bucket’) {
-mainEl.style.display = ‘’;
-visitPanel.style.display = ‘none’;
-} else {
-mainEl.style.display = ‘none’;
-visitPanel.style.display = ‘block’;
-renderVisit(mode);
-}
-}
-
-// 都道府県リスト
-const JAPAN_PREFS = [‘北海道’,‘青森’,‘岩手’,‘宮城’,‘秋田’,‘山形’,‘福島’,‘茨城’,‘栃木’,‘群馬’,‘埼玉’,‘千葉’,‘東京’,‘神奈川’,‘新潟’,‘富山’,‘石川’,‘福井’,‘山梨’,‘長野’,‘岐阜’,‘静岡’,‘愛知’,‘三重’,‘滋賀’,‘京都’,‘大阪’,‘兵庫’,‘奈良’,‘和歌山’,‘鳥取’,‘島根’,‘岡山’,‘広島’,‘山口’,‘徳島’,‘香川’,‘愛媛’,‘高知’,‘福岡’,‘佐賀’,‘長崎’,‘熊本’,‘大分’,‘宮崎’,‘鹿児島’,‘沖縄’];
-
-// 中国省リスト
-const CHINA_REGIONS = [‘北京市’,‘天津市’,‘上海市’,‘重慶市’,‘河北省’,‘山西省’,‘遼寧省’,‘吉林省’,‘黒竜江省’,‘江蘇省’,‘浙江省’,‘安徽省’,‘福建省’,‘江西省’,‘山東省’,‘河南省’,‘湖北省’,‘湖南省’,‘広東省’,‘海南省’,‘四川省’,‘貴州省’,‘雲南省’,‘陝西省’,‘甘粛省’,‘青海省’,‘内モンゴル自治区’,‘広西チワン族自治区’,‘チベット自治区’,‘寧夏回族自治区’,‘新疆ウイグル自治区’,‘香港’,‘マカオ’,‘台湾’];
-
-// 世界大陸グループ
-const WORLD_CONTINENTS = {
-‘🌏 東アジア’: [‘日本’,‘韓国’,‘中国’,‘台湾’,‘香港’,‘マカオ’,‘モンゴル’],
-‘🌴 東南アジア’: [‘ベトナム’,‘タイ’,‘カンボジア’,‘ラオス’,‘ミャンマー’,‘マレーシア’,‘シンガポール’,‘インドネシア’,‘フィリピン’,‘ブルネイ’,‘東ティモール’],
-‘🕌 南アジア・中東’: [‘インド’,‘パキスタン’,‘バングラデシュ’,‘スリランカ’,‘ネパール’,‘ブータン’,‘モルディブ’,‘アフガニスタン’,‘イラン’,‘イラク’,‘サウジアラビア’,‘UAE’,‘カタール’,‘クウェート’,‘バーレーン’,‘オマーン’,‘イエメン’,‘ヨルダン’,‘レバノン’,‘シリア’,‘イスラエル’,‘トルコ’],
-‘🏔️ 中央アジア’: [‘カザフスタン’,‘ウズベキスタン’,‘キルギス’,‘タジキスタン’,‘トルクメニスタン’,‘アゼルバイジャン’,‘グルジア’,‘アルメニア’],
-‘🏰 ヨーロッパ’: [‘ロシア’,‘ウクライナ’,‘ベラルーシ’,‘モルドバ’,‘ポーランド’,‘チェコ’,‘スロバキア’,‘ハンガリー’,‘オーストリア’,‘ドイツ’,‘スイス’,‘リヒテンシュタイン’,‘フランス’,‘ベルギー’,‘オランダ’,‘ルクセンブルク’,‘デンマーク’,‘スウェーデン’,‘ノルウェー’,‘フィンランド’,‘アイスランド’,‘英国’,‘アイルランド’,‘スペイン’,‘ポルトガル’,‘イタリア’,‘バチカン’,‘サンマリノ’,‘モナコ’,‘ギリシャ’,‘マルタ’,‘スロベニア’,‘クロアチア’,‘ボスニア・ヘルツェゴビナ’,‘セルビア’,‘モンテネグロ’,‘北マケドニア’,‘アルバニア’,‘コソボ’,‘ルーマニア’,‘ブルガリア’,‘エストニア’,‘ラトビア’,‘リトアニア’,‘アンドラ’],
-‘🌍 アフリカ’: [‘モロッコ’,‘アルジェリア’,‘チュニジア’,‘リビア’,‘エジプト’,‘スーダン’,‘南スーダン’,‘エチオピア’,‘エリトリア’,‘ジブチ’,‘ソマリア’,‘ケニア’,‘タンザニア’,‘ウガンダ’,‘ルワンダ’,‘ブルンジ’,‘コンゴ民主共和国’,‘コンゴ共和国’,‘中央アフリカ’,‘カメルーン’,‘ナイジェリア’,‘ガーナ’,‘コートジボワール’,‘セネガル’,‘マリ’,‘ブルキナファソ’,‘ニジェール’,‘チャド’,‘ガボン’,‘赤道ギニア’,‘サントメ・プリンシペ’,‘カーボベルデ’,‘モーリタニア’,‘ギニア’,‘ギニアビサウ’,‘シエラレオネ’,‘リベリア’,‘トーゴ’,‘ベナン’,‘ガンビア’,‘南アフリカ’,‘ナミビア’,‘ボツワナ’,‘ジンバブエ’,‘ザンビア’,‘モザンビーク’,‘マラウイ’,‘アンゴラ’,‘マダガスカル’,‘コモロ’,‘セーシェル’,‘モーリシャス’,‘レソト’,‘エスワティニ’],
-‘🌎 北中米’: [‘カナダ’,‘アメリカ’,‘メキシコ’,‘グアテマラ’,‘ベリーズ’,‘ホンジュラス’,‘エルサルバドル’,‘ニカラグア’,‘コスタリカ’,‘パナマ’,‘キューバ’,‘ジャマイカ’,‘ハイチ’,‘ドミニカ共和国’,‘トリニダード・トバゴ’,‘バルバドス’],
-‘🌎 南米’: [‘コロンビア’,‘ベネズエラ’,‘ガイアナ’,‘スリナム’,‘ブラジル’,‘エクアドル’,‘ペルー’,‘ボリビア’,‘チリ’,‘アルゼンチン’,‘ウルグアイ’,‘パラグアイ’],
-‘🦘 オセアニア’: [‘オーストラリア’,‘ニュージーランド’,‘パプアニューギニア’,‘フィジー’,‘ソロモン諸島’,‘バヌアツ’,‘サモア’,‘トンガ’,‘キリバス’,‘ミクロネシア’,‘マーシャル諸島’,‘パラオ’,‘ナウル’,‘ツバル’]
-};
-const WORLD_COUNTRIES = Object.values(WORLD_CONTINENTS).flat();
-
-// 温泉データ
-const ONSEN_DATA = [
-{key:‘北海道登別温泉’,pref:‘北海道’,name:‘登別温泉’,region:‘🌨️ 北海道’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘登別温泉郷滝乃家、祝いの宿登別グランドホテル、第一滝本館’},
-{key:‘北海道湯の川温泉’,pref:‘北海道’,name:‘湯の川温泉’,region:‘🌨️ 北海道’,stars:2,starStr:‘⭐⭐’,dayBath:‘湯の川温泉 ホテル万葉、湯の川温泉 温泉ホテル’},
-{key:‘北海道定山渓温泉’,pref:‘北海道’,name:‘定山渓温泉’,region:‘🌨️ 北海道’,stars:2,starStr:‘⭐⭐’,dayBath:‘定山渓グランドホテル瑞苑、定山渓鶴雅リゾート’},
-{key:‘北海道ニセコ温泉’,pref:‘北海道’,name:‘ニセコ温泉’,region:‘🌨️ 北海道’,stars:2,starStr:‘⭐⭐’,dayBath:‘ニセコパークテラスホテル、グラフィア’},
-{key:‘北海道網走温泉’,pref:‘北海道’,name:‘網走温泉’,region:‘🌨️ 北海道’,stars:1,starStr:‘⭐’,dayBath:‘ホテル網走、能登屋ホテル’},
-{key:‘北海道美幌峠温泉’,pref:‘北海道’,name:‘美幌峠温泉’,region:‘🌨️ 北海道’,stars:1,starStr:‘⭐’,dayBath:‘望湖台温泉’},
-{key:‘北海道阿寒湖温泉’,pref:‘北海道’,name:‘阿寒湖温泉’,region:‘🌨️ 北海道’,stars:1,starStr:‘⭐’,dayBath:‘あかん遊久の里鶴雅、鄙の座’},
-{key:‘北海道屈斜路温泉’,pref:‘北海道’,name:‘屈斜路温泉’,region:‘🌨️ 北海道’,stars:1,starStr:‘⭐’,dayBath:‘レイクホテル屈斜路、湯元鶴雅’},
-{key:‘青森県酸ヶ湯温泉’,pref:‘青森県’,name:‘酸ヶ湯温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘酸ヶ湯温泉旅館、八甲田ホテル’},
-{key:‘青森県浅虫温泉’,pref:‘青森県’,name:‘浅虫温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘浅虫温泉 旅館南宛、旅館大佛’},
-{key:‘青森県大鰐温泉’,pref:‘青森県’,name:‘大鰐温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘すきや亭、星野リゾート 青森屋’},
-{key:‘岩手県繫温泉’,pref:‘岩手県’,name:‘繫温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘別邸 山の抄、旅館田中’},
-{key:‘岩手県花巻温泉郷’,pref:‘岩手県’,name:‘花巻温泉郷’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘花巻温泉ホテルさか田’},
-{key:‘岩手県金田一温泉’,pref:‘岩手県’,name:‘金田一温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘旅館 千葉旅館、旅館 佳松’},
-{key:‘岩手県つなぎ温泉’,pref:‘岩手県’,name:‘つなぎ温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘ホテル紫苑’},
-{key:‘宮城県鳴子温泉’,pref:‘宮城県’,name:‘鳴子温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘鳴子温泉 旅館あづま、大沼旅館’},
-{key:‘宮城県松島温泉’,pref:‘宮城県’,name:‘松島温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘ホテル海風土’},
-{key:‘宮城県作並温泉’,pref:‘宮城県’,name:‘作並温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘ホテルニュー水戸屋、最上屋旅館’},
-{key:‘秋田県玉川温泉’,pref:‘秋田県’,name:‘玉川温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘旅館田中’},
-{key:‘山形県蔵王温泉’,pref:‘山形県’,name:‘蔵王温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘蔵王国際ホテル、深山荘高見屋’},
-{key:‘山形県肘折温泉’,pref:‘山形県’,name:‘肘折温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘旅館松葉、肘折温泉 大浴場’},
-{key:‘山形県天童温泉’,pref:‘山形県’,name:‘天童温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘ホテル天童、旅館 こんや’},
-{key:‘福島県磐梯熱海温泉’,pref:‘福島県’,name:‘磐梯熱海温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘ホテルハイマート’},
-{key:‘福島県土湯温泉’,pref:‘福島県’,name:‘土湯温泉’,region:‘🍎 東北’,stars:2,starStr:‘⭐⭐’,dayBath:‘玉子湯、あづま’},
-{key:‘福島県会津東山温泉’,pref:‘福島県’,name:‘会津東山温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘新滝、ホテル会津’},
-{key:‘福島県飯坂温泉’,pref:‘福島県’,name:‘飯坂温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘旅館大亀、ホテル福の湯’},
-{key:‘福島県いわき湯本温泉’,pref:‘福島県’,name:‘いわき湯本温泉’,region:‘🍎 東北’,stars:1,starStr:‘⭐’,dayBath:‘スパリゾート ハワイアンズ’},
-{key:‘群馬県草津温泉’,pref:‘群馬県’,name:‘草津温泉’,region:‘🌸 関東’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘大滝乃湯、草津温泉ホテルコサイ、湯宿季の庭’},
-{key:‘神奈川県箱根温泉’,pref:‘神奈川県’,name:‘箱根温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘箱根小涌園天悠、強羅花壇、富士屋ホテル’},
-{key:‘群馬県伊香保温泉’,pref:‘群馬県’,name:‘伊香保温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘伊香保グランドホテル、木暮旅館’},
-{key:‘群馬県万座温泉’,pref:‘群馬県’,name:‘万座温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘万座ホテル聚楽、万座プリンスホテル’},
-{key:‘群馬県四万温泉’,pref:‘群馬県’,name:‘四万温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘四万たむら、四万やまぐち館、積善館’},
-{key:‘群馬県みなかみ18湯温泉’,pref:‘群馬県’,name:‘みなかみ18湯温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘みなかみ町 月夜野温泉郷’},
-{key:‘群馬県奥飛騨温泉郷’,pref:‘群馬県’,name:‘奥飛騨温泉郷’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘奥飛騨ガーデンホテル焼岳、穂高荘山のホテル’},
-{key:‘栃木県鬼怒川温泉’,pref:‘栃木県’,name:‘鬼怒川温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘鬼怒川温泉ホテル、あさや’},
-{key:‘栃木県日光湯元温泉’,pref:‘栃木県’,name:‘日光湯元温泉’,region:‘🌸 関東’,stars:2,starStr:‘⭐⭐’,dayBath:‘奥日光高原ホテル’},
-{key:‘栃木県塩原温泉’,pref:‘栃木県’,name:‘塩原温泉’,region:‘🌸 関東’,stars:1,starStr:‘⭐’,dayBath:‘ホテル塩原、旅館 彩つむぎ’},
-{key:‘栃木県日光温泉’,pref:‘栃木県’,name:‘日光温泉’,region:‘🌸 関東’,stars:1,starStr:‘⭐’,dayBath:‘奥日光高原ホテル、ホテルニューパレス’},
-{key:‘埼玉県鬼怒川上流温泉’,pref:‘埼玉県’,name:‘鬼怒川上流温泉’,region:‘🌸 関東’,stars:1,starStr:‘⭐’,dayBath:‘ホテル那智の滝’},
-{key:‘千葉県勝浦温泉’,pref:‘千葉県’,name:‘勝浦温泉’,region:‘🌸 関東’,stars:1,starStr:‘⭐’,dayBath:‘ホテル勝浦、丸万旅館’},
-{key:‘千葉県鴨川温泉’,pref:‘千葉県’,name:‘鴨川温泉’,region:‘🌸 関東’,stars:1,starStr:‘⭐’,dayBath:‘ホテルグランミラージュ’},
-{key:‘茨城県袋田温泉’,pref:‘茨城県’,name:‘袋田温泉’,region:‘🌸 関東’,stars:0,starStr:’’,dayBath:‘袋田温泉 旅館’},
-{key:‘東京都奥多摩温泉’,pref:‘東京都’,name:‘奥多摩温泉’,region:‘🌸 関東’,stars:0,starStr:’’,dayBath:‘宿 やまぼうし’},
-{key:‘岐阜県下呂温泉’,pref:‘岐阜県’,name:‘下呂温泉’,region:‘⛰️ 中部’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘水明館、下呂観光ホテルしょうげつ、小川屋、湯之島館’},
-{key:‘福井県あわら温泉’,pref:‘福井県’,name:‘あわら温泉’,region:‘⛰️ 中部’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘あわら温泉 青雲閣、福朋プラス’},
-{key:‘石川県和倉温泉’,pref:‘石川県’,name:‘和倉温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘加賀屋、あえの風、加賀屋別邸松乃碧’},
-{key:‘石川県山代温泉’,pref:‘石川県’,name:‘山代温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘葉渡莉、日本の宿のと楽’},
-{key:‘石川県山中温泉’,pref:‘石川県’,name:‘山中温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘竜王の館、南信州伊那ロイヤルホテル’},
-{key:‘長野県野沢温泉’,pref:‘長野県’,name:‘野沢温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘野沢温泉 やしおん、ホテル志賀’},
-{key:‘長野県昼神温泉’,pref:‘長野県’,name:‘昼神温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘竜王の館、南信州伊那ロイヤルホテル’},
-{key:‘長野県上諏訪温泉’,pref:‘長野県’,name:‘上諏訪温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘浜の湯、ホテル霧ヶ峰’},
-{key:‘長野県白馬八方温泉’,pref:‘長野県’,name:‘白馬八方温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘白馬オーロラビレッジホテル’},
-{key:‘長野県白骨温泉’,pref:‘長野県’,name:‘白骨温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘湯元齢泉 白骨、泡の湯’},
-{key:‘山梨県富士急温泉’,pref:‘山梨県’,name:‘富士急温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘山中温泉 獅子吼、こおろぎ’},
-{key:‘山梨県下部温泉’,pref:‘山梨県’,name:‘下部温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘下部温泉郷 湯之奥鉱泉館’},
-{key:‘富山県宇奈月温泉’,pref:‘富山県’,name:‘宇奈月温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘宇奈月温泉 延対寺荘’},
-{key:‘岐阜県飛騨高山温泉’,pref:‘岐阜県’,name:‘飛騨高山温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘飛騨亭花扇、ホテルアソシア高山リゾート’},
-{key:‘新潟県越後湯沢温泉’,pref:‘新潟県’,name:‘越後湯沢温泉’,region:‘⛰️ 中部’,stars:2,starStr:‘⭐⭐’,dayBath:‘越後湯沢温泉ホテル国際、雪國’},
-{key:‘新潟県月岡温泉’,pref:‘新潟県’,name:‘月岡温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテル泉迎館’},
-{key:‘新潟県赤倉温泉’,pref:‘新潟県’,name:‘赤倉温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテルヴィレッジ、華翠苑’},
-{key:‘新潟県瀬波温泉’,pref:‘新潟県’,name:‘瀬波温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテル日高、龍言’},
-{key:‘富山県黒部峡谷温泉’,pref:‘富山県’,name:‘黒部峡谷温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘黒部峡谷温泉 泊’},
-{key:‘長野県戸倉上山田温泉’,pref:‘長野県’,name:‘戸倉上山田温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテル大日本、ホテル国際21’},
-{key:‘長野県岡谷温泉’,pref:‘長野県’,name:‘岡谷温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテル岡谷’},
-{key:‘長野県斑尾高原温泉’,pref:‘長野県’,name:‘斑尾高原温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘斑尾高原ホテル’},
-{key:‘岐阜県白川郷温泉’,pref:‘岐阜県’,name:‘白川郷温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘お宿 かねや、合掌の湯’},
-{key:‘静岡県熱海温泉’,pref:‘静岡県’,name:‘熱海温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘熱海後楽園ホテル、古屋旅館’},
-{key:‘静岡県伊東温泉’,pref:‘静岡県’,name:‘伊東温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテルきらら、ホテルニューアカオ’},
-{key:‘静岡県浜名湖かんざんじ温泉’,pref:‘静岡県’,name:‘浜名湖かんざんじ温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテルウェルシーズン浜名湖’},
-{key:‘長野県木曽路温泉’,pref:‘長野県’,name:‘木曽路温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘ホテル木曽路’},
-{key:‘長野県別所温泉’,pref:‘長野県’,name:‘別所温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘旅館 中屋、湯宿 上松屋’},
-{key:‘山梨県西山温泉’,pref:‘山梨県’,name:‘西山温泉’,region:‘⛰️ 中部’,stars:1,starStr:‘⭐’,dayBath:‘慶雲館’},
-{key:‘愛知県南知多温泉郷’,pref:‘愛知県’,name:‘南知多温泉郷’,region:‘⛰️ 中部’,stars:0,starStr:’’,dayBath:‘ホテル南知多’},
-{key:‘兵庫県有馬温泉’,pref:‘兵庫県’,name:‘有馬温泉’,region:‘🦌 近畿’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘有馬温泉 大黒屋、兆楽’},
-{key:‘兵庫県城崎温泉’,pref:‘兵庫県’,name:‘城崎温泉’,region:‘🦌 近畿’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘西村屋本館、西村屋ホテル招月庭’},
-{key:‘兵庫県淡路島東浦温泉’,pref:‘兵庫県’,name:‘淡路島東浦温泉’,region:‘🦌 近畿’,stars:2,starStr:‘⭐⭐’,dayBath:‘ウェスティンホテル淡路’},
-{key:‘和歌山県南紀白浜温泉’,pref:‘和歌山県’,name:‘南紀白浜温泉’,region:‘🦌 近畿’,stars:2,starStr:‘⭐⭐’,dayBath:‘南紀白浜温泉ロイヤルホテル’},
-{key:‘滋賀県雄琴温泉’,pref:‘滋賀県’,name:‘雄琴温泉’,region:‘🦌 近畿’,stars:2,starStr:‘⭐⭐’,dayBath:‘琵琶湖マリオットホテル’},
-{key:‘京都府天橋立温泉’,pref:‘京都府’,name:‘天橋立温泉’,region:‘🦌 近畿’,stars:2,starStr:‘⭐⭐’,dayBath:‘宮津温泉 ホテル北都’},
-{key:‘滋賀県奥びわ温泉’,pref:‘滋賀県’,name:‘奥びわ温泉’,region:‘🦌 近畿’,stars:1,starStr:‘⭐’,dayBath:‘ホテル湖南’},
-{key:‘大阪府泉南トルマリン温泉’,pref:‘大阪府’,name:‘泉南トルマリン温泉’,region:‘🦌 近畿’,stars:1,starStr:‘⭐’,dayBath:‘ゆりの湯’},
-{key:‘京都府丹後温泉’,pref:‘京都府’,name:‘丹後温泉’,region:‘🦌 近畿’,stars:1,starStr:‘⭐’,dayBath:‘丹後温泉 琴引浜’},
-{key:‘和歌山県田辺温泉’,pref:‘和歌山県’,name:‘田辺温泉’,region:‘🦌 近畿’,stars:1,starStr:‘⭐’,dayBath:‘ホテル季楽、うめ乃湯’},
-{key:‘三重県志摩温泉’,pref:‘三重県’,name:‘志摩温泉’,region:‘🦌 近畿’,stars:0,starStr:’’,dayBath:‘志摩観光ホテル’},
-{key:‘奈良県洞川温泉’,pref:‘奈良県’,name:‘洞川温泉’,region:‘🦌 近畿’,stars:0,starStr:’’,dayBath:‘旅館 渓山、旅館 杉の湯’},
-{key:‘愛媛県道後温泉’,pref:‘愛媛県’,name:‘道後温泉’,region:‘⛩️ 中国・四国’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘道後舘、花ゆづき、別邸朧月夜、ホテル椿館’},
-{key:‘香川県こんぴら温泉郷’,pref:‘香川県’,name:‘こんぴら温泉郷’,region:‘⛩️ 中国・四国’,stars:2,starStr:‘⭐⭐’,dayBath:‘琴参閣、こんぴら温泉華の湯’},
-{key:‘山口県長門湯本温泉’,pref:‘山口県’,name:‘長門湯本温泉’,region:‘⛩️ 中国・四国’,stars:2,starStr:‘⭐⭐’,dayBath:‘長門天然温泉’},
-{key:‘広島県宮島温泉’,pref:‘広島県’,name:‘宮島温泉’,region:‘⛩️ 中国・四国’,stars:2,starStr:‘⭐⭐’,dayBath:‘グランドホテル有もと、星の宿’},
-{key:‘香川県高松温泉’,pref:‘香川県’,name:‘高松温泉’,region:‘⛩️ 中国・四国’,stars:1,starStr:‘⭐’,dayBath:‘スパイラル高松’},
-{key:‘徳島県祖谷温泉’,pref:‘徳島県’,name:‘祖谷温泉’,region:‘⛩️ 中国・四国’,stars:1,starStr:‘⭐’,dayBath:‘ホテル祖谷温泉’},
-{key:‘愛媛県北条温泉’,pref:‘愛媛県’,name:‘北条温泉’,region:‘⛩️ 中国・四国’,stars:1,starStr:‘⭐’,dayBath:‘ホテルしおさい北条’},
-{key:‘山口県湯田温泉’,pref:‘山口県’,name:‘湯田温泉’,region:‘⛩️ 中国・四国’,stars:1,starStr:‘⭐’,dayBath:‘ホテル湯田、山陽旅館’},
-{key:‘鳥取県三朝温泉’,pref:‘鳥取県’,name:‘三朝温泉’,region:‘⛩️ 中国・四国’,stars:0,starStr:’’,dayBath:‘ホテル泉都、旅館 大橋’},
-{key:‘島根県玉造温泉’,pref:‘島根県’,name:‘玉造温泉’,region:‘⛩️ 中国・四国’,stars:0,starStr:’’,dayBath:‘佳翠苑皆美、ホテル玉泉’},
-{key:‘岡山県湯郷温泉’,pref:‘岡山県’,name:‘湯郷温泉’,region:‘⛩️ 中国・四国’,stars:0,starStr:’’,dayBath:‘ホテル東亜、旅館 ひらたや’},
-{key:‘高知県いの町温泉’,pref:‘高知県’,name:‘いの町温泉’,region:‘⛩️ 中国・四国’,stars:0,starStr:’’,dayBath:‘いの町温泉 旅館’},
-{key:‘大分県別府八湯温泉’,pref:‘大分県’,name:‘別府八湯温泉’,region:‘🌺 九州・沖縄’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘杉乃井ホテル、別府温泉ホテル、竹瓦温泉’},
-{key:‘鹿児島県指宿温泉’,pref:‘鹿児島県’,name:‘指宿温泉’,region:‘🌺 九州・沖縄’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘いぶすき秀水園、指宿白水館’},
-{key:‘熊本県黒川温泉’,pref:‘熊本県’,name:‘黒川温泉’,region:‘🌺 九州・沖縄’,stars:3,starStr:‘⭐⭐⭐’,dayBath:‘黒川荘、山みず木、旅館山河’},
-{key:‘大分県由布院温泉’,pref:‘大分県’,name:‘由布院温泉’,region:‘🌺 九州・沖縄’,stars:2,starStr:‘⭐⭐’,dayBath:‘亀の井別荘、由布院玉の湯’},
-{key:‘福岡県福岡温泉’,pref:‘福岡県’,name:‘福岡温泉’,region:‘🌺 九州・沖縄’,stars:2,starStr:‘⭐⭐’,dayBath:‘博多の湯’},
-{key:‘大分県奥日田温泉’,pref:‘大分県’,name:‘奥日田温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘旅館 中山館’},
-{key:‘福岡県二日市温泉’,pref:‘福岡県’,name:‘二日市温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘太宰府温泉’},
-{key:‘佐賀県嬉野温泉’,pref:‘佐賀県’,name:‘嬉野温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘ホテル桜、旅館 大村屋’},
-{key:‘長崎県小浜温泉’,pref:‘長崎県’,name:‘小浜温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘ホテル小浜、しおさい小浜’},
-{key:‘熊本県菊池温泉’,pref:‘熊本県’,name:‘菊池温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘ホテルパレス’},
-{key:‘熊本県玉名温泉’,pref:‘熊本県’,name:‘玉名温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘ホテルメイ’},
-{key:‘福岡県原鶴温泉’,pref:‘福岡県’,name:‘原鶴温泉’,region:‘🌺 九州・沖縄’,stars:1,starStr:‘⭐’,dayBath:‘ホテル原鶴’},
-{key:‘宮崎県霧島温泉郷’,pref:‘宮崎県’,name:‘霧島温泉郷’,region:‘🌺 九州・沖縄’,stars:0,starStr:’’,dayBath:‘霧島ホテル’},
-{key:‘沖縄県那覇温泉’,pref:‘沖縄県’,name:‘那覇温泉’,region:‘🌺 九州・沖縄’,stars:0,starStr:’’,dayBath:‘那覇温泉 ホテル那覇’}
-];
-const ONSEN_LIST = ONSEN_DATA.map(o => o.key);
-
-function renderVisit(mode) {
-const titleEl = document.getElementById(‘visitTitle’);
-const gridEl = document.getElementById(‘visitGrid’);
-const visited = visitData[mode] || {};
-const currentYear = new Date().getFullYear();
-let list, title, key;
-if (mode === ‘japan’) { list = JAPAN_PREFS; title = ‘🗾 日本 都道府県’; key = ‘japan’; }
-else if (mode === ‘onsen’) { list = ONSEN_LIST; title = ‘♨️ にっぽんの温泉100選 <span style="font-size:12px;color:var(--accent);font-weight:700;">+11特別追加</span>’; key = ‘onsen’; }
-else if (mode === ‘china’) { list = CHINA_REGIONS; title = ‘🇨🇳 中国 省・自治区・直轄市’; key = ‘china’; }
-else { list = WORLD_COUNTRIES; title = ‘🌍 世界の国々’; key = ‘world’; }
-
-const count = Object.keys(visited).length;
-const total = list.length;
-const pct = total ? Math.round(count / total * 100) : 0;
-titleEl.innerHTML = title;
-document.getElementById(‘visitStats’).textContent = `訪問済み ${count} / ${total}ヶ所　達成率 ${pct}%`;
-document.getElementById(‘visitFill’).style.width = pct + ‘%’;
-document.getElementById(‘mapOverlay’).innerHTML = `${count}/${total}<br>${pct}%`;
-
-// グリッド表示
-if (mode === ‘world’) {
-let html = ‘’;
-Object.entries(WORLD_CONTINENTS).forEach(([continent, countries]) => {
-const doneCount = countries.filter(n => visited[n] !== undefined).length;
-html += `<div class="continent-group"><div class="continent-label">${continent} <span class="continent-count">${doneCount}/${countries.length}</span></div><div class="continent-items">`;
-countries.forEach(name => {
-const year = visited[name];
-const isVisited = year !== undefined;
-let style = ‘’;
-if (isVisited && year) { const age = currentYear-year; const op = Math.max(0.4,1-age*0.06); style = `style="background:rgba(139,44,100,${op});border-color:rgba(139,44,100,${op});color:white;"`; }
-const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : ‘’;
-html += `<div class="visit-item${isVisited?' visited':''}" data-vkey="${name}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
-});
-html += `</div></div>`;
-});
-gridEl.innerHTML = html;
-} else if (mode === ‘onsen’) {
-const REGION_ORDER = [‘🌨️ 北海道’,‘🍎 東北’,‘🌸 関東’,‘⛰️ 中部’,‘🦌 近畿’,‘⛩️ 中国・四国’,‘🌺 九州・沖縄’];
-let html = ‘’;
-REGION_ORDER.forEach(region => {
-const regionItems = ONSEN_DATA.filter(o => o.region === region);
-if (!regionItems.length) return;
-const doneCount = regionItems.filter(o => visited[o.key] !== undefined).length;
-html += `<div class="continent-group"><div class="continent-label">${region} <span class="continent-count">${doneCount}/${regionItems.length}</span></div><div class="continent-items">`;
-regionItems.forEach(onsen => {
-const year = visited[onsen.key];
-const isVisited = year !== undefined;
-let btnStyle = ‘’;
-if (isVisited && year) { const age = currentYear-year; const op = Math.max(0.4,1-age*0.06); btnStyle = `background:rgba(139,44,100,${op});border-color:rgba(139,44,100,${op});color:white;`; }
-const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : ‘’;
-const starDisp = onsen.starStr ? `<span style="font-size:9px;display:block;">${onsen.starStr}</span>` : ‘’;
-html += `<div class="onsen-item-wrap"> <div class="visit-item onsen-btn${isVisited?' visited':''}" data-vkey="${onsen.key}" style="${btnStyle}" onclick="toggleVisitAndMap('${key}','${onsen.key}',this)"> <span style="font-size:9px;opacity:0.75;display:block;">${onsen.pref}</span>${onsen.name}${starDisp}${yearLabel} </div> ${onsen.dayBath?`<button class=“onsen-detail-btn” onclick=“toggleOnsenDetail(this,’${onsen.dayBath.replace(/’/g,”\’”)}’)”>🛁</button>`:''} </div>`;
-});
-html += `</div></div>`;
-});
-gridEl.innerHTML = html;
-} else {
-gridEl.innerHTML = list.map(name => {
-const year = visited[name];
-const isVisited = year !== undefined;
-let style = ‘’;
-if (isVisited && year) { const age = currentYear-year; const op = Math.max(0.4,1-age*0.06); style = `style="background:rgba(139,44,100,${op});border-color:rgba(139,44,100,${op});color:white;"`; }
-const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : ‘’;
-return `<div class="visit-item${isVisited?' visited':''}" data-vkey="${name}" ${style} onclick="toggleVisitAndMap('${key}','${name}',this)">${name}${yearLabel}</div>`;
-}).join(’’);
-}
-renderVisitHistory(key);
-// D3地図を描画
-const mapEl = document.getElementById(‘visitMap’);
-const currentYear2 = new Date().getFullYear();
-mapEl.innerHTML = ‘<svg id="worldD3svg" style="width:100%;height:auto;display:block;"></svg>’;
-renderMapD3(key, visited, currentYear2);
-}
-
-function toggleOnsenDetail(btn, dayBath) {
-const wrap = btn.closest(’.onsen-item-wrap’);
-let popup = wrap.querySelector(’.onsen-detail-popup’);
-if (popup) { popup.remove(); btn.textContent=‘🛁’; return; }
-popup = document.createElement(‘div’);
-popup.className = ‘onsen-detail-popup’;
-popup.innerHTML = `<strong>🛁 日帰り入浴できる宿</strong>${dayBath}`;
-wrap.appendChild(popup);
-btn.textContent = ‘✕’;
-}
-
-function toggleVisitAndMap(key, name, el) {
-toggleVisit(key, name, el);
-}
-
-function toggleVisit(key, name, el) {
-if (!visitData[key]) visitData[key] = {};
-if (visitData[key][name] !== undefined) {
-const displayName = key===‘onsen’ ? (ONSEN_DATA.find(o=>o.key===name)?.name||name) : name;
-if (!confirm(`「${displayName}」の訪問歴を削除してもよいですか？`)) return;
-delete visitData[key][name];
-if (el && el.classList) { el.classList.remove(‘visited’); el.removeAttribute(‘style’); const y=el.querySelector(’.visit-year’); if(y)y.remove(); }
-const gridItem = document.querySelector(`.visit-item[data-vkey="${name}"]`);
-if (gridItem && gridItem!==el) { gridItem.classList.remove(‘visited’); gridItem.removeAttribute(‘style’); const y=gridItem.querySelector(’.visit-year’); if(y)y.remove(); }
-saveVisit();
-renderVisit(currentMode);
-} else {
-const targetEl = (el&&el.classList) ? el : (document.querySelector(`.visit-item[data-vkey="${name}"]`)||document.createElement(‘div’));
-showYearDialog(key, name, targetEl);
-}
-}
-
-let _yearDialogKey=’’, _yearDialogName=’’, _yearDialogEl=null;
-
-function showYearDialog(key, name, el) {
-_yearDialogKey=key; _yearDialogName=name; _yearDialogEl=el;
-const currentYear = new Date().getFullYear();
-const sel = document.getElementById(‘yearSelect’);
-sel.innerHTML=’’;
-for (let y=currentYear; y>=1950; y–) { const opt=document.createElement(‘option’); opt.value=y; opt.textContent=y+‘年’; sel.appendChild(opt); }
-sel.value=currentYear;
-document.getElementById(‘yearDialogTitle’).textContent=`「${name}」を訪問した年`;
-document.getElementById(‘yearDialog’).style.display=‘flex’;
-}
-
-function confirmYear() {
-const year = parseInt(document.getElementById(‘yearSelect’).value);
-const key=_yearDialogKey, name=_yearDialogName, el=_yearDialogEl;
-document.getElementById(‘yearDialog’).style.display=‘none’;
-if (!visitData[key]) visitData[key]={};
-visitData[key][name]=year;
-const age=new Date().getFullYear()-year;
-const op=Math.max(0.4,1-age*0.06);
-if (el&&el.classList) {
-el.classList.add(‘visited’);
-el.style=`background:rgba(139,44,100,${op});border-color:rgba(139,44,100,${op});color:white;`;
-let yearEl=el.querySelector(’.visit-year’);
-if (!yearEl) { yearEl=document.createElement(‘span’); yearEl.className=‘visit-year’; el.appendChild(yearEl); }
-yearEl.textContent=year;
-}
-saveVisit();
-renderVisit(currentMode);
-}
-
-function cancelYear() { document.getElementById(‘yearDialog’).style.display=‘none’; }
-
-// 国コードマッピング
-const COUNTRY_CODE_MAP = {
-‘日本’:‘392’,‘韓国’:‘410’,‘中国’:‘156’,‘台湾’:‘158’,‘香港’:‘344’,‘マカオ’:‘446’,‘モンゴル’:‘496’,
-‘ベトナム’:‘704’,‘タイ’:‘764’,‘カンボジア’:‘116’,‘ラオス’:‘418’,‘ミャンマー’:‘104’,‘マレーシア’:‘458’,‘シンガポール’:‘702’,‘インドネシア’:‘360’,‘フィリピン’:‘608’,‘ブルネイ’:‘096’,‘東ティモール’:‘626’,
-‘インド’:‘356’,‘パキスタン’:‘586’,‘バングラデシュ’:‘050’,‘スリランカ’:‘144’,‘ネパール’:‘524’,‘ブータン’:‘064’,‘モルディブ’:‘462’,‘アフガニスタン’:‘004’,‘イラン’:‘364’,‘イラク’:‘368’,‘サウジアラビア’:‘682’,‘UAE’:‘784’,‘カタール’:‘634’,‘クウェート’:‘414’,‘バーレーン’:‘048’,‘オマーン’:‘512’,‘イエメン’:‘887’,‘ヨルダン’:‘400’,‘レバノン’:‘422’,‘シリア’:‘760’,‘イスラエル’:‘376’,‘トルコ’:‘792’,
-‘カザフスタン’:‘398’,‘ウズベキスタン’:‘860’,‘キルギス’:‘417’,‘タジキスタン’:‘762’,‘トルクメニスタン’:‘795’,‘アゼルバイジャン’:‘031’,‘グルジア’:‘268’,‘アルメニア’:‘051’,
-‘ロシア’:‘643’,‘ウクライナ’:‘804’,‘ベラルーシ’:‘112’,‘モルドバ’:‘498’,‘ポーランド’:‘616’,‘チェコ’:‘203’,‘スロバキア’:‘703’,‘ハンガリー’:‘348’,‘オーストリア’:‘040’,‘ドイツ’:‘276’,‘スイス’:‘756’,‘リヒテンシュタイン’:‘438’,‘フランス’:‘250’,‘ベルギー’:‘056’,‘オランダ’:‘528’,‘ルクセンブルク’:‘442’,‘デンマーク’:‘208’,‘スウェーデン’:‘752’,‘ノルウェー’:‘578’,‘フィンランド’:‘246’,‘アイスランド’:‘352’,‘英国’:‘826’,‘アイルランド’:‘372’,‘スペイン’:‘724’,‘ポルトガル’:‘620’,‘イタリア’:‘380’,‘バチカン’:‘336’,‘サンマリノ’:‘674’,‘モナコ’:‘492’,‘ギリシャ’:‘300’,‘マルタ’:‘470’,‘スロベニア’:‘705’,‘クロアチア’:‘191’,‘ボスニア・ヘルツェゴビナ’:‘070’,‘セルビア’:‘688’,‘モンテネグロ’:‘499’,‘北マケドニア’:‘807’,‘アルバニア’:‘008’,‘コソボ’:‘383’,‘ルーマニア’:‘642’,‘ブルガリア’:‘100’,‘エストニア’:‘233’,‘ラトビア’:‘428’,‘リトアニア’:‘440’,‘アンドラ’:‘020’,
-‘モロッコ’:‘504’,‘アルジェリア’:‘012’,‘チュニジア’:‘788’,‘リビア’:‘434’,‘エジプト’:‘818’,‘スーダン’:‘729’,‘南スーダン’:‘728’,‘エチオピア’:‘231’,‘エリトリア’:‘232’,‘ジブチ’:‘262’,‘ソマリア’:‘706’,‘ケニア’:‘404’,‘タンザニア’:‘834’,‘ウガンダ’:‘800’,‘ルワンダ’:‘646’,‘ブルンジ’:‘108’,‘コンゴ民主共和国’:‘180’,‘コンゴ共和国’:‘178’,‘中央アフリカ’:‘140’,‘カメルーン’:‘120’,‘ナイジェリア’:‘566’,‘ガーナ’:‘288’,‘コートジボワール’:‘384’,‘セネガル’:‘686’,‘マリ’:‘466’,‘ブルキナファソ’:‘854’,‘ニジェール’:‘562’,‘チャド’:‘148’,‘ガボン’:‘266’,‘赤道ギニア’:‘226’,‘サントメ・プリンシペ’:‘678’,‘カーボベルデ’:‘132’,‘モーリタニア’:‘478’,‘ギニア’:‘324’,‘ギニアビサウ’:‘624’,‘シエラレオネ’:‘694’,‘リベリア’:‘430’,‘トーゴ’:‘768’,‘ベナン’:‘204’,‘ガンビア’:‘270’,‘南アフリカ’:‘710’,‘ナミビア’:‘516’,‘ボツワナ’:‘072’,‘ジンバブエ’:‘716’,‘ザンビア’:‘894’,‘モザンビーク’:‘508’,‘マラウイ’:‘454’,‘アンゴラ’:‘024’,‘マダガスカル’:‘450’,‘コモロ’:‘174’,‘セーシェル’:‘690’,‘モーリシャス’:‘480’,‘レソト’:‘426’,‘エスワティニ’:‘748’,
-‘カナダ’:‘124’,‘アメリカ’:‘840’,‘メキシコ’:‘484’,‘グアテマラ’:‘320’,‘ベリーズ’:‘084’,‘ホンジュラス’:‘340’,‘エルサルバドル’:‘222’,‘ニカラグア’:‘558’,‘コスタリカ’:‘188’,‘パナマ’:‘591’,‘キューバ’:‘192’,‘ジャマイカ’:‘388’,‘ハイチ’:‘332’,‘ドミニカ共和国’:‘214’,‘トリニダード・トバゴ’:‘780’,‘バルバドス’:‘052’,
-‘コロンビア’:‘170’,‘ベネズエラ’:‘862’,‘ガイアナ’:‘328’,‘スリナム’:‘740’,‘ブラジル’:‘076’,‘エクアドル’:‘218’,‘ペルー’:‘604’,‘ボリビア’:‘068’,‘チリ’:‘152’,‘アルゼンチン’:‘032’,‘ウルグアイ’:‘858’,‘パラグアイ’:‘600’,
-‘オーストラリア’:‘036’,‘ニュージーランド’:‘554’,‘パプアニューギニア’:‘598’,‘フィジー’:‘242’,‘ソロモン諸島’:‘090’,‘バヌアツ’:‘548’,‘サモア’:‘882’,‘トンガ’:‘776’,‘キリバス’:‘296’,‘ミクロネシア’:‘583’,‘マーシャル諸島’:‘584’,‘パラオ’:‘585’,‘ナウル’:‘520’,‘ツバル’:‘798’
-};
-const CODE_COUNTRY_MAP = {};
-Object.entries(COUNTRY_CODE_MAP).forEach(([n,c])=>CODE_COUNTRY_MAP[c]=n);
-
-const JP_KANJI_MAP_GLOBAL = {
-‘北海道’:‘北海道’,‘青森県’:‘青森’,‘岩手県’:‘岩手’,‘宮城県’:‘宮城’,‘秋田県’:‘秋田’,
-‘山形県’:‘山形’,‘福島県’:‘福島’,‘茨城県’:‘茨城’,‘栃木県’:‘栃木’,‘群馬県’:‘群馬’,
-‘埼玉県’:‘埼玉’,‘千葉県’:‘千葉’,‘東京都’:‘東京’,‘神奈川県’:‘神奈川’,‘新潟県’:‘新潟’,
-‘富山県’:‘富山’,‘石川県’:‘石川’,‘福井県’:‘福井’,‘山梨県’:‘山梨’,‘長野県’:‘長野’,
-‘岐阜県’:‘岐阜’,‘静岡県’:‘静岡’,‘愛知県’:‘愛知’,‘三重県’:‘三重’,‘滋賀県’:‘滋賀’,
-‘京都府’:‘京都’,‘大阪府’:‘大阪’,‘兵庫県’:‘兵庫’,‘奈良県’:‘奈良’,‘和歌山県’:‘和歌山’,
-‘鳥取県’:‘鳥取’,‘島根県’:‘島根’,‘岡山県’:‘岡山’,‘広島県’:‘広島’,‘山口県’:‘山口’,
-‘徳島県’:‘徳島’,‘香川県’:‘香川’,‘愛媛県’:‘愛媛’,‘高知県’:‘高知’,‘福岡県’:‘福岡’,
-‘佐賀県’:‘佐賀’,‘長崎県’:‘長崎’,‘熊本県’:‘熊本’,‘大分県’:‘大分’,‘宮崎県’:‘宮崎’,
-‘鹿児島県’:‘鹿児島’,‘沖縄県’:‘沖縄’
-};
-
-async function renderMapD3(key, visited, currentYear) {
-const mapEl = document.getElementById(‘visitMap’);
-if (!mapEl) return;
-const w = mapEl.offsetWidth || 340;
-
-if (key === ‘world’) {
-const h = Math.round(w * 0.5);
-const svg = d3.select(’#worldD3svg’).attr(‘viewBox’, `0 0 ${w} ${h}`);
-svg.selectAll(’*’).remove();
-const projection = d3.geoNaturalEarth1().rotate([-150,0]).scale(w*0.17).translate([w/2,h/2]);
-const pathGen = d3.geoPath().projection(projection);
-try {
-const world = await d3.json(‘https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json’);
-const countries = topojson.feature(world, world.objects.countries);
-svg.selectAll(‘path’).data(countries.features).join(‘path’)
-.attr(‘d’, pathGen)
-.attr(‘data-code’, d => String(d.id))
-.style(‘fill’, d => {
-const name = CODE_COUNTRY_MAP[String(d.id)];
-if (name && visited[name] !== undefined) {
-const age = currentYear-(visited[name]||currentYear);
-return `rgba(139,44,100,${Math.max(0.4,1-age*0.06)})`;
-}
-return ‘#e8dfc8’;
-})
-.attr(‘stroke’,’#9a8f7a’).attr(‘stroke-width’,0.4).style(‘cursor’,‘pointer’)
-.on(‘click’, function(event,d) {
-const name = CODE_COUNTRY_MAP[String(d.id)];
-if (!name) return;
-const el = document.querySelector(`.visit-item[data-vkey="${name}"]`)||document.createElement(‘div’);
-toggleVisit(key, name, el);
-const yr = visitData[key]?.[name];
-d3.select(this).style(‘fill’, yr!==undefined ? `rgba(139,44,100,${Math.max(0.4,1-(currentYear-(yr||currentYear))*0.06)})` : ‘#e8dfc8’);
-});
-setTimeout(()=>reapplyMapColors(key,visited,currentYear),150);
-} catch(e) { console.error(‘世界地図エラー:’,e); }
-
-} else if (key === ‘japan’ || key === ‘onsen’) {
-const h = Math.round(w*0.85);
-const svg = d3.select(’#worldD3svg’).attr(‘viewBox’,`0 0 ${w} ${h}`);
-svg.selectAll(’*’).remove();
-const projection = d3.geoMercator().center([136.5,37.5]).scale(w*2.0).translate([w/2,h/2]).clipExtent([[0,0],[w,h]]);
-const pathGen = d3.geoPath().projection(projection);
-try {
-const japanData = await d3.json(‘https://eternalflame1001-sudo.github.io/bucket-list/japan.json’);
-let features;
-if (japanData.type===‘Topology’) {
-const prefKey = Object.keys(japanData.objects)[0];
-features = topojson.feature(japanData, japanData.objects[prefKey]).features;
-} else { features = japanData.features||[]; }
-function getJpName(d) {
-const p = d.properties||{};
-if (p.nam_ja) return JP_KANJI_MAP_GLOBAL[p.nam_ja]||p.nam_ja.replace(/[都道府県]$/,’’);
-return ‘’;
-}
-svg.selectAll(‘path’).data(features).join(‘path’)
-.attr(‘d’, pathGen)
-.attr(‘data-pref’, d => getJpName(d))
-.style(‘fill’, d => {
-const name = getJpName(d);
-if (name && visited[name]!==undefined) {
-const age = currentYear-(visited[name]||currentYear);
-return `rgba(139,44,100,${Math.max(0.4,1-age*0.06)})`;
-}
-return ‘#e8dfc8’;
-})
-.attr(‘stroke’,’#9a8f7a’).attr(‘stroke-width’,0.5).style(‘cursor’,‘pointer’)
-.on(‘click’, function(event,d) {
-const name = getJpName(d);
-if (!name) return;
-const el = document.querySelector(`.visit-item[data-vkey="${name}"]`)||document.createElement(‘div’);
-toggleVisit(key, name, el);
-const yr = visitData[key]?.[name];
-d3.select(this).style(‘fill’, yr!==undefined ? `rgba(139,44,100,${Math.max(0.4,1-(currentYear-(yr||currentYear))*0.06)})` : ‘#e8dfc8’);
-});
-setTimeout(()=>reapplyMapColors(key,visited,currentYear),150);
-} catch(e) { console.error(‘日本地図エラー:’,e); }
-
-} else if (key === ‘china’) {
-const h = Math.round(w*0.8);
-const svg = d3.select(’#worldD3svg’).attr(‘viewBox’,`0 0 ${w} ${h}`);
-svg.selectAll(’*’).remove();
-const projection = d3.geoMercator().center([104,35]).scale(w*0.9).translate([w/2,h/2]);
-const pathGen = d3.geoPath().projection(projection);
-try {
-const chinaData = await d3.json(‘https://eternalflame1001-sudo.github.io/bucket-list/china.json’);
-const cnFeatures = chinaData.features||[];
-const CN_JP_MAP = {
-‘北京市’:‘北京市’,‘天津市’:‘天津市’,‘上海市’:‘上海市’,‘重庆市’:‘重慶市’,
-‘河北省’:‘河北省’,‘山西省’:‘山西省’,‘辽宁省’:‘遼寧省’,‘吉林省’:‘吉林省’,
-‘黑龙江省’:‘黒竜江省’,‘江苏省’:‘江蘇省’,‘浙江省’:‘浙江省’,‘安徽省’:‘安徽省’,
-‘福建省’:‘福建省’,‘江西省’:‘江西省’,‘山东省’:‘山東省’,‘河南省’:‘河南省’,
-‘湖北省’:‘湖北省’,‘湖南省’:‘湖南省’,‘广东省’:‘広東省’,‘海南省’:‘海南省’,
-‘四川省’:‘四川省’,‘贵州省’:‘貴州省’,‘云南省’:‘雲南省’,‘陕西省’:‘陝西省’,
-‘甘肃省’:‘甘粛省’,‘青海省’:‘青海省’,‘内蒙古自治区’:‘内モンゴル自治区’,
-‘广西壮族自治区’:‘広西チワン族自治区’,‘西藏自治区’:‘チベット自治区’,
-‘宁夏回族自治区’:‘寧夏回族自治区’,‘新疆维吾尔自治区’:‘新疆ウイグル自治区’,
-‘香港特别行政区’:‘香港’,‘澳门特别行政区’:‘マカオ’,‘台湾省’:‘台湾’
-};
-svg.selectAll(‘path’).data(cnFeatures).join(‘path’)
-.attr(‘d’, pathGen)
-.attr(‘data-province’, d => CN_JP_MAP[(d.properties||{}).name||’’]||(d.properties||{}).name||’’)
-.style(‘fill’, d => {
-const jpName = CN_JP_MAP[(d.properties||{}).name||’’];
-if (jpName && visited[jpName]!==undefined) {
-const age = currentYear-(visited[jpName]||currentYear);
-return `rgba(139,44,100,${Math.max(0.4,1-age*0.06)})`;
-}
-return ‘#e8dfc8’;
-})
-.attr(‘stroke’,’#9a8f7a’).attr(‘stroke-width’,0.5).style(‘cursor’,‘pointer’)
-.on(‘click’, function(event,d) {
-const jpName = CN_JP_MAP[(d.properties||{}).name||’’];
-if (!jpName) return;
-const el = document.querySelector(`.visit-item[data-vkey="${jpName}"]`)||document.createElement(‘div’);
-toggleVisit(key, jpName, el);
-const yr = visitData[key]?.[jpName];
-d3.select(this).style(‘fill’, yr!==undefined ? `rgba(139,44,100,${Math.max(0.4,1-(currentYear-(yr||currentYear))*0.06)})` : ‘#e8dfc8’);
-});
-setTimeout(()=>reapplyMapColors(key,visited,currentYear),150);
-} catch(e) { console.error(‘中国地図エラー:’,e); }
-}
-}
-
-function reapplyMapColors(key, visited, currentYear) {
-Object.entries(visited||{}).forEach(([name,year])=>{
-const age = currentYear-(year||currentYear);
-const fill = `rgba(139,44,100,${Math.max(0.4,1-age*0.06)})`;
-if (key===‘world’) {
-const code = COUNTRY_CODE_MAP[name];
-if (code) d3.select(`#worldD3svg path[data-code="${code}"]`).style(‘fill’,fill);
-} else if (key===‘japan’||key===‘onsen’) {
-d3.selectAll(`#worldD3svg path[data-pref="${name}"]`).style(‘fill’,fill);
-} else if (key===‘china’) {
-d3.selectAll(`#worldD3svg path[data-province="${name}"]`).style(‘fill’,fill);
-}
-});
-}
-
-function renderVisitHistory(key) {
-const historyEl = document.getElementById(‘visitHistory’);
-if (!historyEl) return;
-const visited = visitData[key]||{};
-const entries = Object.entries(visited);
-if (!entries.length) { historyEl.innerHTML=’’; return; }
-const byYear={};
-entries.forEach(([name,year])=>{ const y=year||new Date().getFullYear(); if(!byYear[y])byYear[y]=[]; byYear[y].push(name); });
-const years=Object.keys(byYear).map(Number).sort((a,b)=>b-a);
-let html=’<div class="visit-history-title">📅 訪問履歴（名前タップで年変更）</div>’;
-years.forEach(year=>{
-html+=`<div class="visit-history-year">${year}年</div><div class="visit-history-places">`;
-byYear[year].forEach((name,i)=>{ if(i>0)html+=’　／　‘; html+=`<span class="history-name-btn" onclick="changeVisitYear('${key}','${name}')">${name}</span>`; });
-html+=’</div>’;
-});
-historyEl.innerHTML=html;
-}
-
-function changeVisitYear(key, name) {
-_yearDialogKey=key; _yearDialogName=name;
-const currentYear=new Date().getFullYear();
-const existingYear=(visitData[key]||{})[name]||currentYear;
-const sel=document.getElementById(‘yearSelect’);
-sel.innerHTML=’’;
-for(let y=currentYear;y>=1950;y–){const opt=document.createElement(‘option’);opt.value=y;opt.textContent=y+‘年’;sel.appendChild(opt);}
-sel.value=existingYear;
-document.getElementById(‘yearDialogTitle’).textContent=`「${name}」の訪問年を変更`;
-_yearDialogEl=document.querySelector(`.visit-item[data-vkey="${name}"]`)||document.createElement(‘div’);
-document.getElementById(‘yearDialog’).style.display=‘flex’;
-}
-
 // render() と updateTrashCount() は window.onload で呼ばれます
 </script>
-
 </body>
 </html>
