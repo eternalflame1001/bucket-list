@@ -2202,6 +2202,8 @@ function renderVisit(mode) {
   let list, title, key;
   if (mode === 'japan') { list = JAPAN_PREFS; title = '🗾 日本 都道府県'; key = 'japan'; }
   else if (mode === 'onsen') { list = ONSEN_LIST; title = '♨️ にっぽんの温泉100選 <span style="font-size:12px;color:var(--accent);font-weight:700;">+11特別追加</span>'; key = 'onsen'; }
+  else if (mode === 'gourmet') { list = GOURMET_DATA.map(g=>g.key); title = '🍽 ご当地グルメ'; key = 'gourmet'; }
+  else if (mode === 'ramen') { list = RAMEN_DATA.map(r=>r.key); title = '🍜 ご当地ラーメン'; key = 'ramen'; }
   else if (mode === 'china') { list = CHINA_REGIONS; title = '🇨🇳 中国 省・自治区・直轄市'; key = 'china'; }
   else { list = WORLD_COUNTRIES; title = '🌍 世界の国々'; key = 'world'; }
 
@@ -2259,6 +2261,63 @@ function renderVisit(mode) {
       html += `</div></div>`;
     });
     gridEl.innerHTML = html;
+  } else if (mode === 'gourmet') {
+    // 地方別グループ
+    const GOURMET_REGIONS = ['北海道・東北','関東','中部・北陸','近畿','中国・四国','九州・沖縄'];
+    const PREF_REGION = {
+      '北海道':'北海道・東北','青森県':'北海道・東北','岩手県':'北海道・東北','宮城県':'北海道・東北','秋田県':'北海道・東北','山形県':'北海道・東北','福島県':'北海道・東北',
+      '茨城県':'関東','栃木県':'関東','群馬県':'関東','埼玉県':'関東','千葉県':'関東','東京都':'関東','神奈川県':'関東',
+      '新潟県':'中部・北陸','富山県':'中部・北陸','石川県':'中部・北陸','福井県':'中部・北陸','山梨県':'中部・北陸','長野県':'中部・北陸','岐阜県':'中部・北陸','静岡県':'中部・北陸','愛知県':'中部・北陸',
+      '三重県':'近畿','滋賀県':'近畿','京都府':'近畿','大阪府':'近畿','兵庫県':'近畿','奈良県':'近畿','和歌山県':'近畿',
+      '鳥取県':'中国・四国','島根県':'中国・四国','岡山県':'中国・四国','広島県':'中国・四国','山口県':'中国・四国','徳島県':'中国・四国','香川県':'中国・四国','愛媛県':'中国・四国','高知県':'中国・四国',
+      '福岡県':'九州・沖縄','佐賀県':'九州・沖縄','長崎県':'九州・沖縄','熊本県':'九州・沖縄','大分県':'九州・沖縄','宮崎県':'九州・沖縄','鹿児島県':'九州・沖縄','沖縄県':'九州・沖縄'
+    };
+    let html = '';
+    GOURMET_REGIONS.forEach(region => {
+      const items = GOURMET_DATA.filter(g => PREF_REGION[g.pref] === region);
+      if (!items.length) return;
+      const doneCount = items.filter(g => visited[g.key] !== undefined).length;
+      html += `<div class="continent-group"><div class="continent-label">${region} <span class="continent-count">${doneCount}/${items.length}</span></div><div class="continent-items">`;
+      items.forEach(g => {
+        const year = visited[g.key];
+        const isVisited = year !== undefined;
+        let style = isVisited ? `background:rgba(46,204,113,0.2);border-color:rgba(46,204,113,0.6);color:#1a7a40;` : '';
+        const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+        html += `<div class="visit-item${isVisited?' visited':''}" data-vkey="${g.key}" style="${style}" onclick="toggleVisitAndMap('${key}','${g.key}',this)"><span style="font-size:9px;opacity:0.75;display:block;">${g.pref}</span><span style="font-size:10px;font-weight:700;">${g.food}</span>${yearLabel}</div>`;
+      });
+      html += `</div></div>`;
+    });
+    gridEl.innerHTML = html;
+    gridEl.style.flexDirection = 'column';
+  } else if (mode === 'ramen') {
+    // 地方別グループ
+    const RAMEN_REGIONS = ['北海道','東北','関東','中部','近畿・中国・四国','九州'];
+    const PREF_RAMEN_REGION = {
+      '北海道':'北海道',
+      '青森県':'東北','岩手県':'東北','宮城県':'東北','秋田県':'東北','山形県':'東北','福島県':'東北',
+      '茨城県':'関東','栃木県':'関東','群馬県':'関東','埼玉県':'関東','千葉県':'関東','東京都':'関東','神奈川県':'関東',
+      '新潟県':'中部','富山県':'中部','石川県':'中部','福井県':'中部','山梨県':'中部','長野県':'中部','岐阜県':'中部','静岡県':'中部','愛知県':'中部',
+      '三重県':'近畿・中国・四国','滋賀県':'近畿・中国・四国','京都府':'近畿・中国・四国','大阪府':'近畿・中国・四国','兵庫県':'近畿・中国・四国','奈良県':'近畿・中国・四国','和歌山県':'近畿・中国・四国',
+      '鳥取県':'近畿・中国・四国','島根県':'近畿・中国・四国','岡山県':'近畿・中国・四国','広島県':'近畿・中国・四国','山口県':'近畿・中国・四国','徳島県':'近畿・中国・四国','香川県':'近畿・中国・四国','愛媛県':'近畿・中国・四国','高知県':'近畿・中国・四国',
+      '福岡県':'九州','佐賀県':'九州','長崎県':'九州','熊本県':'九州','大分県':'九州','宮崎県':'九州','鹿児島県':'九州','沖縄県':'九州'
+    };
+    let html = '';
+    RAMEN_REGIONS.forEach(region => {
+      const items = RAMEN_DATA.filter(r => PREF_RAMEN_REGION[r.pref] === region);
+      if (!items.length) return;
+      const doneCount = items.filter(r => visited[r.key] !== undefined).length;
+      html += `<div class="continent-group"><div class="continent-label">${region} <span class="continent-count">${doneCount}/${items.length}</span></div><div class="continent-items">`;
+      items.forEach(r => {
+        const year = visited[r.key];
+        const isVisited = year !== undefined;
+        let style = isVisited ? `background:rgba(243,156,18,0.2);border-color:rgba(243,156,18,0.6);color:#d35400;` : '';
+        const yearLabel = isVisited && year ? `<span class="visit-year">${year}</span>` : '';
+        html += `<div class="visit-item${isVisited?' visited':''}" data-vkey="${r.key}" style="${style}" onclick="toggleVisitAndMap('${key}','${r.key}',this)"><span style="font-size:9px;opacity:0.75;display:block;">${r.city}</span><span style="font-size:10px;font-weight:700;">${r.food}</span>${yearLabel}</div>`;
+      });
+      html += `</div></div>`;
+    });
+    gridEl.innerHTML = html;
+    gridEl.style.flexDirection = 'column';
   } else if (mode === 'japan' || mode === 'china') {
     gridEl.innerHTML = list.map(name => {
       const year = visited[name];
