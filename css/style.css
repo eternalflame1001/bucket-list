@@ -130,3 +130,160 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 #sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; transition: background .3s; }
 #sync-dot.active { background: #4caf50; box-shadow: 0 0 6px #4caf50; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ==========================================
+   訪問ボタン地図タブ
+   ========================================== */
+.map-tab-inner { padding: 0 0 40px; }
+.map-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; }
+.map-title { font-family: var(--font-en); font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: 1px; }
+.map-stats-line { font-size: 13px; color: var(--text2); }
+.mstat-num { font-family: var(--font-en); font-size: 18px; font-weight: 700; color: var(--accent2); }
+.mstat-pct { color: var(--accent); font-weight: 700; }
+
+/* 統計バー */
+.map-stat-bar { display: flex; align-items: center; gap: 10px; margin: 0 16px 12px; padding: 10px 0 8px; border-bottom: 1px solid var(--border); }
+.map-stat-visited { font-family: var(--font-en); font-size: 16px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+.map-stat-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.map-stat-fill { height: 100%; background: linear-gradient(90deg, #b3d4f0, #0d3b6e); border-radius: 3px; transition: width .4s; }
+.map-stat-pct { font-size: 13px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+/* グループ */
+.visit-group { padding: 0 12px 10px; }
+.visit-group-label { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 2px; padding: 8px 4px 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+
+/* ボタングリッド */
+.visit-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+
+/* 訪問ボタン */
+.visit-btn {
+  padding: 8px 4px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-jp);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: transform .1s, box-shadow .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.visit-btn:active { transform: scale(0.93); }
+.visit-btn small { font-size: 10px; font-family: var(--font-en); font-weight: 700; opacity: 0.9; }
+.visit-btn.visited { color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+
+/* 長い国名はfont-sizeを小さく */
+.visit-btn[style] { font-size: 10px; }
+
+/* 年号ダイアログ */
+#year-dialog-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px; }
+#year-dialog-overlay.hidden { display: none; }
+#year-dialog { background: var(--card); border-radius: 16px; padding: 24px 20px 20px; width: 100%; max-width: 320px; box-shadow: 0 8px 40px rgba(0,0,0,.3); }
+#year-dialog h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.year-dialog-sub { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
+#year-dialog-input {
+  width: 100%; padding: 12px; border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 28px; font-family: var(--font-en);
+  font-weight: 700; text-align: center; margin-bottom: 14px;
+  background: var(--bg); color: var(--text); letter-spacing: 4px;
+}
+#year-dialog-input:focus { outline: none; border-color: var(--accent2); }
+.year-dialog-btns { display: flex; gap: 8px; }
+.year-dialog-btns .btn-cancel { flex: 1; padding: 12px; background: var(--bg2); color: var(--text2); border: none; border-radius: 10px; font-size: 14px; cursor: pointer; font-family: var(--font-jp); }
+.year-dialog-btns .btn-save { flex: 1; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--font-jp); }
+
+/* ==========================================
+   地図タブ v3
+   ========================================== */
+.map-tab-inner { padding: 0 0 40px; }
+.map-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; }
+.map-title { font-family: var(--font-en); font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: 1px; }
+.map-stats-line { font-size: 13px; color: var(--text2); }
+.mstat-num { font-family: var(--font-en); font-size: 18px; font-weight: 700; color: var(--accent2); }
+.mstat-pct { color: var(--accent); font-weight: 700; }
+
+/* 統計バー */
+.map-stat-bar { display: flex; align-items: center; gap: 10px; margin: 0 16px 4px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.map-stat-visited { font-family: var(--font-en); font-size: 15px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+.map-stat-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.map-stat-fill { height: 100%; background: linear-gradient(90deg, #b3d4f0, #0d3b6e); border-radius: 3px; transition: width .4s; }
+.map-stat-pct { font-size: 13px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+/* ボタングループ */
+.visit-group { padding: 0 12px 8px; }
+.visit-group-label { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 2px; padding: 8px 4px 5px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+.visit-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.visit-btn {
+  padding: 7px 3px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-jp);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  transition: transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.visit-btn:active { transform: scale(0.92); }
+.visit-btn small { font-size: 9px; font-family: var(--font-en); font-weight: 700; opacity: 0.9; }
+.visit-btn.visited { color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,.18); }
+
+/* SVG地図 */
+.map-svg-section { padding: 8px 8px 4px; }
+.map-svg-section h3 { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 2px; padding: 0 8px 6px; }
+#japan-svg-container { width: 100%; }
+#japan-svg-container svg { display: block; width: 100%; }
+.map-load-msg { text-align: center; padding: 30px; color: var(--text2); font-size: 13px; }
+.map-legend { display: flex; gap: 10px; padding: 0 16px 8px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); flex-shrink: 0; }
+
+/* 渡航履歴 */
+.history-section { padding: 0 12px; margin-top: 6px; }
+.history-section-title { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 2px; padding: 10px 4px 8px; border-top: 2px solid var(--border); margin-bottom: 4px; }
+.history-empty { text-align: center; padding: 20px; color: var(--text2); font-size: 13px; }
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+.history-year-group {}
+.history-year-label { font-family: var(--font-en); font-size: 16px; font-weight: 700; color: var(--accent); padding: 2px 4px 4px; }
+.history-places { display: flex; flex-wrap: wrap; gap: 5px; padding-left: 4px; }
+.history-place-btn {
+  padding: 4px 10px;
+  border-radius: 14px;
+  border: 1.5px solid #b3d4f0;
+  background: #e8f3fc;
+  color: #1a4a7a;
+  font-family: var(--font-jp);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.history-place-btn:active { background: #b3d4f0; }
+
+/* 年号ダイアログ */
+#year-dialog-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px; }
+#year-dialog-overlay.hidden { display: none; }
+#year-dialog { background: var(--card); border-radius: 16px; padding: 22px 20px 18px; width: 100%; max-width: 300px; box-shadow: 0 8px 40px rgba(0,0,0,.3); }
+#year-dialog h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.year-dialog-sub { font-size: 11px; color: var(--text2); margin-bottom: 12px; }
+#year-dialog-input { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 30px; font-family: var(--font-en); font-weight: 700; text-align: center; margin-bottom: 12px; background: var(--bg); color: var(--text); letter-spacing: 4px; }
+#year-dialog-input:focus { outline: none; border-color: var(--accent2); }
+.year-dialog-btns { display: flex; gap: 8px; }
+.year-dialog-btns .btn-cancel { flex: 1; padding: 11px; background: var(--bg2); color: var(--text2); border: none; border-radius: 10px; font-size: 13px; cursor: pointer; font-family: var(--font-jp); }
+.year-dialog-btns .btn-save { flex: 1; padding: 11px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font-jp); }
