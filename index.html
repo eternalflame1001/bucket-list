@@ -31,10 +31,10 @@
   </nav>
   <div id="cat-filter-bar">
     <div class="cat-btn active" data-cat=""><span class="cat-pct" id="cpct-all">0%</span><span class="cat-icon">📚</span><span class="cat-frac" id="cfrac-all">0/0</span></div>
-    <div class="cat-btn" data-cat="海外旅行"><span class="cat-pct" id="cpct-0">0%</span><span class="cat-icon">🌍</span><span class="cat-frac" id="cfrac-0">0/0</span></div>
-    <div class="cat-btn" data-cat="国内旅行"><span class="cat-pct" id="cpct-1">0%</span><span class="cat-icon">🗾</span><span class="cat-frac" id="cfrac-1">0/0</span></div>
-    <div class="cat-btn" data-cat="人生の目標"><span class="cat-pct" id="cpct-3">0%</span><span class="cat-icon">⭐</span><span class="cat-frac" id="cfrac-3">0/0</span></div>
-    <div class="cat-btn" data-cat="スキル・学習"><span class="cat-pct" id="cpct-4">0%</span><span class="cat-icon">✏️</span><span class="cat-frac" id="cfrac-4">0/0</span></div>
+    <div class="cat-btn" data-cat="海外旅行"><span class="cat-pct" id="cpct-海外旅行">0%</span><span class="cat-icon">🌍</span><span class="cat-frac" id="cfrac-海外旅行">0/0</span></div>
+    <div class="cat-btn" data-cat="国内旅行"><span class="cat-pct" id="cpct-国内旅行">0%</span><span class="cat-icon">🗾</span><span class="cat-frac" id="cfrac-国内旅行">0/0</span></div>
+    <div class="cat-btn" data-cat="人生の目標"><span class="cat-pct" id="cpct-人生の目標">0%</span><span class="cat-icon">⭐</span><span class="cat-frac" id="cfrac-人生の目標">0/0</span></div>
+    <div class="cat-btn" data-cat="スキル・学習"><span class="cat-pct" id="cpct-スキル・学習">0%</span><span class="cat-icon">✏️</span><span class="cat-frac" id="cfrac-スキル・学習">0/0</span></div>
     <div class="cat-btn" data-cat="__done__"><span class="cat-pct" id="cpct-done">0%</span><span class="cat-icon">✅</span><span class="cat-frac" id="cfrac-done">0/0</span></div>
     <div class="cat-btn" data-cat="__trash__"><span class="cat-pct">—</span><span class="cat-icon">🗑️</span><span class="cat-frac" id="cfrac-trash">0件</span></div>
   </div>
@@ -82,7 +82,23 @@
         <h2 class="map-title">🇯🇵 日本</h2>
         <div class="map-stats-line" id="japan-map-stats">—</div>
       </div>
+      <!-- ① ボタン -->
       <div id="japan-btn-container"></div>
+      <!-- ② SVG地図 -->
+      <div class="map-svg-section">
+        <h3>▼ 地図</h3>
+        <div class="map-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#b3d4f0"></span>1975</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#0d3b6e"></span>最近</span>
+        </div>
+        <div id="japan-svg-container"></div>
+      </div>
+      <!-- ③ 渡航履歴 -->
+      <div class="history-section">
+        <div class="history-section-title">▼ 渡航履歴</div>
+        <div id="japan-history"></div>
+      </div>
     </div>
   </section>
 
@@ -93,7 +109,23 @@
         <h2 class="map-title">🇨🇳 中国</h2>
         <div class="map-stats-line" id="china-map-stats">—</div>
       </div>
+      <!-- ① ボタン -->
       <div id="china-btn-container"></div>
+      <!-- ② SVG地図 -->
+      <div class="map-svg-section">
+        <h3>▼ 地図</h3>
+        <div class="map-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+        </div>
+        <div id="china-svg-container"></div>
+      </div>
+      <!-- ③ 渡航履歴 -->
+      <div class="history-section">
+        <div class="history-section-title">▼ 渡航履歴</div>
+        <div id="china-history"></div>
+      </div>
     </div>
   </section>
 
@@ -104,7 +136,23 @@
         <h2 class="map-title">🌍 World</h2>
         <div class="map-stats-line" id="world-map-stats">—</div>
       </div>
+      <!-- ① ボタン -->
       <div id="world-btn-container"></div>
+      <!-- ② SVG地図 -->
+      <div class="map-svg-section">
+        <h3>▼ 地図</h3>
+        <div class="map-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+        </div>
+        <div id="world-svg-container"></div>
+      </div>
+      <!-- ③ 渡航履歴 -->
+      <div class="history-section">
+        <div class="history-section-title">▼ 渡航履歴</div>
+        <div id="world-history"></div>
+      </div>
     </div>
   </section>
 </main>
@@ -149,8 +197,13 @@
 <div id="year-dialog-overlay" class="hidden">
   <div id="year-dialog">
     <h3 id="year-dialog-title">地名</h3>
-    <p class="year-dialog-sub">訪問年を入力 (1975〜今年)</p>
-    <input type="number" id="year-dialog-input" placeholder="2025" min="1975" max="2099">
+    <p class="year-dialog-sub">訪問年をスクロールで選択</p>
+    <div class="year-picker-wrap">
+      <div class="year-picker-mask top"></div>
+      <div class="year-picker-mask bottom"></div>
+      <div class="year-picker-highlight"></div>
+      <div id="year-picker-scroll" class="year-picker-scroll"></div>
+    </div>
     <div class="year-dialog-btns">
       <button id="year-dialog-cancel" class="btn-cancel">キャンセル</button>
       <button id="year-dialog-save" class="btn-save">保存</button>
