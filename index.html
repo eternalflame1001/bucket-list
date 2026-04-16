@@ -5,44 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Bucket List</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&family=Black+Ops+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ヘッダー -->
-  <header id="app-header">
-    <h1>Bucket List</h1>
-    <p class="header-sub">死ぬまでにやりたいこと、行きたい場所、なりたい自分</p>
-    <div class="header-stats">
-      <div class="stat"><span id="stat-total">0</span><small>合　計</small></div>
-      <div class="stat accent"><span id="stat-done">0</span><small>達　成</small></div>
-      <div class="stat"><span id="stat-remain">0</span><small>残　り</small></div>
-    </div>
-  </header>
+<header id="app-header">
+  <h1>Bucket List</h1>
+  <p class="header-sub">死ぬまでにやりたいこと、行きたい場所、なりたい自分</p>
+  <div class="header-stats">
+    <div class="stat"><span id="stat-total">0</span><small>合　計</small></div>
+    <div class="stat accent"><span id="stat-done">0</span><small>達　成</small></div>
+    <div class="stat"><span id="stat-remain">0</span><small>残　り</small></div>
+  </div>
+</header>
 
-  <!-- タブナビ -->
+<div id="sticky-nav">
   <nav id="tab-nav">
-    <button class="tab active" data-tab="bucket">📚 Bucket List</button>
-    <button class="tab" data-tab="japan">🇯🇵 Japan</button>
-    <button class="tab" data-tab="pref">📐 都道府県</button>
-    <button class="tab" data-tab="china">🇨🇳 China</button>
-    <button class="tab" data-tab="world">🌍 World</button>
+    <button class="tab active" data-tab="bucket"><span class="tab-icon">📚</span><span>BucketList</span></button>
+    <button class="tab" data-tab="japan"><span class="tab-icon">🇯🇵</span><span>Japan</span></button>
+    <button class="tab" data-tab="china"><span class="tab-icon">🇨🇳</span><span>China</span></button>
+    <button class="tab" data-tab="world"><span class="tab-icon">🌍</span><span>World</span></button>
   </nav>
+  <div id="cat-filter-bar">
+    <div class="cat-btn active" data-cat=""><span class="cat-pct" id="cpct-all">0%</span><span class="cat-icon">📚</span><span class="cat-frac" id="cfrac-all">0/0</span></div>
+    <div class="cat-btn" data-cat="海外旅行"><span class="cat-pct" id="cpct-0">0%</span><span class="cat-icon">🌍</span><span class="cat-frac" id="cfrac-0">0/0</span></div>
+    <div class="cat-btn" data-cat="国内旅行"><span class="cat-pct" id="cpct-1">0%</span><span class="cat-icon">🗾</span><span class="cat-frac" id="cfrac-1">0/0</span></div>
+    <div class="cat-btn" data-cat="食"><span class="cat-pct" id="cpct-2">0%</span><span class="cat-icon">🍜</span><span class="cat-frac" id="cfrac-2">0/0</span></div>
+    <div class="cat-btn" data-cat="人生の目標"><span class="cat-pct" id="cpct-3">0%</span><span class="cat-icon">⭐</span><span class="cat-frac" id="cfrac-3">0/0</span></div>
+    <div class="cat-btn" data-cat="スキル・学習"><span class="cat-pct" id="cpct-4">0%</span><span class="cat-icon">✏️</span><span class="cat-frac" id="cfrac-4">0/0</span></div>
+    <div class="cat-btn" data-cat="__done__"><span class="cat-pct" id="cpct-done">100%</span><span class="cat-icon">✅</span><span class="cat-frac" id="cfrac-done">0/0</span></div>
+    <div class="cat-btn" data-cat="__trash__"><span class="cat-pct">—</span><span class="cat-icon">🗑️</span><span class="cat-frac" id="cfrac-trash">0件</span></div>
+  </div>
+</div>
 
-  <!-- メインコンテンツ -->
-  <main id="main-content">
-
-    <!-- Bucket List タブ -->
-    <section id="tab-bucket" class="tab-content active">
-      <!-- 追加フォーム -->
+<main id="main-content">
+  <section id="tab-bucket" class="tab-content active">
+    <div id="top-bar">
       <div id="add-form">
         <div class="add-title">＋ 新しい夢を追加</div>
         <div class="add-row">
           <input type="text" id="add-input" placeholder="やりたいことを入力...">
           <button id="btn-add">追加</button>
         </div>
-        <select id="add-cat"></select>
+        <select id="add-cat">
+          <option value="">カテゴリなし</option>
+          <option value="海外旅行">🌍 海外旅行</option>
+          <option value="国内旅行">🗾 国内旅行</option>
+          <option value="食">🍜 食</option>
+          <option value="人生の目標">⭐ 人生の目標</option>
+          <option value="スキル・学習">✏️ スキル・学習</option>
+          <option value="__new__">＋ 新しいカテゴリ</option>
+        </select>
         <div class="add-priority">
           <span class="prio-label">緊急度</span>
           <button class="prio-btn active" data-type="urg" data-val="高">高</button>
@@ -54,74 +68,76 @@
           <button class="prio-btn" data-type="prio" data-val="低">低</button>
         </div>
       </div>
-      <!-- フィルター -->
-      <div id="filter-bar">
-        <input type="search" id="search-input" placeholder="🔍 検索...">
-        <select id="status-filter">
-          <option value="">すべて</option>
-          <option value="todo">未達成</option>
-          <option value="done">達成済</option>
-        </select>
-      </div>
-      <ul id="bucket-list"></ul>
-    </section>
-
-    <!-- Japan タブ -->
-    <section id="tab-japan" class="tab-content">
-      <div class="coming-soon">🇯🇵<br>Japan<br><small>準備中</small></div>
-    </section>
-
-    <!-- 都道府県 タブ -->
-    <section id="tab-pref" class="tab-content">
-      <div class="coming-soon">📐<br>都道府県<br><small>準備中</small></div>
-    </section>
-
-    <!-- China タブ -->
-    <section id="tab-china" class="tab-content">
-      <div class="coming-soon">🇨🇳<br>China<br><small>準備中</small></div>
-    </section>
-
-    <!-- World タブ -->
-    <section id="tab-world" class="tab-content">
-      <div class="coming-soon">🌍<br>World<br><small>準備中</small></div>
-    </section>
-
-  </main>
-
-  <!-- 編集モーダル -->
-  <div id="modal-overlay" class="hidden">
-    <div id="modal">
-      <h2 id="modal-title">編集</h2>
-      <input type="text" id="modal-input-text" placeholder="タイトル" maxlength="100">
-      <select id="modal-input-cat"></select>
-      <div class="modal-row">
-        <label>緊急度
-          <select id="modal-input-urg">
-            <option>高</option><option selected>中</option><option>低</option>
-          </select>
-        </label>
-        <label>重要度
-          <select id="modal-input-prio">
-            <option>高</option><option selected>中</option><option>低</option>
-          </select>
-        </label>
-      </div>
-      <div class="modal-btns">
-        <button id="modal-cancel">キャンセル</button>
-        <button id="modal-save" class="primary">保存</button>
+      <div id="search-box">
+        <label>🔍 検索</label>
+        <input type="search" id="search-input" placeholder="キーワード...">
+        <div id="search-result-count"></div>
       </div>
     </div>
+    <ul id="bucket-list"></ul>
+  </section>
+
+  <section id="tab-japan" class="tab-content">
+    <nav class="sub-tab-nav">
+      <button class="sub-tab active" data-sub="japan-list">🗾 Japan List</button>
+      <button class="sub-tab" data-sub="japan-pref">📐 都道府県</button>
+    </nav>
+    <div id="japan-list" class="sub-tab-content active">
+      <div class="coming-soon">🇯🇵<br>Japan List<br><small>準備中</small></div>
+    </div>
+    <div id="japan-pref" class="sub-tab-content">
+      <div class="coming-soon">📐<br>都道府県<br><small>準備中</small></div>
+    </div>
+  </section>
+  <section id="tab-china" class="tab-content">
+    <div class="coming-soon">🇨🇳<br>China<br><small>準備中</small></div>
+  </section>
+  <section id="tab-world" class="tab-content">
+    <div class="coming-soon">🌍<br>World<br><small>準備中</small></div>
+  </section>
+</main>
+
+<!-- 編集モーダル -->
+<div id="edit-modal-overlay" class="hidden">
+  <div id="edit-modal">
+    <h2>✏️ 編集</h2>
+    <div class="detail-field">
+      <label>タイトル</label>
+      <input type="text" id="edit-text" maxlength="100">
+    </div>
+    <div class="detail-field">
+      <label>カテゴリ</label>
+      <select id="edit-cat">
+        <option value="">なし</option>
+        <option value="海外旅行">🌍 海外旅行</option>
+        <option value="国内旅行">🗾 国内旅行</option>
+        <option value="食">🍜 食</option>
+        <option value="人生の目標">⭐ 人生の目標</option>
+        <option value="スキル・学習">✏️ スキル・学習</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div class="detail-field">
+        <label>緊急度</label>
+        <select id="edit-urg"><option>高</option><option>中</option><option>低</option></select>
+      </div>
+      <div class="detail-field">
+        <label>重要度</label>
+        <select id="edit-prio"><option>高</option><option>中</option><option>低</option></select>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="edit-cancel">キャンセル</button>
+      <button class="btn-save" id="edit-save">保存</button>
+    </div>
   </div>
+</div>
 
-  <!-- ローディング -->
-  <div id="loading" class="hidden"><div class="spinner"></div></div>
-  <!-- トースト -->
-  <div id="toast" class="hidden"></div>
+<div id="loading" class="hidden"><div class="spinner"></div></div>
+<div id="toast" class="hidden"></div>
+<div id="sync-badge"><span id="sync-dot"></span>リアルタイム同期中</div>
 
-  <!-- リアルタイム同期バッジ -->
-  <div id="sync-badge"><span id="sync-dot"></span>リアルタイム同期中</div>
-
-  <script src="js/firebase.js"></script>
-  <script src="js/app.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
