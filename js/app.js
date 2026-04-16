@@ -1,15 +1,28 @@
 // app.js — UI・メイン処理
 
+const CAT_ICONS = { "海外旅行":"🌍","国内旅行":"🗾","食":"🍜","人生の目標":"⭐","スキル・学習":"✏️" };
+const CAT_KEYS  = ["海外旅行","国内旅行","食","人生の目標","スキル・学習"];
+const SCORE_MAP = { "高":3,"中":2,"低":1 };
+
 let state = {
   bucket: {}, trash: {}, visit: {},
   tab: "bucket", editKey: null,
-  newUrg: "高", newPrio: "高"
+  newUrg: "高", newPrio: "高", catFilter: ""
 };
 
 const $ = id => document.getElementById(id);
 const bucketUL = $("bucket-list");
 const searchEl = $("search-input");
-const stsFilter = $("status-filter");
+
+function score(item) { return (SCORE_MAP[item.urg]||1) * (SCORE_MAP[item.prio]||1); }
+function toZen(n)    { return String(n).replace(/[0-9]/g, c => String.fromCharCode(c.charCodeAt(0)+0xFEE0)); }
+function esc(str)    { return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function showLoading(show) { $("loading").classList.toggle("hidden", !show); }
+function toast(msg, type="ok") {
+  const el = $("toast"); el.textContent = msg;
+  el.className = `toast-${type}`; el.classList.remove("hidden");
+  setTimeout(() => el.classList.add("hidden"), 2500);
+}
 
 // --- 初期化 ---
 async function init() {
@@ -23,54 +36,104 @@ async function init() {
     state.bucket = b || {};
     state.trash  = t || {};
     state.visit  = v || {};
-    buildCatSelect($("add-cat"));
-    renderBucket();
     updateStats();
+    renderBucket();
   } catch(e) { toast("データ読み込みエラー", "error"); }
   showLoading(false);
   startListener();
 }
 
-// --- カテゴリセレクト構築 ---
-function buildCatSelect(el, selected = "") {
-  const cats = [...new Set(Object.values(state.bucket).map(i => i.cat).filter(Boolean))].sort();
-  el.innerHTML = `<option value="">カテゴリなし</option>` +
-    cats.map(c => `<option value="${c}"${c===selected?" selected":""}>${c}</option>`).join("") +
-    `<option value="__new__">＋ 新しいカテゴリ</option>`;
-}
-
-// --- 統計更新 ---
+// --- 統計・カテゴリバー更新 ---
 function updateStats() {
-  const total  = Object.keys(state.bucket).length;
-  const done   = Object.values(state.bucket).filter(i => i.done).length;
+  const all   = Object.values(state.bucket);
+  const trash = Object.values(state.trash);
+  const total = all.length;
+  const done  = all.filter(i => i.done).length;
   $("stat-total").textContent  = total;
   $("stat-done").textContent   = done;
   $("stat-remain").textContent = total - done;
+
+  // ALL
+  const allPct = total ? Math.round(done/total*100) : 0;
+  $("cpct-all").textContent  = allPct + "%";
+  $("cfrac-all").textContent = `${done}/${total}`;
+
+  // 各カテゴリ
+  CAT_KEYS.forEach((cat, i) => {
+    const items = all.filter(v => v.cat === cat);
+    const d = items.filter(v => v.done).length;
+    const pct = items.length ? Math.round(d/items.length*100) : 0;
+    $(`cpct-${i}`).textContent  = pct + "%";
+    $(`cfrac-${i}`).textContent = `${d}/${items.length}`;
+  });
+
+  // 達成
+  $("cpct-done").textContent  = done ? "100%" : "0%";
+  $("cfrac-done").textContent = `${done}/${done}`;
+
+  // ゴミ箱
+  $("cfrac-trash").textContent = trash.length + "件";
 }
 
 // --- バケットリスト描画 ---
 function renderBucket() {
-  const q   = searchEl.value.toLowerCase();
-  const sts = stsFilter.value;
-  const items = Object.entries(state.bucket).filter(([, v]) => {
-    if (q   && !v.text?.toLowerCase().includes(q)) return false;
-    if (sts === "done" && !v.done) return false;
-    if (sts === "todo" && v.done)  return false;
+  updateStats();
+  const cf = state.catFilter;
+  const q  = searchEl.value.toLowerCase();
+
+  // ゴミ箱表示
+  if (cf === "__trash__") {
+    const items = Object.entries(state.trash);
+    bucketUL.innerHTML = items.length ? "" : `<li class="empty">ゴミ箱は空です</li>`;
+    items.forEach(([key, item]) => {
+      const li = document.createElement("li");
+      li.className = "item";
+      li.innerHTML = `
+        <div class="item-body">
+          <div class="item-title">${esc(item.text)}</div>
+          ${item.cat?`<div class="item-meta"><span class="item-cat-badge">${CAT_ICONS[item.cat]||""}</span></div>`:""}
+        </div>
+        <div class="item-actions">
+          <button class="act-restore" data-key="${key}">♻️</button>
+          <button class="act-delete"  data-key="${key}">❌</button>
+        </div>`;
+      bucketUL.appendChild(li);
+    });
+    return;
+  }
+
+  let items = Object.entries(state.bucket).filter(([, v]) => {
+    if (cf === "__done__" && !v.done) return false;
+    if (cf !== "__done__" && cf && v.cat !== cf) return false;
+    if (q && !v.text?.toLowerCase().includes(q) &&
+        !(v.memo  && v.memo.toLowerCase().includes(q)) &&
+        !(v.place && v.place.toLowerCase().includes(q)) &&
+        !(v.date  && v.date.toLowerCase().includes(q))) return false;
     return true;
   });
+
+  // スコア降順・達成済みは最後
+  items.sort(([,a],[,b]) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    return score(b) - score(a);
+  });
+
+  const countEl = $("search-result-count");
+  countEl.textContent = q ? `${items.length}件ヒット` : "";
+
   bucketUL.innerHTML = items.length ? "" : `<li class="empty">アイテムがありません</li>`;
   items.forEach(([key, item]) => {
     const li = document.createElement("li");
-    li.className = `item${item.done ? " done" : ""}`;
+    li.className = `item${item.done?" done":""}`;
+    const s = score(item);
+    const hasDetail = item.memo || item.date || item.place;
     li.innerHTML = `
-      <div class="item-check" data-key="${key}">${item.done ? "✓" : ""}</div>
+      <div class="item-check" data-key="${key}">${item.done?"✓":""}</div>
       <div class="item-body">
         <div class="item-title">${esc(item.text)}</div>
         <div class="item-meta">
-          ${item.cat ? `<span class="item-cat-badge">${esc(item.cat)}</span>` : ""}
-          ${item.urg ? `<span class="item-num">${esc(item.urg)}</span>` : ""}
-        </div>
-        <div class="prio-row">
+          ${item.cat?`<span class="item-cat-badge">${CAT_ICONS[item.cat]||""}</span>`:""}
+          <span class="item-score">${toZen(s)}</span>
           <span class="prio-row-label">緊急度</span>
           <span class="prio-tag${item.urg==="高"?" on":""}">高</span>
           <span class="prio-tag${item.urg==="中"?" on":""}">中</span>
@@ -80,10 +143,22 @@ function renderBucket() {
           <span class="prio-tag${item.prio==="中"?" on":""}">中</span>
           <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
         </div>
+        ${hasDetail?`<div class="item-detail-preview">
+          ${item.date ?`📅 ${esc(item.date)}　`:""}
+          ${item.place?`📍 ${esc(item.place)}`:""}
+          ${item.memo ?`<br>📝 ${esc(item.memo)}`:""}
+        </div>`:""}
+        <div class="detail-panel hidden" id="dp-${key}">
+          <div class="detail-field"><label>📝 メモ</label><textarea class="dp-memo">${esc(item.memo||"")}</textarea></div>
+          <div class="detail-field"><label>📅 目標日・期限</label><input class="dp-date" type="text" value="${esc(item.date||"")}"></div>
+          <div class="detail-field"><label>📍 場所・エリア</label><input class="dp-place" type="text" value="${esc(item.place||"")}"></div>
+          <button class="dp-save" data-key="${key}">💾 保存</button>
+        </div>
       </div>
       <div class="item-actions">
-        <button class="act-edit"  data-key="${key}">✏️</button>
-        <button class="act-trash" data-key="${key}">×</button>
+        <button class="act-detail" data-key="${key}">📋</button>
+        <button class="act-edit"   data-key="${key}">✏️</button>
+        <button class="act-trash"  data-key="${key}">×</button>
       </div>`;
     bucketUL.appendChild(li);
   });
@@ -95,102 +170,150 @@ async function toggleDone(key) {
   if (!item) return;
   const newDone = !item.done;
   state.bucket[key].done = newDone;
-  renderBucket(); updateStats();
+  renderBucket();
   try {
     await FB.patch(`${FB.endpoints.bucket}/${key}`, { done: newDone });
     toast(newDone ? "達成！🎉" : "未達成に戻しました");
   } catch(e) {
     state.bucket[key].done = !newDone;
-    renderBucket(); updateStats();
-    toast("更新エラー", "error");
+    renderBucket(); toast("更新エラー","error");
   }
 }
 
 // --- 追加 ---
 async function addItem() {
-  const text = $("add-input").value.trim();
-  let cat    = $("add-cat").value;
-  if (!text) { toast("タイトルを入力してください", "error"); return; }
+  let text = $("add-input").value.trim();
+  let cat  = $("add-cat").value;
+  if (!text) { toast("タイトルを入力してください","error"); return; }
   if (cat === "__new__") { cat = prompt("新しいカテゴリ名を入力") || ""; }
-  const data = { text, cat, prio: state.newPrio, urg: state.newUrg, done: false, createdAt: Date.now() };
+  const data = { text, cat, prio: state.newPrio, urg: state.newUrg, done: false, memo:"", date:"", place:"", createdAt: Date.now() };
   showLoading(true);
   try {
     const maxId = Math.max(0, ...Object.keys(state.bucket).map(Number)) + 1;
     await FB.patch(`${FB.endpoints.bucket}/${maxId}`, data);
     state.bucket[maxId] = data;
     $("add-input").value = "";
-    buildCatSelect($("add-cat"));
-    renderBucket(); updateStats();
+    renderBucket();
     toast("追加しました🎉");
-  } catch(e) { toast("保存エラー", "error"); }
+  } catch(e) { toast("保存エラー","error"); }
   showLoading(false);
-  startListener();
 }
 
 // --- ゴミ箱へ ---
 async function moveToTrash(key) {
   const item = state.bucket[key];
-  if (!item || !confirm(`「${item.text}」を削除しますか？`)) return;
+  if (!item || !confirm(`「${item.text}」を削除しますか？\nこの操作は元に戻せません。`)) return;
   showLoading(true);
   try {
     await FB.patch(`${FB.endpoints.trash}/${key}`, { ...item, deletedAt: Date.now() });
     await FB.delete(`${FB.endpoints.bucket}/${key}`);
     delete state.bucket[key];
     state.trash[key] = item;
-    renderBucket(); updateStats();
-    toast("削除しました");
-  } catch(e) { toast("エラーが発生しました", "error"); }
+    renderBucket(); toast("削除しました");
+  } catch(e) { toast("エラーが発生しました","error"); }
   showLoading(false);
-  startListener();
 }
 
-// --- モーダル ---
-function openModal(key) {
-  state.editKey = key;
-  const item = state.bucket[key] || {};
-  $("modal-title").textContent = "編集";
-  $("modal-input-text").value = item.text || "";
-  $("modal-input-urg").value  = item.urg  || "中";
-  $("modal-input-prio").value = item.prio || "中";
-  buildCatSelect($("modal-input-cat"), item.cat || "");
-  $("modal-overlay").classList.remove("hidden");
-  $("modal-input-text").focus();
-}
-function closeModal() {
-  $("modal-overlay").classList.add("hidden");
-  state.editKey = null;
-}
-async function saveModal() {
-  let text = $("modal-input-text").value.trim();
-  let cat  = $("modal-input-cat").value;
-  let urg  = $("modal-input-urg").value;
-  let prio = $("modal-input-prio").value;
-  if (!text) { toast("タイトルを入力してください", "error"); return; }
-  if (cat === "__new__") { cat = prompt("新しいカテゴリ名を入力") || ""; }
-  const data = { text, cat, urg, prio, done: state.bucket[state.editKey].done };
+// --- ゴミ箱から復元 ---
+async function restoreFromTrash(key) {
+  const item = state.trash[key];
+  if (!item) return;
   showLoading(true);
   try {
-    await FB.patch(`${FB.endpoints.bucket}/${state.editKey}`, data);
-    state.bucket[state.editKey] = { ...state.bucket[state.editKey], ...data };
-    buildCatSelect($("add-cat"));
-    renderBucket();
-    closeModal();
-    toast("更新しました");
-  } catch(e) { toast("保存エラー", "error"); }
+    const { deletedAt, ...restored } = item;
+    await FB.patch(`${FB.endpoints.bucket}/${key}`, restored);
+    await FB.delete(`${FB.endpoints.trash}/${key}`);
+    delete state.trash[key];
+    state.bucket[key] = restored;
+    renderBucket(); toast("復元しました");
+  } catch(e) { toast("エラーが発生しました","error"); }
   showLoading(false);
-  startListener();
 }
 
-// --- イベント ---
-bucketUL.addEventListener("click", e => {
-  const key = e.target.dataset.key;
-  if (!key) return;
-  if (e.target.classList.contains("item-check")) toggleDone(key);
-  if (e.target.classList.contains("act-edit"))   openModal(key);
-  if (e.target.classList.contains("act-trash"))  moveToTrash(key);
+// --- 完全削除 ---
+async function deleteFromTrash(key) {
+  if (!confirm("完全に削除しますか？元に戻せません。")) return;
+  showLoading(true);
+  try {
+    await FB.delete(`${FB.endpoints.trash}/${key}`);
+    delete state.trash[key];
+    renderBucket(); toast("完全削除しました");
+  } catch(e) { toast("エラーが発生しました","error"); }
+  showLoading(false);
+}
+
+// --- 詳細保存 ---
+async function saveDetail(key) {
+  const panel = $(`dp-${key}`);
+  if (!panel) return;
+  const memo  = panel.querySelector(".dp-memo").value;
+  const date  = panel.querySelector(".dp-date").value;
+  const place = panel.querySelector(".dp-place").value;
+  showLoading(true);
+  try {
+    await FB.patch(`${FB.endpoints.bucket}/${key}`, { memo, date, place });
+    state.bucket[key] = { ...state.bucket[key], memo, date, place };
+    renderBucket(); toast("詳細を保存しました");
+  } catch(e) { toast("保存エラー","error"); }
+  showLoading(false);
+}
+
+// --- 編集モーダル ---
+const editModal = $("edit-modal-overlay");
+function openEdit(key) {
+  const item = state.bucket[key];
+  if (!item) return;
+  $("edit-text").value  = item.text;
+  $("edit-urg").value   = item.urg  || "中";
+  $("edit-prio").value  = item.prio || "中";
+  $("edit-cat").value   = item.cat  || "";
+  $("edit-save").dataset.key = key;
+  editModal.classList.remove("hidden");
+}
+$("edit-cancel").addEventListener("click", () => editModal.classList.add("hidden"));
+editModal.addEventListener("click", e => { if (e.target === editModal) editModal.classList.add("hidden"); });
+$("edit-save").addEventListener("click", async () => {
+  const key  = $("edit-save").dataset.key;
+  const data = {
+    text: $("edit-text").value.trim() || state.bucket[key].text,
+    urg:  $("edit-urg").value,
+    prio: $("edit-prio").value,
+    cat:  $("edit-cat").value,
+    done: state.bucket[key].done
+  };
+  showLoading(true);
+  try {
+    await FB.patch(`${FB.endpoints.bucket}/${key}`, data);
+    state.bucket[key] = { ...state.bucket[key], ...data };
+    editModal.classList.add("hidden");
+    renderBucket(); toast("更新しました");
+  } catch(e) { toast("保存エラー","error"); }
+  showLoading(false);
 });
 
-// 優先度ボタン
+// --- イベント委任 ---
+bucketUL.addEventListener("click", e => {
+  const btn = e.target.closest("button, .item-check");
+  if (!btn) return;
+  const key = btn.dataset.key;
+  if (!key) return;
+
+  if (btn.classList.contains("item-check"))  toggleDone(key);
+  if (btn.classList.contains("act-edit"))    openEdit(key);
+  if (btn.classList.contains("act-trash"))   moveToTrash(key);
+  if (btn.classList.contains("act-restore")) restoreFromTrash(key);
+  if (btn.classList.contains("act-delete"))  deleteFromTrash(key);
+  if (btn.classList.contains("dp-save"))     saveDetail(key);
+  if (btn.classList.contains("act-detail")) {
+    const panel = $(`dp-${key}`);
+    if (!panel) return;
+    const isOpen = !panel.classList.contains("hidden");
+    panel.classList.toggle("hidden", isOpen);
+    btn.classList.toggle("open", !isOpen);
+  }
+});
+
+// --- 優先度ボタン ---
 document.querySelectorAll(".prio-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.type;
@@ -201,17 +324,14 @@ document.querySelectorAll(".prio-btn").forEach(btn => {
   });
 });
 
+// --- 追加ボタン ---
 $("btn-add").addEventListener("click", addItem);
 $("add-input").addEventListener("keydown", e => { if (e.key === "Enter") addItem(); });
-searchEl.addEventListener("input",    renderBucket);
-stsFilter.addEventListener("change",  renderBucket);
-$("modal-cancel").addEventListener("click", closeModal);
-$("modal-save").addEventListener("click",   saveModal);
-$("modal-overlay").addEventListener("click", e => {
-  if (e.target === $("modal-overlay")) closeModal();
-});
 
-// タブ切替
+// --- 検索 ---
+searchEl.addEventListener("input", renderBucket);
+
+// --- タブ切替 ---
 document.querySelectorAll(".tab").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
@@ -222,27 +342,32 @@ document.querySelectorAll(".tab").forEach(btn => {
   });
 });
 
-// --- ユーティリティ ---
-function esc(str) {
-  return String(str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-function showLoading(show) { $("loading").classList.toggle("hidden", !show); }
-function toast(msg, type = "ok") {
-  const el = $("toast");
-  el.textContent = msg;
-  el.className = `toast-${type}`;
-  el.classList.remove("hidden");
-  setTimeout(() => el.classList.add("hidden"), 2500);
-}
+// --- カテゴリフィルター ---
+document.querySelectorAll(".cat-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.catFilter = btn.dataset.cat;
+    renderBucket();
+  });
+});
 
-// --- リアルタイムリスナー起動 ---
+// --- サブタブ ---
+document.querySelectorAll(".sub-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".sub-tab").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".sub-tab-content").forEach(s => s.classList.remove("active"));
+    btn.classList.add("active");
+    $(btn.dataset.sub).classList.add("active");
+  });
+});
+
+// --- リアルタイムリスナー ---
 function startListener() {
-  FB.listen(FB.endpoints.bucket, (data, patch) => {
+  FB.listen(FB.endpoints.bucket, data => {
     if (data) {
       state.bucket = data;
-      buildCatSelect($("add-cat"));
       renderBucket();
-      updateStats();
     }
   });
 }
