@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>接続テスト</title>
+</head>
+<body>
+  <h2>Firebase接続テスト</h2>
+  <pre id="result">テスト中...</pre>
+  <script>
+    const URL = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app/users/hideki/bucketList.json?shallow=true";
+    fetch(URL)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("result").textContent =
+          "✅ 成功！\nキー数: " + Object.keys(data).length + "\n最初のキー: " + Object.keys(data)[0];
+      })
+      .catch(e => {
+        document.getElementById("result").textContent = "❌ エラー: " + e.message;
+      });
+  </script>
+</body>
+</html>
