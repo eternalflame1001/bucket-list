@@ -26,29 +26,30 @@ const CHINA_REGIONS = [
 ];
 
 const WORLD_REGIONS = [
-  { label: "🌏 東アジア", countries: ["日本","韓国","中国","台湾","北朝鮮","モンゴル","香港","マカオ"] },
-  { label: "🌏 東南アジア", countries: ["タイ","ベトナム","インドネシア","フィリピン","マレーシア","シンガポール","ミャンマー","カンボジア","ラオス","ブルネイ","東ティモール"] },
-  { label: "🌏 南アジア", countries: ["インド","パキスタン","バングラデシュ","スリランカ","ネパール","ブータン","モルディブ","アフガニスタン"] },
-  { label: "🌏 中央アジア", countries: ["カザフスタン","ウズベキスタン","トルクメニスタン","タジキスタン","キルギス"] },
-  { label: "🌏 西アジア・中東", countries: ["トルコ","イラン","イラク","サウジアラビア","アラブ首長国連邦","イスラエル","ヨルダン","レバノン","シリア","クウェート","カタール","バーレーン","オマーン","イエメン","ジョージア","アルメニア","アゼルバイジャン","キプロス"] },
-  { label: "🌍 西ヨーロッパ", countries: ["フランス","ドイツ","イギリス","イタリア","スペイン","ポルトガル","オランダ","ベルギー","スイス","オーストリア","ルクセンブルク","アイルランド","モナコ","アンドラ","リヒテンシュタイン","マルタ"] },
-  { label: "🌍 北ヨーロッパ", countries: ["スウェーデン","ノルウェー","デンマーク","フィンランド","アイスランド","エストニア","ラトビア","リトアニア"] },
-  { label: "🌍 東ヨーロッパ", countries: ["ロシア","ポーランド","チェコ","スロバキア","ハンガリー","ルーマニア","ブルガリア","ウクライナ","ベラルーシ","モルドバ","クロアチア","スロベニア","ボスニア・ヘルツェゴビナ","セルビア","モンテネグロ","アルバニア","コソボ","ギリシャ"] },
-  { label: "🌎 北アメリカ", countries: ["アメリカ","カナダ","メキシコ","キューバ","ジャマイカ","ハイチ","ドミニカ共和国","プエルトリコ","グアム"] },
-  { label: "🌎 中米・カリブ", countries: ["グアテマラ","ベリーズ","ホンジュラス","エルサルバドル","ニカラグア","コスタリカ","パナマ"] },
-  { label: "🌎 南アメリカ", countries: ["ブラジル","アルゼンチン","チリ","コロンビア","ペルー","ベネズエラ","エクアドル","ボリビア","パラグアイ","ウルグアイ","ガイアナ","スリナム"] },
-  { label: "🌍 北アフリカ", countries: ["エジプト","モロッコ","チュニジア","アルジェリア","リビア","スーダン"] },
-  { label: "🌍 サブサハラ・アフリカ", countries: ["南アフリカ","ナイジェリア","ケニア","エチオピア","タンザニア","ガーナ","セネガル","コートジボワール","カメルーン","ウガンダ","ルワンダ","ジンバブエ","モザンビーク","マダガスカル","ナミビア","ボツワナ","ザンビア","マラウイ","アンゴラ","コンゴ共和国","コンゴ民主共和国"] },
-  { label: "🌏 オセアニア", countries: ["オーストラリア","ニュージーランド","フィジー","パプアニューギニア","ソロモン諸島","バヌアツ","サモア","トンガ","パラオ","ミクロネシア","マーシャル諸島","ニューカレドニア","フランス領ポリネシア"] }
+  { label: "東アジア", countries: ["日本","韓国","中国","台湾","北朝鮮","モンゴル","香港","マカオ"] },
+  { label: "東南アジア", countries: ["タイ","ベトナム","インドネシア","フィリピン","マレーシア","シンガポール","ミャンマー","カンボジア","ラオス","ブルネイ","東ティモール"] },
+  { label: "南アジア", countries: ["インド","パキスタン","バングラデシュ","スリランカ","ネパール","ブータン","モルディブ","アフガニスタン"] },
+  { label: "中央アジア", countries: ["カザフスタン","ウズベキスタン","トルクメニスタン","タジキスタン","キルギス"] },
+  { label: "西アジア・中東", countries: ["トルコ","イラン","イラク","サウジアラビア","アラブ首長国連邦","イスラエル","ヨルダン","レバノン","シリア","クウェート","カタール","バーレーン","オマーン","イエメン","ジョージア","アルメニア","アゼルバイジャン","キプロス"] },
+  { label: "西ヨーロッパ", countries: ["フランス","ドイツ","イギリス","イタリア","スペイン","ポルトガル","オランダ","ベルギー","スイス","オーストリア","ルクセンブルク","アイルランド","モナコ","アンドラ","リヒテンシュタイン","マルタ"] },
+  { label: "北ヨーロッパ", countries: ["スウェーデン","ノルウェー","デンマーク","フィンランド","アイスランド","エストニア","ラトビア","リトアニア"] },
+  { label: "東ヨーロッパ", countries: ["ロシア","ポーランド","チェコ","スロバキア","ハンガリー","ルーマニア","ブルガリア","ウクライナ","ベラルーシ","モルドバ","クロアチア","スロベニア","ボスニア・ヘルツェゴビナ","セルビア","モンテネグロ","アルバニア","コソボ","ギリシャ"] },
+  { label: "北アメリカ", countries: ["アメリカ","カナダ","メキシコ","キューバ","ジャマイカ","ハイチ","ドミニカ共和国","プエルトリコ","グアム"] },
+  { label: "中米・カリブ", countries: ["グアテマラ","ベリーズ","ホンジュラス","エルサルバドル","ニカラグア","コスタリカ","パナマ"] },
+  { label: "南アメリカ", countries: ["ブラジル","アルゼンチン","チリ","コロンビア","ペルー","ベネズエラ","エクアドル","ボリビア","パラグアイ","ウルグアイ","ガイアナ","スリナム"] },
+  { label: "北アフリカ", countries: ["エジプト","モロッコ","チュニジア","アルジェリア","リビア","スーダン"] },
+  { label: "サブサハラ・アフリカ", countries: ["南アフリカ","ナイジェリア","ケニア","エチオピア","タンザニア","ガーナ","セネガル","コートジボワール","カメルーン","ウガンダ","ルワンダ","ジンバブエ","モザンビーク","マダガスカル","ナミビア","ボツワナ","ザンビア","マラウイ","アンゴラ","コンゴ共和国","コンゴ民主共和国"] },
+  { label: "オセアニア", countries: ["オーストラリア","ニュージーランド","フィジー","パプアニューギニア","ソロモン諸島","バヌアツ","サモア","トンガ","パラオ","ミクロネシア","マーシャル諸島","ニューカレドニア","フランス領ポリネシア"] }
 ];
 
 // --- 年グラデーション（1975=薄青 〜 現在=濃青）---
 function yearToColor(year) {
-  if (!year || year === true) return "#4a90d9";
+  // 最濃（最近）= #e8c06a（ヘッダー達成色）、最薄（1975）= #f5e9c8
+  if (!year || year === true) return "#eed499"; // 年不明→中間色
   const t = Math.max(0, Math.min(1, (year - 1975) / (new Date().getFullYear() - 1975)));
-  const r = Math.round(179 - t * 166);
-  const g = Math.round(212 - t * 153);
-  const b = Math.round(240 - t * 130);
+  const r = Math.round(245 - t * 13);
+  const g = Math.round(233 - t * 41);
+  const b = Math.round(200 - t * 94);
   return `rgb(${r},${g},${b})`;
 }
 function prefShort(name) { return name.replace(/[都道府県]$/, ""); }
@@ -65,16 +66,21 @@ function renderButtons(container, groups, visitData, type) {
   const total = allItems.length;
   const pct = total ? Math.round(visitedCount / total * 100) : 0;
 
-  let html = `<div class="map-stat-bar">
-    <span class="map-stat-visited">${visitedCount} / ${total}</span>
-    <div class="map-stat-track"><div class="map-stat-fill" style="width:${pct}%"></div></div>
-    <span class="map-stat-pct">${pct}%</span>
-  </div>`;
+  let html = "";
 
   groups.forEach(group => {
     const items = group.prefs || group.areas || group.countries || [];
+    const gVisited = items.filter(n => {
+      const key = type === "japan" ? prefShort(n) : n;
+      return !!visitData[key];
+    }).length;
+    const gTotal = items.length;
+    const gPct = gTotal ? Math.round(gVisited / gTotal * 100) : 0;
     html += `<div class="visit-group">
-      <div class="visit-group-label">${group.label}</div>
+      <div class="visit-group-label">
+        <span class="group-label-text">${group.label}</span>
+        <span class="group-label-stat">${gVisited}/${gTotal} <em>${gPct}%</em></span>
+      </div>
       <div class="visit-btn-grid">`;
     items.forEach(name => {
       const key = type === "japan" ? prefShort(name) : name;
@@ -116,7 +122,8 @@ async function renderJapanMap(visitData) {
     }
   }
 
-  const features = topojson.feature(_japanTopo, _japanTopo.objects.japan).features;
+  const objKey = Object.keys(_japanTopo.objects)[0];
+  const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
   const H = Math.round(W * 1.05);
   const projection = d3.geoMercator().fitSize([W, H], { type: "FeatureCollection", features });
@@ -124,7 +131,8 @@ async function renderJapanMap(visitData) {
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   features.forEach(feat => {
-    const full = feat.properties.nam_ja;
+    const props = feat.properties;
+    const full = props.nam_ja || props.name_ja || props.NAME || props.name || props.N03_001 || '';
     const key = prefShort(full);
     const val = visitData[key];
     const year = (val === true) ? null : (val || null);
@@ -153,9 +161,115 @@ async function renderJapanMap(visitData) {
 }
 
 // ==========================================
+// China 地図
+// ==========================================
+let _chinaTopo = null;
+async function renderChinaMap(visitData) {
+  const container = document.getElementById("china-svg-container");
+  if (!container) return;
+  if (!_chinaTopo) {
+    try {
+      const r = await fetch("./china.json");
+      _chinaTopo = await r.json();
+    } catch(e) {
+      container.innerHTML = '<div class="map-load-msg">地図データ読み込み失敗</div>';
+      return;
+    }
+  }
+  const objKey = Object.keys(_chinaTopo.objects)[0];
+  const features = topojson.feature(_chinaTopo, _chinaTopo.objects[objKey]).features;
+  const W = container.clientWidth || 370;
+  const H = Math.round(W * 0.75);
+  const projection = d3.geoMercator().fitSize([W, H], { type:"FeatureCollection", features });
+  const pathGen = d3.geoPath().projection(projection);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
+  features.forEach(feat => {
+    const props = feat.properties;
+    const key = props.nam_ja || props.name || '';
+    const val = visitData[key];
+    const year = (val === true) ? null : (val || null);
+    const visited = !!val;
+    const fill = visited ? yearToColor(year) : "#e8e4dc";
+    const d = pathGen(feat);
+    if (!d) return;
+    svg += `<path d="${d}" fill="${fill}" stroke="#fff" stroke-width="0.8" class="svg-pref"
+      data-name="${key}" style="cursor:pointer">
+      <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
+    </path>`;
+  });
+  svg += `</svg>`;
+  container.innerHTML = svg;
+  container.querySelectorAll(".svg-pref").forEach(path => {
+    path.addEventListener("click", () => {
+      const name = path.dataset.name;
+      if (!name) return;
+      const val = (window.appState?.visit?.china || {})[name];
+      const curYear = (val && val !== true) ? val : new Date().getFullYear();
+      openYearDialog("china", name, curYear).then(() => refreshTab("china"));
+    });
+    path.addEventListener("mouseenter", () => path.style.opacity = "0.7");
+    path.addEventListener("mouseleave", () => path.style.opacity = "1");
+  });
+}
+
+// ==========================================
+// World 地図
+// ==========================================
+let _worldTopo = null;
+async function renderWorldMap(visitData) {
+  const container = document.getElementById("world-svg-container");
+  if (!container) return;
+  if (!_worldTopo) {
+    try {
+      const r = await fetch("./world.json");
+      _worldTopo = await r.json();
+    } catch(e) {
+      container.innerHTML = '<div class="map-load-msg">地図データ読み込み失敗</div>';
+      return;
+    }
+  }
+  const features = topojson.feature(_worldTopo, _worldTopo.objects.countries).features;
+  const W = container.clientWidth || 370;
+  const H = Math.round(W * 0.55);
+  const projection = d3.geoNaturalEarth1().fitSize([W, H], { type:"FeatureCollection", features });
+  const pathGen = d3.geoPath().projection(projection);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
+  features.forEach(feat => {
+    const key = feat.properties.nam_ja || feat.properties.name || '';
+    const val = visitData[key];
+    const year = (val === true) ? null : (val || null);
+    const visited = !!val;
+    const fill = visited ? yearToColor(year) : "#e8e4dc";
+    const d = pathGen(feat);
+    if (!d) return;
+    svg += `<path d="${d}" fill="${fill}" stroke="#fff" stroke-width="0.5" class="svg-pref"
+      data-name="${key}" style="cursor:pointer">
+      <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
+    </path>`;
+  });
+  svg += `</svg>`;
+  container.innerHTML = svg;
+  container.querySelectorAll(".svg-pref").forEach(path => {
+    path.addEventListener("click", () => {
+      const name = path.dataset.name;
+      if (!name) return;
+      const val = (window.appState?.visit?.world || {})[name];
+      const curYear = (val && val !== true) ? val : new Date().getFullYear();
+      openYearDialog("world", name, curYear).then(() => refreshTab("world"));
+    });
+    path.addEventListener("mouseenter", () => path.style.opacity = "0.7");
+    path.addEventListener("mouseleave", () => path.style.opacity = "1");
+  });
+}
+
+// ==========================================
 // ③ 渡航履歴リスト（年ごと・新しい順）
 // ==========================================
 function renderHistory(container, visitData, type) {
+  if (!visitData || typeof visitData !== 'object') {
+    container.innerHTML = '<div class="history-empty">まだ訪問履歴がありません</div>';
+    return;
+  }
   // 年ごとにグループ化
   const byYear = {};
   const noYear = [];
@@ -235,35 +349,73 @@ async function onBtnClick(btn, type) {
 // ==========================================
 async function openYearDialog(type, name, defaultYear) {
   return new Promise(resolve => {
-    const overlay = document.getElementById("year-dialog-overlay");
-    const titleEl = document.getElementById("year-dialog-title");
-    const input   = document.getElementById("year-dialog-input");
-    const btnSave = document.getElementById("year-dialog-save");
-    const btnCancel = document.getElementById("year-dialog-cancel");
+    const overlay  = document.getElementById("year-dialog-overlay");
+    const titleEl  = document.getElementById("year-dialog-title");
+    const scroller = document.getElementById("year-picker-scroll");
+    const btnSave  = document.getElementById("year-dialog-save");
+    const btnCancel= document.getElementById("year-dialog-cancel");
+
+    const curY = new Date().getFullYear();
+    const startY = 1975;
+    const targetY = defaultYear || curY;
+
+    // アイテム生成
+    scroller.innerHTML = "";
+    for (let y = curY; y >= startY; y--) {
+      const div = document.createElement("div");
+      div.className = "year-picker-item";
+      div.textContent = y;
+      div.dataset.year = y;
+      scroller.appendChild(div);
+    }
 
     titleEl.textContent = name;
-    input.value = defaultYear || new Date().getFullYear();
     overlay.classList.remove("hidden");
-    setTimeout(() => { input.focus(); input.select(); }, 50);
+
+    // 選択年にスクロール（アイテム高さ44px）
+    const itemH = 44;
+    const idx = curY - targetY;
+    setTimeout(() => {
+      scroller.scrollTop = idx * itemH;
+      updateSelected();
+    }, 30);
+
+    function updateSelected() {
+      const idx = Math.round(scroller.scrollTop / 44);
+      scroller.querySelectorAll(".year-picker-item").forEach((el, i) => {
+        el.classList.toggle("selected", i === idx);
+      });
+    }
+
+    function getSelectedYear() {
+      const idx = Math.round(scroller.scrollTop / 44);
+      const items = scroller.querySelectorAll(".year-picker-item");
+      return items[idx] ? parseInt(items[idx].dataset.year) : curY;
+    }
+
+    scroller.addEventListener("scroll", updateSelected, { passive: true });
+
+    // アイテムクリックでその年にスナップ
+    scroller.addEventListener("click", e => {
+      const item = e.target.closest(".year-picker-item");
+      if (!item) return;
+      const idx = Array.from(scroller.children).indexOf(item);
+      scroller.scrollTo({ top: idx * 44, behavior: "smooth" });
+    });
 
     function done() {
       overlay.classList.add("hidden");
-      btnSave.onclick = btnCancel.onclick = overlay.onclick = input.onkeydown = null;
+      btnSave.onclick = btnCancel.onclick = overlay.onclick = null;
     }
+
     btnSave.onclick = async () => {
-      const yr = parseInt(input.value);
-      const curY = new Date().getFullYear();
-      if (isNaN(yr) || yr < 1975 || yr > curY) {
-        alert(`1975〜${curY}の年を入力してください`);
-        return;
-      }
+      const yr = getSelectedYear();
       done();
       await saveVisit(type, name, yr);
       resolve();
     };
     btnCancel.onclick = () => { done(); resolve(); };
     overlay.onclick = e => { if (e.target === overlay) { done(); resolve(); } };
-    input.onkeydown = e => { if (e.key === "Enter") btnSave.onclick(); };
   });
 }
 
@@ -307,8 +459,10 @@ function refreshTab(type) {
   const btnEl = document.getElementById(`${type}-btn-container`);
   if (btnEl) renderButtons(btnEl, groups, visitData, type);
 
-  // 地図（Japanのみ）
+  // 地図
   if (type === "japan") renderJapanMap(visitData);
+  if (type === "china") renderChinaMap(visitData);
+  if (type === "world") renderWorldMap(visitData);
 
   // 渡航履歴
   const histEl = document.getElementById(`${type}-history`);
