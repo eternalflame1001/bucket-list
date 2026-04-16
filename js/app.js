@@ -28,6 +28,7 @@ async function init() {
     updateStats();
   } catch(e) { toast("データ読み込みエラー", "error"); }
   showLoading(false);
+  startListener();
 }
 
 // --- カテゴリセレクト構築 ---
@@ -123,6 +124,7 @@ async function addItem() {
     toast("追加しました🎉");
   } catch(e) { toast("保存エラー", "error"); }
   showLoading(false);
+  startListener();
 }
 
 // --- ゴミ箱へ ---
@@ -139,6 +141,7 @@ async function moveToTrash(key) {
     toast("削除しました");
   } catch(e) { toast("エラーが発生しました", "error"); }
   showLoading(false);
+  startListener();
 }
 
 // --- モーダル ---
@@ -175,6 +178,7 @@ async function saveModal() {
     toast("更新しました");
   } catch(e) { toast("保存エラー", "error"); }
   showLoading(false);
+  startListener();
 }
 
 // --- イベント ---
@@ -229,6 +233,18 @@ function toast(msg, type = "ok") {
   el.className = `toast-${type}`;
   el.classList.remove("hidden");
   setTimeout(() => el.classList.add("hidden"), 2500);
+}
+
+// --- リアルタイムリスナー起動 ---
+function startListener() {
+  FB.listen(FB.endpoints.bucket, (data, patch) => {
+    if (data) {
+      state.bucket = data;
+      buildCatSelect($("add-cat"));
+      renderBucket();
+      updateStats();
+    }
+  });
 }
 
 init();
