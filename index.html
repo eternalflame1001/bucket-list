@@ -78,82 +78,100 @@
 
   <!-- Japan タブ -->
   <section id="tab-japan" class="tab-content">
-    <div class="map-tab-inner">
-      <div class="map-header-bar">
-        <h2 class="map-title">🇯🇵 日本</h2>
-        <div class="map-stats-line" id="japan-map-stats">—</div>
-      </div>
-      <!-- ① ボタン -->
-      <div id="japan-btn-container"></div>
-      <!-- ② SVG地図 -->
-      <div class="map-svg-section">
-        <h3>▼ 地図</h3>
-        <div class="map-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#b3d4f0"></span>1975</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#0d3b6e"></span>最近</span>
+    <div class="sub-tab-nav">
+      <button class="sub-tab active" data-group="japan" data-sub="japan-main">🇯🇵 都道府県</button>
+      <button class="sub-tab" data-group="japan" data-sub="japan-heritage">⭐ 世界遺産</button>
+    </div>
+    <div id="japan-main" class="sub-tab-content active">
+      <div class="map-tab-inner">
+        <div class="map-header-bar">
+          <h2 class="map-title">🇯🇵 日本</h2>
+          <div class="map-stats-line" id="japan-map-stats">—</div>
         </div>
-        <div id="japan-svg-container"></div>
+        <div id="japan-btn-container"></div>
+        <div class="map-svg-section">
+          <h3>▼ 地図</h3>
+          <div class="map-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#b3d4f0"></span>1975</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#0d3b6e"></span>最近</span>
+          </div>
+          <div id="japan-svg-container"></div>
+        </div>
+        <div class="history-section">
+          <div class="history-section-title">▼ 渡航履歴</div>
+          <div id="japan-history"></div>
+        </div>
       </div>
-      <!-- ③ 渡航履歴 -->
-      <div class="history-section">
-        <div class="history-section-title">▼ 渡航履歴</div>
-        <div id="japan-history"></div>
-      </div>
+    </div>
+    <div id="japan-heritage" class="sub-tab-content">
+      <div id="japan-heritage-container"></div>
     </div>
   </section>
 
   <!-- China タブ -->
   <section id="tab-china" class="tab-content">
-    <div class="map-tab-inner">
-      <div class="map-header-bar">
-        <h2 class="map-title">🇨🇳 中国</h2>
-        <div class="map-stats-line" id="china-map-stats">—</div>
-      </div>
-      <!-- ① ボタン -->
-      <div id="china-btn-container"></div>
-      <!-- ② SVG地図 -->
-      <div class="map-svg-section">
-        <h3>▼ 地図</h3>
-        <div class="map-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+    <div class="sub-tab-nav">
+      <button class="sub-tab active" data-group="china" data-sub="china-main">🇨🇳 省・自治区</button>
+      <button class="sub-tab" data-group="china" data-sub="china-heritage">⭐ 世界遺産</button>
+    </div>
+    <div id="china-main" class="sub-tab-content active">
+      <div class="map-tab-inner">
+        <div class="map-header-bar">
+          <h2 class="map-title">🇨🇳 中国</h2>
+          <div class="map-stats-line" id="china-map-stats">—</div>
         </div>
-        <div id="china-svg-container"></div>
+        <div id="china-btn-container"></div>
+        <div class="map-svg-section">
+          <h3>▼ 地図</h3>
+          <div class="map-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+          </div>
+          <div id="china-svg-container"></div>
+        </div>
+        <div class="history-section">
+          <div class="history-section-title">▼ 渡航履歴</div>
+          <div id="china-history"></div>
+        </div>
       </div>
-      <!-- ③ 渡航履歴 -->
-      <div class="history-section">
-        <div class="history-section-title">▼ 渡航履歴</div>
-        <div id="china-history"></div>
-      </div>
+    </div>
+    <div id="china-heritage" class="sub-tab-content">
+      <div id="china-heritage-container"></div>
     </div>
   </section>
 
   <!-- World タブ -->
   <section id="tab-world" class="tab-content">
-    <div class="map-tab-inner">
-      <div class="map-header-bar">
-        <h2 class="map-title">🌍 World</h2>
-        <div class="map-stats-line" id="world-map-stats">—</div>
-      </div>
-      <!-- ① ボタン -->
-      <div id="world-btn-container"></div>
-      <!-- ② SVG地図 -->
-      <div class="map-svg-section">
-        <h3>▼ 地図</h3>
-        <div class="map-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+    <div class="sub-tab-nav">
+      <button class="sub-tab active" data-group="world" data-sub="world-main">🌍 国</button>
+      <button class="sub-tab" data-group="world" data-sub="world-heritage">⭐ 世界遺産</button>
+    </div>
+    <div id="world-main" class="sub-tab-content active">
+      <div class="map-tab-inner">
+        <div class="map-header-bar">
+          <h2 class="map-title">🌍 World</h2>
+          <div class="map-stats-line" id="world-map-stats">—</div>
         </div>
-        <div id="world-svg-container"></div>
+        <div id="world-btn-container"></div>
+        <div class="map-svg-section">
+          <h3>▼ 地図</h3>
+          <div class="map-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+          </div>
+          <div id="world-svg-container"></div>
+        </div>
+        <div class="history-section">
+          <div class="history-section-title">▼ 渡航履歴</div>
+          <div id="world-history"></div>
+        </div>
       </div>
-      <!-- ③ 渡航履歴 -->
-      <div class="history-section">
-        <div class="history-section-title">▼ 渡航履歴</div>
-        <div id="world-history"></div>
-      </div>
+    </div>
+    <div id="world-heritage" class="sub-tab-content">
+      <div id="world-heritage-container"></div>
     </div>
   </section>
 </main>
@@ -217,6 +235,7 @@
 <div id="sync-badge"><span id="sync-dot"></span>リアルタイム同期中</div>
 
 <script src="js/firebase.js"></script>
+<script src="js/heritage-jp-cn.js"></script>
 <script src="js/map.js"></script>
 <script src="js/app.js"></script>
 </body>

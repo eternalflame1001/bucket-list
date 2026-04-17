@@ -361,13 +361,19 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
   });
 });
 
-// --- サブタブ ---
+// --- サブタブ（セクション内スコープ） ---
 document.querySelectorAll(".sub-tab").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".sub-tab").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".sub-tab-content").forEach(s => s.classList.remove("active"));
+    const section = btn.closest(".tab-content");
+    section.querySelectorAll(".sub-tab").forEach(b => b.classList.remove("active"));
+    section.querySelectorAll(".sub-tab-content").forEach(s => s.classList.remove("active"));
     btn.classList.add("active");
     $(btn.dataset.sub).classList.add("active");
+    const sub = btn.dataset.sub;
+    if (sub.endsWith("-heritage")) {
+      const scope = sub.replace("-heritage", "");
+      window.renderHeritageList?.(scope);
+    }
   });
 });
 

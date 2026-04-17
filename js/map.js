@@ -1,7 +1,74 @@
 // ==========================================
-// map.js v3 — 訪問地管理
-// 構成: ボタン → SVG地図 → 渡航履歴
+// map.js v4 — 訪問地管理 + 世界遺産リスト
+// 構成: ボタン → SVG地図 → 渡航履歴 → 世界遺産
 // ==========================================
+
+// ISO code → 日本語国名
+const ISO_JA = {
+  ad:"アンドラ",ae:"UAE",af:"アフガニスタン",al:"アルバニア",am:"アルメニア",
+  ao:"アンゴラ",ar:"アルゼンチン",at:"オーストリア",au:"オーストラリア",
+  az:"アゼルバイジャン",ba:"ボスニア・ヘルツェゴビナ",be:"ベルギー",
+  bf:"ブルキナファソ",bg:"ブルガリア",bh:"バーレーン",bj:"ベナン",
+  bo:"ボリビア",br:"ブラジル",bt:"ブータン",by:"ベラルーシ",bz:"ベリーズ",
+  ca:"カナダ",cd:"コンゴ民主共和国",cf:"中央アフリカ",cg:"コンゴ共和国",
+  ch:"スイス",ci:"コートジボワール",cl:"チリ",cm:"カメルーン",cn:"中国",
+  co:"コロンビア",cr:"コスタリカ",cu:"キューバ",cv:"カーボベルデ",
+  cy:"キプロス",cz:"チェコ",de:"ドイツ",dj:"ジブチ",dk:"デンマーク",
+  do:"ドミニカ共和国",dz:"アルジェリア",ec:"エクアドル",eg:"エジプト",
+  er:"エリトリア",es:"スペイン",et:"エチオピア",fi:"フィンランド",
+  fj:"フィジー",fr:"フランス",ga:"ガボン",gb:"イギリス",ge:"ジョージア",
+  gh:"ガーナ",gm:"ガンビア",gn:"ギニア",gq:"赤道ギニア",gr:"ギリシャ",
+  gt:"グアテマラ",hn:"ホンジュラス",hr:"クロアチア",ht:"ハイチ",
+  hu:"ハンガリー",id:"インドネシア",ie:"アイルランド",il:"イスラエル",
+  in:"インド",iq:"イラク",ir:"イラン",is:"アイスランド",it:"イタリア",
+  jo:"ヨルダン",jp:"日本",ke:"ケニア",kg:"キルギス",kh:"カンボジア",
+  kp:"北朝鮮",kr:"韓国",kw:"クウェート",kz:"カザフスタン",la:"ラオス",
+  lb:"レバノン",li:"リヒテンシュタイン",lr:"リベリア",ls:"レソト",
+  lt:"リトアニア",lu:"ルクセンブルク",lv:"ラトビア",ly:"リビア",
+  ma:"モロッコ",mc:"モナコ",md:"モルドバ",me:"モンテネグロ",
+  mg:"マダガスカル",mk:"北マケドニア",ml:"マリ",mn:"モンゴル",
+  mo:"マカオ",mr:"モーリタニア",mt:"マルタ",mu:"モーリシャス",
+  mv:"モルディブ",mw:"マラウィ",mx:"メキシコ",my:"マレーシア",
+  mz:"モザンビーク",na:"ナミビア",ne:"ニジェール",ng:"ナイジェリア",
+  ni:"ニカラグア",nl:"オランダ",no:"ノルウェー",np:"ネパール",
+  nz:"ニュージーランド",om:"オマーン",pa:"パナマ",pe:"ペルー",
+  pg:"パプアニューギニア",ph:"フィリピン",pk:"パキスタン",pl:"ポーランド",
+  pt:"ポルトガル",py:"パラグアイ",qa:"カタール",ro:"ルーマニア",
+  rs:"セルビア",ru:"ロシア",rw:"ルワンダ",sa:"サウジアラビア",
+  sc:"セーシェル",sd:"スーダン",se:"スウェーデン",sg:"シンガポール",
+  si:"スロベニア",sk:"スロバキア",sl:"シエラレオネ",sm:"サンマリノ",
+  sn:"セネガル",sr:"スリナム",ss:"南スーダン",sv:"エルサルバドル",
+  sy:"シリア",sz:"エスワティニ",td:"チャド",tg:"トーゴ",th:"タイ",
+  tj:"タジキスタン",tm:"トルクメニスタン",tn:"チュニジア",tr:"トルコ",
+  tz:"タンザニア",ua:"ウクライナ",ug:"ウガンダ",us:"アメリカ",
+  uy:"ウルグアイ",uz:"ウズベキスタン",va:"バチカン",ve:"ベネズエラ",
+  vn:"ベトナム",vu:"バヌアツ",ws:"サモア",ye:"イエメン",
+  za:"南アフリカ",zm:"ザンビア",zw:"ジンバブエ"
+};
+
+// 世界遺産リスト フィルター状態
+const heritageState = {
+  japan: { cat: '', search: '' },
+  china: { cat: '', search: '' },
+  world: { cat: '', search: '', iso: '' }
+};
+
+// 世界遺産ボタン用短縮名
+function heritageShortName(s) {
+  const name = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : s.name;
+  let n = name;
+  n = n.replace(/（[^）]*）/g, '').replace(/「[^」]*」/g, '');
+  n = n.split('－')[0].split('、')[0].trim();
+  if (n.length > 6) {
+    const noIdx  = n.indexOf('の') > 0 ? n.indexOf('の') : 999;
+    const toIdx  = n.indexOf('と') > 0 ? n.indexOf('と') : 999;
+    const dotIdx = n.indexOf('・');
+    const dotSafe = dotIdx >= 3 ? dotIdx : 999;
+    const cut = Math.min(noIdx, toIdx, dotSafe);
+    n = cut < 999 ? n.slice(0, cut) : n.slice(0, 8);
+  }
+  return n || name.slice(0, 8);
+}
 
 const JAPAN_REGIONS = [
   { label: "北海道・東北", prefs: ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県"] },
@@ -112,7 +179,9 @@ async function loadHeritage() {
   try {
     const r = await fetch('./heritage.json');
     _heritageData = await r.json();
-  } catch(e) { _heritageData = []; }
+  } catch(e) {
+    _heritageData = window.HERITAGE_JP_CN || [];
+  }
   return _heritageData;
 }
 
@@ -616,5 +685,238 @@ function refreshTab(type) {
 // タブ切替時
 // ==========================================
 window.onMapTabActivate = function(type) {
-  refreshTab(type);
+  const section = document.getElementById(`tab-${type}`);
+  const activeSub = section?.querySelector('.sub-tab.active')?.dataset.sub;
+  if (activeSub === `${type}-heritage`) {
+    renderHeritageList(type);
+  } else {
+    refreshTab(type);
+  }
 };
+
+// ==========================================
+// 世界遺産リスト描画
+// ==========================================
+async function renderHeritageList(scope) {
+  const container = document.getElementById(`${scope}-heritage-container`);
+  if (!container) return;
+
+  const heritage = await loadHeritage();
+  const hv = window.appState?.visit?.heritage || {};
+  const st = heritageState[scope];
+
+  // スコープでフィルター
+  let sites = heritage;
+  if (scope === 'japan') {
+    sites = heritage.filter(s => (Array.isArray(s.iso) ? s.iso : [s.iso]).includes('jp'));
+  } else if (scope === 'china') {
+    sites = heritage.filter(s => (Array.isArray(s.iso) ? s.iso : [s.iso]).includes('cn'));
+  }
+
+  // World用 国リスト生成（全データから）
+  let isoOptions = [];
+  if (scope === 'world') {
+    const isoSet = new Set();
+    heritage.forEach(s => (Array.isArray(s.iso) ? s.iso : [s.iso]).forEach(c => isoSet.add(c)));
+    isoOptions = [...isoSet].sort((a, b) => {
+      const na = ISO_JA[a] || a, nb = ISO_JA[b] || b;
+      return na.localeCompare(nb, 'ja');
+    });
+  }
+
+  // カテゴリフィルター
+  let filtered = sites;
+  if (st.cat) filtered = filtered.filter(s => s.cat === st.cat);
+
+  // 国フィルター（World）
+  if (scope === 'world' && st.iso) {
+    filtered = filtered.filter(s => (Array.isArray(s.iso) ? s.iso : [s.iso]).includes(st.iso));
+  }
+
+  // 検索フィルター
+  if (st.search) {
+    const q = st.search.toLowerCase();
+    filtered = filtered.filter(s =>
+      (s.name_ja && s.name_ja.toLowerCase().includes(q)) ||
+      s.name.toLowerCase().includes(q) ||
+      (Array.isArray(s.iso) ? s.iso : [s.iso]).some(c => c.includes(q)) ||
+      (Array.isArray(s.iso) ? s.iso : [s.iso]).some(c => (ISO_JA[c] || '').includes(q))
+    );
+  }
+
+  // 年順ソート
+  filtered.sort((a, b) => a.year - b.year);
+
+  const visitedCount  = filtered.filter(s => hv[String(s.id)]).length;
+  const scopeVisited  = sites.filter(s => hv[String(s.id)]).length;
+  const scopeTotal    = sites.length;
+  const total         = filtered.length;
+
+  // ---- ボタングリッド（Japan/Chinaのみ） ----
+  let html = '';
+  if (scope === 'japan' || scope === 'china') {
+    const catGroups = [
+      { key:'C', label:'文化遺産', icon:'🏛️' },
+      { key:'N', label:'自然遺産', icon:'🌿' },
+      { key:'M', label:'複合遺産', icon:'🌟' }
+    ];
+    html += `<div class="heritage-btn-section">`;
+    catGroups.forEach(cg => {
+      const grpSites = sites.filter(s => s.cat === cg.key).slice().sort((a,b) => a.year - b.year);
+      if (!grpSites.length) return;
+      const gv = grpSites.filter(s => hv[String(s.id)]).length;
+      const gt = grpSites.length;
+      const gp = gt ? Math.round(gv/gt*100) : 0;
+      html += `<div class="visit-group">
+        <div class="visit-group-label">
+          <span class="group-label-text">${cg.icon} ${cg.label}</span>
+          <span class="group-label-stat">${gv}/${gt} <em>${gp}%</em></span>
+        </div>
+        <div class="visit-btn-grid heritage-btn-grid">`;
+      grpSites.forEach(s => {
+        const id = String(s.id);
+        const visited = !!hv[id];
+        const visitYr = (hv[id] && hv[id] !== true) ? hv[id] : null;
+        const color   = visited ? yearToColor(visitYr) : '';
+        const short   = heritageShortName(s);
+        const fullName = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : s.name;
+        html += `<button class="visit-btn heritage-btn${visited?' visited':''}"
+          data-hid="${s.id}" data-hscope="${scope}"
+          data-hname="${encodeURIComponent(fullName)}"
+          ${visited?`style="background:${color};border-color:${color}"`:''}
+          title="${fullName}（${s.year}年）">
+          ${esc(short)}${visitYr?`<small>${visitYr}</small>`:visited?`<small>✓</small>`:''}
+        </button>`;
+      });
+      html += `</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ---- カテゴリフィルターバー ----
+  const cats = [
+    { key:'', label:'全て',   icon:'📚' },
+    { key:'C', label:'文化遺産', icon:'🏛️' },
+    { key:'N', label:'自然遺産', icon:'🌿' },
+    { key:'M', label:'複合遺産', icon:'🌟' }
+  ];
+  html += `<div class="heritage-toolbar">`;
+  html += `<div class="heritage-cat-filter">`;
+  cats.forEach(c => {
+    html += `<button class="hcat-btn${st.cat === c.key ? ' active' : ''}"
+      data-scope="${scope}" data-cat="${c.key}">${c.icon} ${c.label}</button>`;
+  });
+  html += `</div>`;
+
+  // World: 国セレクト
+  if (scope === 'world') {
+    html += `<select class="heritage-iso-select" data-scope="${scope}">
+      <option value="">🌍 全ての国 (${scopeTotal}件)</option>`;
+    isoOptions.forEach(iso => {
+      const name = ISO_JA[iso] || iso.toUpperCase();
+      const cnt = heritage.filter(s => (Array.isArray(s.iso) ? s.iso : [s.iso]).includes(iso)).length;
+      html += `<option value="${iso}"${st.iso === iso ? ' selected' : ''}>${name} (${cnt}件)</option>`;
+    });
+    html += `</select>`;
+  }
+
+  // 検索 + 統計
+  html += `<div class="heritage-search-row">
+    <input type="search" class="heritage-search" data-scope="${scope}"
+      placeholder="🔍 検索..." value="${(st.search || '').replace(/"/g,'&quot;')}">
+    <span class="heritage-stats">${scopeVisited}/${scopeTotal} 訪問済</span>
+  </div>`;
+  if (st.cat || st.search || st.iso) {
+    html += `<div class="heritage-filter-summary">${total}件表示中</div>`;
+  }
+  html += `</div>`;
+
+  // ---- 一覧 ----
+  html += `<div class="heritage-list">`;
+  if (filtered.length === 0) {
+    html += `<div class="heritage-empty">該当する世界遺産がありません</div>`;
+  } else {
+    filtered.forEach(s => {
+      const id      = String(s.id);
+      const visited = !!hv[id];
+      const visitYr = (hv[id] && hv[id] !== true) ? hv[id] : null;
+      const name    = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : s.name;
+      const catIcon = s.cat === 'N' ? '🌿' : s.cat === 'M' ? '🌟' : '🏛️';
+      const catCls  = s.cat === 'N' ? 'cat-n' : s.cat === 'M' ? 'cat-m' : 'cat-c';
+      const isoArr  = Array.isArray(s.iso) ? s.iso : [s.iso];
+      const countryText = isoArr.map(c => ISO_JA[c] || c.toUpperCase()).join('・');
+
+      html += `<div class="heritage-item${visited ? ' visited' : ''}"
+        data-id="${s.id}" data-scope="${scope}" data-name="${encodeURIComponent(name)}">
+        <div class="heritage-star-icon">${visited ? '★' : '☆'}</div>
+        <div class="heritage-item-body">
+          <div class="heritage-item-name">${esc(name)}</div>
+          <div class="heritage-item-meta">
+            <span class="heritage-cat-badge ${catCls}">${catIcon} ${esc(s.cat_ja || s.cat)}</span>
+            <span class="heritage-year">${s.year}年</span>
+            ${visitYr ? `<span class="heritage-visit-year">${visitYr}年訪問</span>` : ''}
+          </div>
+          <div class="heritage-country">${esc(countryText)}</div>
+        </div>
+      </div>`;
+    });
+  }
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  // ---- イベント ----
+  container.querySelectorAll('.hcat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      heritageState[scope].cat = btn.dataset.cat;
+      renderHeritageList(scope);
+    });
+  });
+  const isoSel = container.querySelector('.heritage-iso-select');
+  if (isoSel) {
+    isoSel.addEventListener('change', () => {
+      heritageState[scope].iso = isoSel.value;
+      renderHeritageList(scope);
+    });
+  }
+  const searchEl = container.querySelector('.heritage-search');
+  if (searchEl) {
+    searchEl.addEventListener('input', () => {
+      heritageState[scope].search = searchEl.value;
+      renderHeritageList(scope);
+    });
+  }
+  // ボタンクリック
+  container.querySelectorAll('.heritage-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id   = btn.dataset.hid;
+      const name = decodeURIComponent(btn.dataset.hname);
+      const hv   = window.appState?.visit?.heritage || {};
+      if (hv[id]) {
+        if (!confirm(`「${name}」の訪問記録を削除しますか？`)) return;
+        await saveVisit('heritage', id, null);
+      } else {
+        await openYearDialog('heritage', name, new Date().getFullYear());
+      }
+      renderHeritageList(scope);
+    });
+  });
+
+  // リストアイテムクリック
+  container.querySelectorAll('.heritage-item').forEach(el => {
+    el.addEventListener('click', async () => {
+      const id   = el.dataset.id;
+      const name = decodeURIComponent(el.dataset.name);
+      const hv   = window.appState?.visit?.heritage || {};
+      if (hv[id]) {
+        if (!confirm(`「${name}」の訪問記録を削除しますか？`)) return;
+        await saveVisit('heritage', id, null);
+      } else {
+        await openYearDialog('heritage', name, new Date().getFullYear());
+      }
+      renderHeritageList(scope);
+    });
+  });
+}
+
+window.renderHeritageList = renderHeritageList;

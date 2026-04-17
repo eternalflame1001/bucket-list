@@ -239,8 +239,18 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
   -webkit-tap-highlight-color: transparent;
 }
 .visit-btn:active { transform: scale(0.92); }
-.visit-btn small { font-size: 20px; font-family: var(--font-jp); font-weight: 700; opacity: 1; }
+.visit-btn small { font-size: 13px; font-family: var(--font-jp); font-weight: 700; opacity: 1; }
 .visit-btn.visited { color: #2a1f0e; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,.18); }
+
+/* Japan: 8列グリッド */
+#japan-btn-container .visit-btn-grid { grid-template-columns: repeat(8, 1fr); gap: 3px; }
+#japan-btn-container .visit-btn { font-size: 11px; padding: 5px 1px; }
+#japan-btn-container .visit-btn small { font-size: 11px; }
+
+/* China: 6列グリッド */
+#china-btn-container .visit-btn-grid { grid-template-columns: repeat(6, 1fr); gap: 3px; }
+#china-btn-container .visit-btn { font-size: 11px; padding: 5px 1px; }
+#china-btn-container .visit-btn small { font-size: 11px; }
 
 /* SVG地図 */
 .map-svg-section { padding: 8px 8px 4px; }
@@ -274,5 +284,42 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
   -webkit-tap-highlight-color: transparent;
 }
 .history-place-btn:active { background: #b3d4f0; }
+
+/* ==========================================
+   世界遺産リスト
+   ========================================== */
+.heritage-btn-section { border-bottom: 2px solid var(--border); padding-bottom: 4px; }
+.heritage-btn-grid { grid-template-columns: repeat(4, 1fr) !important; }
+.heritage-btn { font-size: 11px !important; padding: 6px 2px !important; }
+.heritage-btn small { font-size: 11px !important; }
+
+.heritage-toolbar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; position: sticky; top: 0; z-index: 10; }
+.heritage-cat-filter { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.heritage-cat-filter::-webkit-scrollbar { display: none; }
+.hcat-btn { flex-shrink: 0; padding: 5px 10px; border: 1.5px solid var(--border); border-radius: 16px; background: var(--card); color: var(--text2); font-family: var(--font-jp); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .15s; }
+.hcat-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.heritage-iso-select { width: 100%; padding: 6px 8px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-family: var(--font-jp); font-size: 13px; }
+.heritage-search-row { display: flex; align-items: center; gap: 8px; }
+.heritage-search { flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-family: var(--font-jp); font-size: 13px; }
+.heritage-stats { font-size: 12px; color: var(--accent); font-weight: 700; white-space: nowrap; }
+.heritage-filter-summary { font-size: 11px; color: var(--text2); text-align: right; }
+
+.heritage-list { padding-bottom: 60px; }
+.heritage-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--card); cursor: pointer; transition: background .1s; -webkit-tap-highlight-color: transparent; }
+.heritage-item:active { background: var(--bg2); }
+.heritage-item.visited { background: #fffbf0; }
+.heritage-star-icon { font-size: 24px; flex-shrink: 0; color: #ddd; line-height: 1.2; }
+.heritage-item.visited .heritage-star-icon { color: #FFD700; text-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.heritage-item-body { flex: 1; min-width: 0; }
+.heritage-item-name { font-size: 14px; font-weight: 700; line-height: 1.4; word-break: break-all; color: var(--text); }
+.heritage-item-meta { display: flex; align-items: center; gap: 5px; margin-top: 3px; flex-wrap: wrap; }
+.heritage-cat-badge { font-size: 11px; padding: 1px 6px; border-radius: 8px; font-weight: 700; }
+.cat-c { background: #e8f0ff; color: #2a4a9a; }
+.cat-n { background: #e8f5e9; color: #2e7d32; }
+.cat-m { background: #fff8e1; color: #e65100; }
+.heritage-year { font-size: 11px; color: var(--text2); }
+.heritage-visit-year { font-size: 11px; color: var(--accent); font-weight: 700; background: #fff0f0; padding: 1px 5px; border-radius: 6px; }
+.heritage-country { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+.heritage-empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
 
 /* 年号ダイアログ */
