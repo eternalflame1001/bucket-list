@@ -322,6 +322,7 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .heritage-visit-year { font-size: 11px; color: var(--accent); font-weight: 700; background: #fff0f0; padding: 1px 5px; border-radius: 6px; }
 .heritage-country { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
 .heritage-empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
+.heritage-inline-map { padding: 8px 12px 0; border-bottom: 1px solid var(--border); }
 .japan-extra-container { padding: 16px; }
 .japan-extra-header { font-size: 18px; font-weight: 700; color: var(--text1); padding: 12px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
 .japan-extra-empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }

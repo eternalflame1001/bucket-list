@@ -372,8 +372,8 @@ async function renderJapanMap(visitData) {
 // China 地図
 // ==========================================
 let _chinaTopo = null;
-async function renderChinaMap(visitData) {
-  const container = document.getElementById("china-svg-container");
+async function renderChinaMap(visitData, containerId = "china-svg-container") {
+  const container = document.getElementById(containerId);
   if (!container) return;
   if (!_chinaTopo) {
     try {
@@ -434,8 +434,8 @@ async function renderChinaMap(visitData) {
 // World 地図
 // ==========================================
 let _worldTopo = null;
-async function renderWorldMap(visitData) {
-  const container = document.getElementById("world-svg-container");
+async function renderWorldMap(visitData, containerId = "world-svg-container") {
+  const container = document.getElementById(containerId);
   if (!container) return;
   if (!_worldTopo) {
     try {
@@ -723,6 +723,12 @@ window.onMapTabActivate = function(type) {
 async function renderHeritageList(scope) {
   const container = document.getElementById(`${scope}-heritage-container`);
   if (!container) return;
+  // 地図を遺産タブにも表示
+  if (scope === 'china') {
+    renderChinaMap(window.appState?.visit?.china || {}, 'china-heritage-svg-container');
+  } else if (scope === 'world') {
+    renderWorldMap(window.appState?.visit?.world || {}, 'world-heritage-svg-container');
+  }
   try {
   const heritage = await loadHeritage();
   if (!heritage || !heritage.length) { container.innerHTML = '<div class="heritage-empty">データを読み込めませんでした</div>'; return; }
