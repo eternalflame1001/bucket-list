@@ -275,8 +275,8 @@ function attachMapZoom(container, maxScale) {
 // ② SVG地図描画（Japanのみ）
 // ==========================================
 let _japanTopo = null;
-async function renderJapanMap(visitData) {
-  const container = document.getElementById("japan-svg-container");
+async function renderJapanMap(visitData, containerId = "japan-svg-container", readOnly = false) {
+  const container = document.getElementById(containerId);
   if (!container) return;
 
   if (!_japanTopo) {
@@ -323,7 +323,7 @@ async function renderJapanMap(visitData) {
     const d = pg(feat);
     if (!d) return '';
     return `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" class="svg-pref"
-      data-name="${key}" style="cursor:pointer">
+      data-name="${key}" style="cursor:${readOnly ? 'default' : 'pointer'}">
       <title>${full}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
   };
@@ -354,16 +354,18 @@ async function renderJapanMap(visitData) {
   svg += `</svg>`;
   container.innerHTML = svg;
 
-  container.querySelectorAll(".svg-pref").forEach(path => {
-    path.addEventListener("click", () => {
-      const name = path.dataset.name;
-      const val = (window.appState?.visit?.japan || {})[name];
-      const curYear = (val && val !== true) ? val : new Date().getFullYear();
-      openYearDialog("japan", name, curYear).then(() => refreshTab("japan"));
+  if (!readOnly) {
+    container.querySelectorAll(".svg-pref").forEach(path => {
+      path.addEventListener("click", () => {
+        const name = path.dataset.name;
+        const val = (window.appState?.visit?.japan || {})[name];
+        const curYear = (val && val !== true) ? val : new Date().getFullYear();
+        openYearDialog("japan", name, curYear).then(() => refreshTab("japan"));
+      });
+      path.addEventListener("mouseenter", () => path.style.opacity = "0.7");
+      path.addEventListener("mouseleave", () => path.style.opacity = "1");
     });
-    path.addEventListener("mouseenter", () => path.style.opacity = "0.7");
-    path.addEventListener("mouseleave", () => path.style.opacity = "1");
-  });
+  }
   attachHeritageClicks(container, 'japan');
   attachMapZoom(container, 15);
 }
@@ -728,7 +730,9 @@ async function renderHeritageList(scope) {
   const container = document.getElementById(`${scope}-heritage-container`);
   if (!container) return;
   // 地図を遺産タブにも表示
-  if (scope === 'china') {
+  if (scope === 'japan') {
+    renderJapanMap(window.appState?.visit?.japan || {}, 'japan-heritage-svg-container', true);
+  } else if (scope === 'china') {
     renderChinaMap(window.appState?.visit?.china || {}, 'china-heritage-svg-container', true);
   } else if (scope === 'world') {
     renderWorldMap(window.appState?.visit?.world || {}, 'world-heritage-svg-container', true);
