@@ -196,7 +196,7 @@ let _heritageData = null;
 async function loadHeritage() {
   if (_heritageData) return _heritageData;
   try {
-    const r = await fetch('./heritage.json');
+    const r = await fetch('./heritage.json?v=20260419b');
     _heritageData = await r.json();
   } catch(e) {
     _heritageData = window.HERITAGE_JP_CN || [];
