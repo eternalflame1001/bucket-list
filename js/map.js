@@ -757,8 +757,8 @@ async function renderHeritageList(scope) {
     const q = st.search.toLowerCase();
     filtered = filtered.filter(s =>
       (s.name_ja && s.name_ja.toLowerCase().includes(q)) ||
-      s.name.toLowerCase().includes(q) ||
-      (Array.isArray(s.iso) ? s.iso : [s.iso]).some(c => c.includes(q)) ||
+      (s.name || '').toLowerCase().includes(q) ||
+      (Array.isArray(s.iso) ? s.iso : [s.iso]).some(c => (c || '').includes(q)) ||
       (Array.isArray(s.iso) ? s.iso : [s.iso]).some(c => (ISO_JA[c] || '').includes(q))
     );
   }
@@ -798,12 +798,12 @@ async function renderHeritageList(scope) {
         const visitYr = (hv[id] && hv[id] !== true) ? hv[id] : null;
         const color   = visited ? yearToColor(visitYr) : '';
         const short   = heritageShortName(s);
-        const fullName = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : s.name;
+        const fullName = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : (s.name || '');
         html += `<button class="visit-btn heritage-btn${visited?' visited':''}"
           data-hid="${s.id}" data-hscope="${scope}"
           data-hname="${encodeURIComponent(fullName)}"
           ${visited?`style="background:${color};border-color:${color}"`:''}
-          title="${fullName}（${s.year}年）">
+          title="${esc(fullName)}（${s.year}年）">
           ${esc(short)}${visitYr?`<small>${visitYr}</small>`:visited?`<small>✓</small>`:''}
         </button>`;
       });
@@ -861,12 +861,12 @@ async function renderHeritageList(scope) {
             const visitYr = (hv[id] && hv[id] !== true) ? hv[id] : null;
             const color   = visited ? yearToColor(visitYr) : '';
             const short   = heritageShortName(s);
-            const fullName = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : s.name;
+            const fullName = (s.name_ja && s.name_ja !== s.name) ? s.name_ja : (s.name || '');
             html += `<button class="visit-btn heritage-btn${visited ? ' visited' : ''}"
               data-hid="${s.id}" data-hscope="${scope}"
               data-hname="${encodeURIComponent(fullName)}"
               ${visited ? `style="background:${color};border-color:${color}"` : ''}
-              title="${fullName}（${s.year}年）">
+              title="${esc(fullName)}（${s.year}年）">
               ${esc(short)}${visitYr ? `<small>${visitYr}</small>` : visited ? `<small>✓</small>` : ''}
             </button>`;
           });
