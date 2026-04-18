@@ -338,8 +338,9 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   // 沖縄エリアの遺産のみ（lat<28.5, lon<132）
   const okSites = jpSites.filter(s => s.lat < 28.5 && s.lon < 132);
 
+  const clipId = containerId.replace(/[^a-z0-9]/gi, '-') + '-ok';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg">`;
-  svg += `<defs><clipPath id="ok-clip"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
+  svg += `<defs><clipPath id="${clipId}"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
   svg += `<g>`; // ズーム対象：本州・北海道・四国・九州 + 星
   mainFeats.forEach(f => { svg += featPath(f, pathGen); });
   svg += heritageStarsSVG(jpSites, projection, hv, 7);
@@ -347,7 +348,7 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   // 沖縄インセット（ズーム対象外・固定）
   svg += `<rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"
     fill="#f5f0e8" stroke="#999" stroke-width="1" rx="3"/>`;
-  svg += `<g clip-path="url(#ok-clip)">`; // 沖縄グループ（固定・クリップあり）
+  svg += `<g clip-path="url(#${clipId})">`; // 沖縄グループ（固定・クリップあり）
   okFeats.forEach(f => { svg += featPath(f, okPG); });
   svg += heritageStarsSVG(okSites, okProj, hv, 4);
   svg += `</g>`;
