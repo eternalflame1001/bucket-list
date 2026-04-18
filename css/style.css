@@ -315,17 +315,17 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .heritage-star-icon { font-size: 24px; flex-shrink: 0; color: #ddd; line-height: 1.2; }
 .heritage-item.visited .heritage-star-icon { color: #FFD700; text-shadow: 0 1px 3px rgba(0,0,0,.2); }
 .heritage-item-body { flex: 1; min-width: 0; }
-.heritage-item-name { font-size: 14px; font-weight: 700; line-height: 1.4; word-break: break-all; color: var(--text); }
-.heritage-item-desc { font-size: 12px; color: #c07000; margin-top: 2px; line-height: 1.4; font-weight: 500; }
-.heritage-item-meta { display: flex; align-items: center; gap: 5px; margin-top: 3px; flex-wrap: wrap; }
-.heritage-criteria { font-size: 11px; color: var(--text2); font-family: var(--font-en); }
-.heritage-cat-badge { font-size: 11px; padding: 1px 6px; border-radius: 8px; font-weight: 700; }
+.heritage-item-name { font-size: 17px; font-weight: 700; line-height: 1.4; word-break: break-all; color: var(--text); }
+.heritage-item-desc { font-size: 14px; color: var(--accent); margin-top: 3px; line-height: 1.4; font-weight: 500; }
+.heritage-item-meta { display: flex; align-items: center; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+.heritage-criteria { font-size: 14px; color: var(--text2); font-family: var(--font-en); }
+.heritage-cat-badge { font-size: 14px; padding: 1px 6px; border-radius: 8px; font-weight: 700; }
 .cat-c { background: #e8f0ff; color: #2a4a9a; }
 .cat-n { background: #e8f5e9; color: #2e7d32; }
 .cat-m { background: #fff8e1; color: #e65100; }
-.heritage-year { font-size: 11px; color: var(--text2); }
-.heritage-visit-year { font-size: 11px; color: var(--accent); font-weight: 700; background: #fff0f0; padding: 1px 5px; border-radius: 6px; }
-.heritage-country { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+.heritage-year { font-size: 14px; color: var(--text2); }
+.heritage-visit-year { font-size: 14px; color: var(--accent); font-weight: 700; background: #fff0f0; padding: 1px 5px; border-radius: 6px; }
+.heritage-country { font-size: 14px; color: var(--text2); line-height: 1.4; }
 .heritage-empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 14px; }
 .heritage-inline-map { padding: 8px 12px 0; border-bottom: 1px solid var(--border); }
 .japan-extra-container { padding: 16px; }

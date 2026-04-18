@@ -963,14 +963,14 @@ async function renderHeritageList(scope) {
         <div class="heritage-star-icon">${visited ? '★' : '☆'}</div>
         <div class="heritage-item-body">
           <div class="heritage-item-name">${esc(name)}</div>
-          ${s.desc_ja ? `<div class="heritage-item-desc">${esc(s.desc_ja)}</div>` : ''}
           <div class="heritage-item-meta">
             <span class="heritage-cat-badge ${catCls}">${catIcon} ${esc(s.cat_ja || s.cat)}</span>
+            ${countryText ? `<span class="heritage-country">${esc(countryText)}</span>` : ''}
             <span class="heritage-year">${s.year}年</span>
             ${s.criteria ? `<span class="heritage-criteria">${esc(s.criteria)}</span>` : ''}
             ${visitYr ? `<span class="heritage-visit-year">${visitYr}年訪問</span>` : ''}
           </div>
-          <div class="heritage-country">${esc(countryText)}</div>
+          ${s.desc_ja ? `<div class="heritage-item-desc">${esc(s.desc_ja)}</div>` : ''}
         </div>
       </div>`;
     });
