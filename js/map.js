@@ -345,7 +345,12 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   // 沖縄を除いた本州・北海道・四国・九州でフィット
   const isOk = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
   const mainFeats = features.filter(f => !isOk(f));
-  const mainFC = { type: "FeatureCollection", features: mainFeats };
+  // 遠隔離島（南鳥島・小笠原等）を除外して本土のみで投影フィット
+  const projFeats = mainFeats.filter(f => {
+    try { const c = d3.geoCentroid(f); return c && c[0] >= 128 && c[0] <= 148 && c[1] >= 29; }
+    catch(e) { return false; }
+  });
+  const mainFC = { type: "FeatureCollection", features: projFeats.length ? projFeats : mainFeats };
   const projection = d3.geoMercator().fitExtent([[5, 5], [W-5, H-5]], mainFC);
   const pathGen = d3.geoPath().projection(projection);
 
@@ -1298,8 +1303,13 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId, onVisitChang
   // 沖縄を除いた本州・北海道・四国・九州でフィット
   const isOkPref = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
   const mainFeats = features.filter(f => !isOkPref(f));
+  // 遠隔離島（南鳥島・小笠原等）を除外して本土のみで投影フィット
+  const projFeats = mainFeats.filter(f => {
+    try { const c = d3.geoCentroid(f); return c && c[0] >= 128 && c[0] <= 148 && c[1] >= 29; }
+    catch(e) { return false; }
+  });
   const projection = d3.geoMercator().fitExtent([[5, 5], [W - 5, H - 5]],
-    { type: "FeatureCollection", features: mainFeats });
+    { type: "FeatureCollection", features: projFeats.length ? projFeats : mainFeats });
   const pathGen = d3.geoPath().projection(projection);
 
   function getCoords(item) {
@@ -1390,8 +1400,13 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
   // 沖縄を除いた本州・北海道・四国・九州でフィット
   const isOkPref  = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
   const mainFeats = features.filter(f => !isOkPref(f));
+  // 遠隔離島（南鳥島・小笠原等）を除外して本土のみで投影フィット
+  const projFeats = mainFeats.filter(f => {
+    try { const c = d3.geoCentroid(f); return c && c[0] >= 128 && c[0] <= 148 && c[1] >= 29; }
+    catch(e) { return false; }
+  });
   const projection = d3.geoMercator().fitExtent([[5, 5], [W - 5, H - 5]],
-    { type: "FeatureCollection", features: mainFeats });
+    { type: "FeatureCollection", features: projFeats.length ? projFeats : mainFeats });
   const pathGen = d3.geoPath().projection(projection);
 
   const japanVisit   = window.appState?.visit?.japan    || {};
