@@ -261,33 +261,57 @@ function attachHeritageClicks(container, tabType) {
 // ==========================================
 function attachMapZoom(container, maxScale) {
   const svgEl = container.querySelector('svg');
-  const gEl   = container.querySelector('svg > g');
-  if (!svgEl || !gEl) return;
+  // zoom-bg/zoom-markers の2レイヤー構造を優先、なければ旧来の最初のgを使用
+  const bgG   = container.querySelector('svg g.zoom-bg');
+  const mkG   = container.querySelector('svg g.zoom-markers');
+  const zoomG = bgG || container.querySelector('svg > g');
+  if (!svgEl || !zoomG) return;
+
   const zoom = d3.zoom()
     .scaleExtent([1, maxScale])
     .on('zoom', e => {
-      gEl.setAttribute('transform', e.transform);
-      const k = e.transform.k;
-      // マーカーの見た目サイズを固定（要素種別ごとに属性を直接更新）
-      gEl.querySelectorAll('.map-marker').forEach(el => {
-        const tag = el.tagName.toLowerCase();
-        if (tag === 'text') {
-          // font-size を逆スケール（transform だとフォント描画が崩れるため属性で制御）
-          const base = +(el.dataset.baseFontSize || 10);
-          el.setAttribute('font-size', (base / k).toFixed(4));
-        } else if (tag === 'circle') {
-          // r と stroke-width を逆スケール
-          const baseR  = +(el.dataset.baseR  || 3.5);
-          const baseSw = +(el.dataset.baseSw || 1.5);
-          el.setAttribute('r',            (baseR  / k).toFixed(4));
-          el.setAttribute('stroke-width', (baseSw / k).toFixed(4));
-        } else {
-          // polygon（世界遺産★）は逆スケール変換
+      zoomG.setAttribute('transform', e.transform);
+      const t = e.transform;
+      const k = t.k, tx = t.x, ty = t.y;
+
+      if (mkG) {
+        // 新方式: マーカーはズームグループ外 → 位置のみ更新・サイズ固定
+        mkG.querySelectorAll('.map-marker').forEach(el => {
           const ox = +el.dataset.ox, oy = +el.dataset.oy;
-          el.setAttribute('transform',
-            `translate(${ox},${oy}) scale(${(1/k).toFixed(6)}) translate(${-ox},${-oy})`);
-        }
-      });
+          const nx = (k * ox + tx).toFixed(2);
+          const ny = (k * oy + ty).toFixed(2);
+          const tag = el.tagName.toLowerCase();
+          if (tag === 'text') {
+            el.setAttribute('x', nx);
+            el.setAttribute('y', ny);
+          } else if (tag === 'circle') {
+            el.setAttribute('cx', nx);
+            el.setAttribute('cy', ny);
+          } else {
+            // polygon（世界遺産★）: 平行移動のみ（回転・拡大なし）
+            el.setAttribute('transform',
+              `translate(${(k * ox + tx - ox).toFixed(2)},${(k * oy + ty - oy).toFixed(2)})`);
+          }
+        });
+      } else {
+        // 旧方式フォールバック（China・World地図）
+        zoomG.querySelectorAll('.map-marker').forEach(el => {
+          const tag = el.tagName.toLowerCase();
+          if (tag === 'text') {
+            const base = +(el.dataset.baseFontSize || 10);
+            el.setAttribute('font-size', (base / k).toFixed(4));
+          } else if (tag === 'circle') {
+            const baseR  = +(el.dataset.baseR  || 3.5);
+            const baseSw = +(el.dataset.baseSw || 1.5);
+            el.setAttribute('r',            (baseR  / k).toFixed(4));
+            el.setAttribute('stroke-width', (baseSw / k).toFixed(4));
+          } else {
+            const ox = +el.dataset.ox, oy = +el.dataset.oy;
+            el.setAttribute('transform',
+              `translate(${ox},${oy}) scale(${(1/k).toFixed(6)}) translate(${-ox},${-oy})`);
+          }
+        });
+      }
     });
   d3.select(svgEl).call(zoom);
   svgEl.addEventListener('dblclick', () => {
@@ -365,10 +389,11 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   const clipId = containerId.replace(/[^a-z0-9]/gi, '-') + '-ok';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg">`;
   svg += `<defs><clipPath id="${clipId}"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
-  svg += `<g>`; // ズーム対象：本州・北海道・四国・九州 + 星
+  svg += `<g class="zoom-bg">`; // ズーム対象：本州・北海道・四国・九州（パスのみ）
   mainFeats.forEach(f => { svg += featPath(f, pathGen); });
-  if (readOnly) svg += heritageStarsSVG(jpSites, projection, hv, 7);
   svg += `</g>`;
+  // 世界遺産★マーカー（ズーム外・位置のみ更新）
+  svg += `<g class="zoom-markers">${readOnly ? heritageStarsSVG(jpSites, projection, hv, 7) : ''}</g>`;
   // 沖縄インセット（ズーム対象外・固定）
   svg += `<rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"
     fill="#f5f0e8" stroke="#999" stroke-width="1" rx="3"/>`;
@@ -424,7 +449,7 @@ async function renderChinaMap(visitData, containerId = "china-svg-container", re
     return iso.includes('cn') && s.lat != null;
   });
 
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg"><g>`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg"><g class="zoom-bg">`;
   features.forEach(feat => {
     const props = feat.properties;
     const key = props.nam_ja || props.name || '';
@@ -439,8 +464,9 @@ async function renderChinaMap(visitData, containerId = "china-svg-container", re
       <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
   });
-  if (readOnly) svg += heritageStarsSVG(cnSites, projection, hv, 6);
-  svg += `</g></svg>`;
+  svg += `</g>`;
+  svg += `<g class="zoom-markers">${readOnly ? heritageStarsSVG(cnSites, projection, hv, 6) : ''}</g>`;
+  svg += `</svg>`;
   container.innerHTML = svg;
   if (!readOnly) {
     container.querySelectorAll(".svg-pref").forEach(path => {
@@ -494,7 +520,7 @@ async function renderWorldMap(visitData, containerId = "world-svg-container", re
   const hv = window.appState?.visit?.heritage || {};
   const allSites = heritage.filter(s => s.lat != null);
 
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg"><g>`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg"><g class="zoom-bg">`;
   features.forEach(feat => {
     const key = feat.properties.nam_ja || feat.properties.name || '';
     const val = visitData[key];
@@ -508,8 +534,9 @@ async function renderWorldMap(visitData, containerId = "world-svg-container", re
       <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
   });
-  if (readOnly) svg += heritageStarsSVG(allSites, pathGen.projection(), hv, 4);
-  svg += `</g></svg>`;
+  svg += `</g>`;
+  svg += `<g class="zoom-markers">${readOnly ? heritageStarsSVG(allSites, pathGen.projection(), hv, 4) : ''}</g>`;
+  svg += `</svg>`;
   container.innerHTML = svg;
   if (!readOnly) {
     container.querySelectorAll(".svg-pref").forEach(path => {
@@ -1305,9 +1332,12 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
   svg += `<defs><clipPath id="${clipId}"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
 
-  // 本州・北海道・四国・九州
-  svg += `<g>`;
+  // 本州・北海道・四国・九州（背景パスのみ・ズーム対象）
+  svg += `<g class="zoom-bg">`;
   mainFeats.forEach(f => { const d = pathGen(f); if (d) svg += `<path d="${d}" fill="#e8e4dc" stroke="#555" stroke-width="0.8"/>`; });
+  svg += `</g>`;
+  // マーカーレイヤー（ズーム外・位置のみ更新）
+  let markerSvg = '';
   DATA.forEach(item => {
     const coords = getCoords(item);
     if (!coords || isOkinawa(coords)) return;
@@ -1317,9 +1347,9 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
     if (x < 0 || x > W || y < 0 || y > H) return;
     const val = visitData[item.key];
     const year = (val === true) ? null : (val || null);
-    svg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year);
+    markerSvg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year);
   });
-  svg += `</g>`;
+  svg += `<g class="zoom-markers">${markerSvg}</g>`;
 
   // 沖縄インセット
   svg += `<rect x="${inX}" y="${inY}" width="${inW}" height="${inH}" fill="#f5f0e8" stroke="#999" stroke-width="1" rx="3"/>`;
