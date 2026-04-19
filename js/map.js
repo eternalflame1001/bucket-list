@@ -340,25 +340,12 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   const objKey = Object.keys(_japanTopo.objects)[0];
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.4);
+  const H = Math.round(W * 1.6);
 
-  // 沖縄を分離してメイン本州・四国・九州・北海道を拡大
-  const isOk = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
-  const mainFeats = features.filter(f => !isOk(f));
-  const okFeats   = features.filter(f =>  isOk(f));
-
-  // メイン投影（沖縄除外で拡大）
-  const mainFC = { type: "FeatureCollection", features: mainFeats };
-  const projection = d3.geoMercator().fitExtent([[10, 10], [W-10, H-10]], mainFC);
+  // 単一投影（沖縄含む全都道府県）
+  const allFC = { type: "FeatureCollection", features };
+  const projection = d3.geoMercator().fitExtent([[10, 10], [W-10, H-10]], allFC);
   const pathGen = d3.geoPath().projection(projection);
-
-  // 沖縄インセット（左上）
-  const inW = Math.round(W * 0.27);
-  const inH = Math.round(inW * 0.95);
-  const inX = 8, inY = Math.round(H * 0.18);
-  const okFC = { type: "FeatureCollection", features: okFeats };
-  const okProj = d3.geoMercator().fitExtent([[inX+5, inY+5], [inX+inW-5, inY+inH-5]], okFC);
-  const okPG = d3.geoPath().projection(okProj);
 
   const featPath = (feat, pg) => {
     const props = feat.properties;
@@ -383,24 +370,12 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
     return iso.includes('jp') && s.lat != null;
   });
 
-  // 沖縄エリアの遺産のみ（lat<28.5, lon<132）
-  const okSites = jpSites.filter(s => s.lat < 28.5 && s.lon < 132);
-
-  const clipId = containerId.replace(/[^a-z0-9]/gi, '-') + '-ok';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg">`;
-  svg += `<defs><clipPath id="${clipId}"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
-  svg += `<g class="zoom-bg">`; // ズーム対象：本州・北海道・四国・九州（パスのみ）
-  mainFeats.forEach(f => { svg += featPath(f, pathGen); });
+  svg += `<g class="zoom-bg">`; // ズーム対象：全都道府県（沖縄含む）
+  features.forEach(f => { svg += featPath(f, pathGen); });
   svg += `</g>`;
   // 世界遺産★マーカー（ズーム外・位置のみ更新）
   svg += `<g class="zoom-markers">${readOnly ? heritageStarsSVG(jpSites, projection, hv, 7) : ''}</g>`;
-  // 沖縄インセット（ズーム対象外・固定）
-  svg += `<rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"
-    fill="#f5f0e8" stroke="#999" stroke-width="1" rx="3"/>`;
-  svg += `<g clip-path="url(#${clipId})">`; // 沖縄グループ（固定・クリップあり）
-  okFeats.forEach(f => { svg += featPath(f, okPG); });
-  if (readOnly) svg += heritageStarsSVG(okSites, okProj, hv, 4);
-  svg += `</g>`;
   svg += `</svg>`;
   container.innerHTML = svg;
 
@@ -1302,24 +1277,12 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
   const objKey   = Object.keys(_japanTopo.objects)[0];
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.4);
+  const H = Math.round(W * 1.6);
 
-  const isOkPref = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
-  const mainFeats = features.filter(f => !isOkPref(f));
-  const okFeats   = features.filter(f =>  isOkPref(f));
-
+  // 単一投影（沖縄含む全都道府県）
   const projection = d3.geoMercator().fitExtent([[10, 10], [W - 10, H - 10]],
-    { type: "FeatureCollection", features: mainFeats });
+    { type: "FeatureCollection", features });
   const pathGen = d3.geoPath().projection(projection);
-
-  const inW = Math.round(W * 0.27);
-  const inH = Math.round(inW * 0.95);
-  const inX = 8, inY = Math.round(H * 0.18);
-  const okProj = d3.geoMercator().fitExtent(
-    [[inX + 5, inY + 5], [inX + inW - 5, inY + inH - 5]],
-    { type: "FeatureCollection", features: okFeats });
-  const okPG = d3.geoPath().projection(okProj);
-  const clipId = containerId.replace(/[^a-z0-9]/gi, '-') + '-ok';
 
   function getCoords(item) {
     if (type === 'onsen') {
@@ -1327,20 +1290,17 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
     }
     return item.coords || null;
   }
-  const isOkinawa = ([lon, lat]) => lat < 27.5 && lon < 132;
-
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
-  svg += `<defs><clipPath id="${clipId}"><rect x="${inX}" y="${inY}" width="${inW}" height="${inH}"/></clipPath></defs>`;
 
-  // 本州・北海道・四国・九州（背景パスのみ・ズーム対象）
+  // 全都道府県（沖縄含む・ズーム対象）
   svg += `<g class="zoom-bg">`;
-  mainFeats.forEach(f => { const d = pathGen(f); if (d) svg += `<path d="${d}" fill="#e8e4dc" stroke="#555" stroke-width="0.8"/>`; });
+  features.forEach(f => { const d = pathGen(f); if (d) svg += `<path d="${d}" fill="#e8e4dc" stroke="#555" stroke-width="0.8"/>`; });
   svg += `</g>`;
   // マーカーレイヤー（ズーム外・位置のみ更新）
   let markerSvg = '';
   DATA.forEach(item => {
     const coords = getCoords(item);
-    if (!coords || isOkinawa(coords)) return;
+    if (!coords) return;
     const xy = projection(coords);
     if (!xy) return;
     const [x, y] = xy;
@@ -1350,22 +1310,7 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
     markerSvg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year);
   });
   svg += `<g class="zoom-markers">${markerSvg}</g>`;
-
-  // 沖縄インセット
-  svg += `<rect x="${inX}" y="${inY}" width="${inW}" height="${inH}" fill="#f5f0e8" stroke="#999" stroke-width="1" rx="3"/>`;
-  svg += `<g clip-path="url(#${clipId})">`;
-  okFeats.forEach(f => { const d = okPG(f); if (d) svg += `<path d="${d}" fill="#e8e4dc" stroke="#555" stroke-width="0.8"/>`; });
-  DATA.forEach(item => {
-    const coords = getCoords(item);
-    if (!coords || !isOkinawa(coords)) return;
-    const xy = okProj(coords);
-    if (!xy) return;
-    const [x, y] = xy;
-    const val = visitData[item.key];
-    const year = (val === true) ? null : (val || null);
-    svg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year);
-  });
-  svg += `</g></svg>`;
+  svg += `</svg>`;
   container.innerHTML = svg;
   attachMapZoom(container, 25);
 }
