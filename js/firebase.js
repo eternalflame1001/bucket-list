@@ -4,9 +4,11 @@
 // ==========================================
 
 const DB        = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app";
-const _U        = new URLSearchParams(window.location.search).get('u') || 'hideki';
+const _U        = new URLSearchParams(window.location.search).get('u') || 'master';
 const USER      = `users/${_U}`;
-const USER_LABEL = _U === 'friend' ? "Friend's List" : "HIDEKI's List";
+const USER_LABEL = _U === 'hideki' ? "HIDEKI's List"
+                : _U === 'friend'  ? "Friend's List"
+                : "Master's List";
 
 const FB = {
   // --- REST: 取得 ---
