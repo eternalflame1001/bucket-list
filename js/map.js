@@ -954,14 +954,26 @@ async function renderHeritageList(scope) {
   }
 
   // ---- 地図（ボタンの直後） ----
-  html += `<div class="map-svg-section heritage-inline-map">
-    <div class="map-legend">
-      <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
-    </div>
-    <div id="${scope}-heritage-svg-container"></div>
-  </div>`;
+  if (scope === 'japan') {
+    html += `<div class="map-svg-section heritage-inline-map">
+      <div class="map-legend">
+        <span class="legend-item"><span style="color:#FFD700;font-size:13px;line-height:1">★</span> 世界遺産</span>
+        <span class="legend-item"><span style="color:#0055cc;font-size:14px;line-height:1">♨</span> 温泉</span>
+        <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#00aa00" stroke="#00aa00" stroke-width="1.5"/></svg> グルメ</span>
+        <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#cc0000" stroke="#cc0000" stroke-width="1.5"/></svg> ラーメン</span>
+      </div>
+      <div id="${scope}-heritage-svg-container"></div>
+    </div>`;
+  } else {
+    html += `<div class="map-svg-section heritage-inline-map">
+      <div class="map-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+      </div>
+      <div id="${scope}-heritage-svg-container"></div>
+    </div>`;
+  }
 
   // ---- カテゴリフィルターバー ----
   const cats = [
@@ -1097,7 +1109,7 @@ async function renderHeritageList(scope) {
   container.innerHTML = html;
 
   // 地図レンダリング（DOM挿入後）
-  if (scope === 'japan') renderJapanMap(window.appState?.visit?.japan || {}, 'japan-heritage-svg-container', true);
+  if (scope === 'japan') renderCombinedJapanMap('japan-heritage-svg-container', () => renderHeritageList('japan'));
   else if (scope === 'china') renderChinaMap(window.appState?.visit?.china || {}, 'china-heritage-svg-container', true);
   else if (scope === 'world') renderWorldMap(window.appState?.visit?.world || {}, 'world-heritage-svg-container', true);
 
@@ -1353,6 +1365,154 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId, onVisitChang
   });
 }
 
+// ==========================================
+// 統合日本地図（世界遺産★ 温泉♨ グルメ● ラーメン●）
+// ==========================================
+async function renderCombinedJapanMap(containerId, onVisitChange) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!_japanTopo) {
+    try {
+      const r = await fetch("./japan.json");
+      _japanTopo = await r.json();
+    } catch(e) {
+      container.innerHTML = '<div class="map-load-msg">地図データ読み込み失敗</div>';
+      return;
+    }
+  }
+
+  const heritage = await loadHeritage();
+  const objKey   = Object.keys(_japanTopo.objects)[0];
+  const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
+
+  const W      = container.clientWidth || 370;
+  const H_proj = Math.round(W * 1.4);
+  const H      = Math.round(W * 1.9);
+
+  const isOkPref  = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
+  const mainFeats = features.filter(f => !isOkPref(f));
+  const projection = d3.geoMercator().fitExtent([[10, 10], [W - 10, H_proj - 10]],
+    { type: "FeatureCollection", features: mainFeats });
+  const pathGen = d3.geoPath().projection(projection);
+
+  const japanVisit   = window.appState?.visit?.japan    || {};
+  const hv           = window.appState?.visit?.heritage  || {};
+  const onsenVisit   = window.appState?.visit?.onsen     || {};
+  const gourmetVisit = window.appState?.visit?.gourmet   || {};
+  const ramenVisit   = window.appState?.visit?.ramen     || {};
+
+  const jpSites = heritage.filter(s => {
+    const iso = Array.isArray(s.iso) ? s.iso : [s.iso];
+    return iso.includes('jp') && s.lat != null;
+  });
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:none" xmlns="http://www.w3.org/2000/svg">`;
+
+  // 都道府県（訪問色付き）
+  svg += `<g class="zoom-bg">`;
+  features.forEach(f => {
+    const d = pathGen(f);
+    if (!d) return;
+    const props = f.properties;
+    const full  = props.nam_ja || props.name_ja || props.NAME || props.name || props.N03_001 || '';
+    const key   = prefShort(full);
+    const val   = japanVisit[key];
+    const year  = (val === true) ? null : (val || null);
+    svg += `<path d="${d}" fill="${val ? yearToColor(year) : '#e8e4dc'}" stroke="#555" stroke-width="0.8"/>`;
+  });
+  svg += `</g>`;
+
+  // 全マーカー（ズーム外レイヤー）
+  let markerSvg = '';
+
+  // ① 世界遺産 ★
+  markerSvg += heritageStarsSVG(jpSites, projection, hv, 7);
+
+  // ② 温泉 ♨
+  const ONSEN = typeof ONSEN_DATA !== 'undefined' ? ONSEN_DATA : [];
+  ONSEN.forEach(item => {
+    const coords = (typeof ONSEN_COORDS !== 'undefined' && ONSEN_COORDS[item.key]) ? ONSEN_COORDS[item.key] : null;
+    if (!coords) return;
+    const xy = projection(coords);
+    if (!xy) return;
+    const [x, y] = xy;
+    if (x < 0 || x > W || y < 0 || y > H) return;
+    const val  = onsenVisit[item.key];
+    const year = (val === true) ? null : (val || null);
+    markerSvg += makeMarker('onsen', x, y, !!val, item.name || item.key, year, item.key);
+  });
+
+  // ③ グルメ ●
+  const GOURMET = typeof GOURMET_DATA !== 'undefined' ? GOURMET_DATA : [];
+  GOURMET.forEach(item => {
+    if (!item.coords) return;
+    const xy = projection(item.coords);
+    if (!xy) return;
+    const [x, y] = xy;
+    if (x < 0 || x > W || y < 0 || y > H) return;
+    const val  = gourmetVisit[item.key];
+    const year = (val === true) ? null : (val || null);
+    markerSvg += makeMarker('gourmet', x, y, !!val, item.food || item.key, year, item.key);
+  });
+
+  // ④ ラーメン ●
+  const RAMEN = typeof RAMEN_DATA !== 'undefined' ? RAMEN_DATA : [];
+  RAMEN.forEach(item => {
+    if (!item.coords) return;
+    const xy = projection(item.coords);
+    if (!xy) return;
+    const [x, y] = xy;
+    if (x < 0 || x > W || y < 0 || y > H) return;
+    const val  = ramenVisit[item.key];
+    const year = (val === true) ? null : (val || null);
+    markerSvg += makeMarker('ramen', x, y, !!val, item.food || item.key, year, item.key);
+  });
+
+  svg += `<g class="zoom-markers">${markerSvg}</g>`;
+  svg += `</svg>`;
+  container.innerHTML = svg;
+  attachMapZoom(container, 25);
+
+  // 世界遺産★クリック
+  container.querySelectorAll('.heritage-star').forEach(el => {
+    el.addEventListener('click', async e => {
+      e.stopPropagation();
+      const id   = el.dataset.id;
+      const name = el.dataset.nameJa;
+      const cur  = window.appState?.visit?.heritage || {};
+      if (cur[id]) {
+        if (!confirm(`「${name}」の訪問記録を削除しますか？`)) return;
+        await saveVisit('heritage', id, null);
+      } else {
+        await openYearDialog('heritage', name, new Date().getFullYear());
+      }
+      if (onVisitChange) onVisitChange();
+    });
+  });
+
+  // 温泉・グルメ・ラーメン●クリック
+  container.querySelectorAll('.zoom-markers .map-marker[data-key]').forEach(el => {
+    el.addEventListener('click', async e => {
+      e.stopPropagation();
+      const key  = el.dataset.key;
+      const disp = el.dataset.disp;
+      const t    = el.dataset.type;
+      const vd   = window.appState?.visit?.[t] || {};
+      const val  = vd[key];
+      if (val) {
+        if (!confirm(`「${disp}」の訪問記録を削除しますか？`)) return;
+        await saveVisit(t, key, null);
+      } else {
+        await openYearDialog(t, disp, new Date().getFullYear(), key);
+      }
+      if (onVisitChange) onVisitChange();
+    });
+  });
+}
+
+window.renderCombinedJapanMap = renderCombinedJapanMap;
+
 function renderFoodTab(dataType) {
   const DATA = dataType === "gourmet" ? (typeof GOURMET_DATA !== "undefined" ? GOURMET_DATA : [])
                                       : (typeof RAMEN_DATA   !== "undefined" ? RAMEN_DATA   : []);
@@ -1407,17 +1567,15 @@ function renderFoodTab(dataType) {
   });
 
   // ---- 地図 ----
-  {
-    const dotUnvisit = type => `<svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="none" stroke="${type === 'gourmet' ? '#00aa00' : '#cc0000'}" stroke-width="1.5"/></svg>`;
-    const dotVisit   = type => `<svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="${type === 'gourmet' ? '#00aa00' : '#cc0000'}" stroke="${type === 'gourmet' ? '#00aa00' : '#cc0000'}" stroke-width="1.5"/></svg>`;
-    html += `<div class="map-svg-section heritage-inline-map">
-      <div class="map-legend">
-        <span class="legend-item">${dotUnvisit(dataType)} 未訪問</span>
-        <span class="legend-item">${dotVisit(dataType)} 訪問済</span>
-      </div>
-      <div id="japan-${dataType}-map-svg"></div>
-    </div>`;
-  }
+  html += `<div class="map-svg-section heritage-inline-map">
+    <div class="map-legend">
+      <span class="legend-item"><span style="color:#FFD700;font-size:13px;line-height:1">★</span> 世界遺産</span>
+      <span class="legend-item"><span style="color:#0055cc;font-size:14px;line-height:1">♨</span> 温泉</span>
+      <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#00aa00" stroke="#00aa00" stroke-width="1.5"/></svg> グルメ</span>
+      <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#cc0000" stroke="#cc0000" stroke-width="1.5"/></svg> ラーメン</span>
+    </div>
+    <div id="japan-${dataType}-map-svg"></div>
+  </div>`;
 
   // ---- 一覧リスト（世界遺産スタイル） ----
   const foodIcon = dataType === 'gourmet' ? '🍱' : '🍜';
@@ -1477,7 +1635,7 @@ function renderFoodTab(dataType) {
   }
 
   container.innerHTML = html;
-  renderFoodMapSVG(dataType, DATA, visitData, `japan-${dataType}-map-svg`, () => renderFoodTab(dataType));
+  renderCombinedJapanMap(`japan-${dataType}-map-svg`, () => renderFoodTab(dataType));
 
   // ボタンイベント
   container.querySelectorAll(".food-btn").forEach(btn => {
@@ -1588,8 +1746,10 @@ function renderOnsenTab() {
   // ---- 地図 ----
   html += `<div class="map-svg-section heritage-inline-map">
     <div class="map-legend">
-      <span class="legend-item"><span style="color:#0055cc;font-size:14px;line-height:1">♨</span> 未訪問</span>
-      <span class="legend-item"><span style="color:#cc0000;font-size:14px;line-height:1">♨</span> 訪問済</span>
+      <span class="legend-item"><span style="color:#FFD700;font-size:13px;line-height:1">★</span> 世界遺産</span>
+      <span class="legend-item"><span style="color:#0055cc;font-size:14px;line-height:1">♨</span> 温泉</span>
+      <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#00aa00" stroke="#00aa00" stroke-width="1.5"/></svg> グルメ</span>
+      <span class="legend-item"><svg width="12" height="12" style="vertical-align:middle"><circle cx="6" cy="6" r="4" fill="#cc0000" stroke="#cc0000" stroke-width="1.5"/></svg> ラーメン</span>
     </div>
     <div id="japan-onsen-map-svg"></div>
   </div>`;
@@ -1650,7 +1810,7 @@ function renderOnsenTab() {
   }
 
   container.innerHTML = html;
-  renderFoodMapSVG('onsen', DATA, visitData, 'japan-onsen-map-svg', () => renderOnsenTab());
+  renderCombinedJapanMap('japan-onsen-map-svg', () => renderOnsenTab());
 
   // ボタンイベント
   container.querySelectorAll(".onsen-btn").forEach(btn => {
