@@ -763,14 +763,6 @@ window.onMapTabActivate = function(type) {
 async function renderHeritageList(scope) {
   const container = document.getElementById(`${scope}-heritage-container`);
   if (!container) return;
-  // 地図を遺産タブにも表示
-  if (scope === 'japan') {
-    renderJapanMap(window.appState?.visit?.japan || {}, 'japan-heritage-svg-container', true);
-  } else if (scope === 'china') {
-    renderChinaMap(window.appState?.visit?.china || {}, 'china-heritage-svg-container', true);
-  } else if (scope === 'world') {
-    renderWorldMap(window.appState?.visit?.world || {}, 'world-heritage-svg-container', true);
-  }
   try {
   const heritage = await loadHeritage();
   if (!heritage || !heritage.length) { container.innerHTML = '<div class="heritage-empty">データを読み込めませんでした</div>'; return; }
@@ -932,6 +924,16 @@ async function renderHeritageList(scope) {
     }
   }
 
+  // ---- 地図（ボタンの直後） ----
+  html += `<div class="map-svg-section heritage-inline-map">
+    <div class="map-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#e8e4dc"></span>未訪問</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f5e9c8"></span>1975</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#e8c06a"></span>最近</span>
+    </div>
+    <div id="${scope}-heritage-svg-container"></div>
+  </div>`;
+
   // ---- カテゴリフィルターバー ----
   const cats = [
     { key:'', label:'全て',   icon:'📚' },
@@ -1064,6 +1066,11 @@ async function renderHeritageList(scope) {
   }
 
   container.innerHTML = html;
+
+  // 地図レンダリング（DOM挿入後）
+  if (scope === 'japan') renderJapanMap(window.appState?.visit?.japan || {}, 'japan-heritage-svg-container', true);
+  else if (scope === 'china') renderChinaMap(window.appState?.visit?.china || {}, 'china-heritage-svg-container', true);
+  else if (scope === 'world') renderWorldMap(window.appState?.visit?.world || {}, 'world-heritage-svg-container', true);
 
   // ---- イベント ----
   container.querySelectorAll('.hcat-btn').forEach(btn => {
