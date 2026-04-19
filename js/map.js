@@ -668,7 +668,9 @@ async function openYearDialog(type, name, defaultYear, saveKey) {
       return items[idx] ? parseInt(items[idx].dataset.year) : curY;
     }
 
-    scroller.addEventListener("scroll", updateSelected, { passive: true });
+    const ac = new AbortController();
+    const sig = { signal: ac.signal };
+    scroller.addEventListener("scroll", updateSelected, { passive: true, ...sig });
 
     // アイテムクリックでその年にスナップ
     scroller.addEventListener("click", e => {
@@ -676,11 +678,12 @@ async function openYearDialog(type, name, defaultYear, saveKey) {
       if (!item) return;
       const idx = Array.from(scroller.children).indexOf(item);
       scroller.scrollTo({ top: idx * 44, behavior: "smooth" });
-    });
+    }, sig);
 
     function done() {
       overlay.classList.add("hidden");
       btnSave.onclick = btnCancel.onclick = overlay.onclick = null;
+      ac.abort(); // scroll/clickリスナーを一括解除
     }
 
     btnSave.onclick = async () => {
@@ -1281,97 +1284,6 @@ function makeMarker(type, x, y, visited, name, year, key) {
     <title>${title}</title></circle>`;
 }
 
-async function renderFoodMapSVG(type, DATA, visitData, containerId, onVisitChange) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  if (!_japanTopo) {
-    try {
-      const r = await fetch("./japan.json");
-      _japanTopo = await r.json();
-    } catch(e) {
-      container.innerHTML = '<div class="map-load-msg">地図データ読み込み失敗</div>';
-      return;
-    }
-  }
-
-  const objKey   = Object.keys(_japanTopo.objects)[0];
-  const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
-  const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.4);
-
-  // 沖縄を除いた本州・北海道・四国・九州でフィット
-  const isOkPref = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
-  const mainFeats = features.filter(f => !isOkPref(f));
-  // 遠隔離島（南鳥島・小笠原等）を除外して本土のみで投影フィット
-  const projFeats = mainFeats.filter(f => {
-    try { const c = d3.geoCentroid(f); return c && c[0] >= 128 && c[0] <= 148 && c[1] >= 29; }
-    catch(e) { return false; }
-  });
-  const projection = d3.geoMercator().fitExtent([[5, 5], [W - 5, H - 5]],
-    { type: "FeatureCollection", features: projFeats.length ? projFeats : mainFeats });
-  const pathGen = d3.geoPath().projection(projection);
-
-  function getCoords(item) {
-    if (type === 'onsen') {
-      return (typeof ONSEN_COORDS !== 'undefined' && ONSEN_COORDS[item.key]) ? ONSEN_COORDS[item.key] : null;
-    }
-    return item.coords || null;
-  }
-  const japanVisit = window.appState?.visit?.japan || {};
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" overflow="hidden" xmlns="http://www.w3.org/2000/svg">`;
-
-  // 全都道府県（沖縄含む・ズーム対象）— 訪問済県に色付け
-  svg += `<g class="zoom-bg">`;
-  features.forEach(f => {
-    const d = pathGen(f);
-    if (!d) return;
-    const props = f.properties;
-    const full = props.nam_ja || props.name_ja || props.NAME || props.name || props.N03_001 || '';
-    const key = prefShort(full);
-    const val = japanVisit[key];
-    const year = (val === true) ? null : (val || null);
-    const fill = val ? yearToColor(year) : '#e8e4dc';
-    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" vector-effect="non-scaling-stroke"/>`;
-  });
-  svg += `</g>`;
-  // マーカーレイヤー（ズーム外・位置のみ更新）
-  let markerSvg = '';
-  DATA.forEach(item => {
-    const coords = getCoords(item);
-    if (!coords) return;
-    const xy = projection(coords);
-    if (!xy) return;
-    const [x, y] = xy;
-    if (x < 0 || x > W || y < 0 || y > H) return;
-    const val = visitData[item.key];
-    const year = (val === true) ? null : (val || null);
-    markerSvg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year, item.key);
-  });
-  svg += `<g class="zoom-markers">${markerSvg}</g>`;
-  svg += `</svg>`;
-  container.innerHTML = svg;
-  attachMapZoom(container, 25);
-
-  // マーカークリック（世界遺産★と同様：未訪問→年入力 / 訪問済→削除確認）
-  container.querySelectorAll('.zoom-markers .map-marker[data-key]').forEach(el => {
-    el.addEventListener('click', async e => {
-      e.stopPropagation();
-      const key  = el.dataset.key;
-      const disp = el.dataset.disp;
-      const t    = el.dataset.type;
-      const vd   = window.appState?.visit?.[t] || {};
-      const val  = vd[key];
-      if (val) {
-        if (!confirm(`「${disp}」の訪問記録を削除しますか？`)) return;
-        await saveVisit(t, key, null);
-      } else {
-        await openYearDialog(t, disp, new Date().getFullYear(), key);
-      }
-      if (onVisitChange) onVisitChange();
-    });
-  });
-}
 
 // ==========================================
 // 統合日本地図（世界遺産★ 温泉♨ グルメ● ラーメン●）
@@ -1498,7 +1410,7 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
         if (!confirm(`「${name}」の訪問記録を削除しますか？`)) return;
         await saveVisit('heritage', id, null);
       } else {
-        await openYearDialog('heritage', name, new Date().getFullYear());
+        await openYearDialog('heritage', name, new Date().getFullYear(), id);
       }
       if (onVisitChange) onVisitChange();
     });
@@ -1523,8 +1435,6 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
     });
   });
 }
-
-window.renderCombinedJapanMap = renderCombinedJapanMap;
 
 function renderFoodTab(dataType) {
   const DATA = dataType === "gourmet" ? (typeof GOURMET_DATA !== "undefined" ? GOURMET_DATA : [])

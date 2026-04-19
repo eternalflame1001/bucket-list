@@ -6,7 +6,7 @@ const SCORE_MAP = { "高":3,"中":2,"低":1 };
 
 let state = {
   bucket: {}, trash: {}, visit: {},
-  tab: "bucket", editKey: null,
+  tab: "bucket",
   newUrg: "高", newPrio: "高", catFilter: ""
 };
 
@@ -18,7 +18,6 @@ function score(item) { return (SCORE_MAP[item.urg]||1) + (SCORE_MAP[item.prio]||
 function toZen(n)    { return String(n).replace(/[0-9]/g, c => String.fromCharCode(c.charCodeAt(0)+0xFEE0)); }
 function esc(str)    { return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function showLoading(show) { $("loading").classList.toggle("hidden", !show); }
-window.toast = function(msg, type="ok") {};
 function toast(msg, type="ok") {
   const el = $("toast"); el.textContent = msg;
   el.className = `toast-${type}`; el.classList.remove("hidden");
@@ -38,9 +37,14 @@ async function init() {
       </div>`;
     return;
   }
-  // ユーザーラベル表示
+  // ユーザーラベル表示＋タップで切り替え
   const ulEl = document.getElementById('user-label');
-  if (ulEl && typeof USER_LABEL !== 'undefined') ulEl.textContent = USER_LABEL;
+  if (ulEl && typeof USER_LABEL !== 'undefined') {
+    ulEl.textContent = USER_LABEL;
+    ulEl.title = 'タップでユーザー切り替え';
+    ulEl.style.cursor = 'pointer';
+    ulEl.addEventListener('click', showUserSwitcher);
+  }
   showLoading(true);
   try {
     const [b, t, v] = await Promise.all([
@@ -207,7 +211,8 @@ async function addItem() {
   const data = { text, cat, prio: state.newPrio, urg: state.newUrg, done: false, memo:"", date:"", place:"", createdAt: Date.now() };
   showLoading(true);
   try {
-    const maxId = Math.max(0, ...Object.keys(state.bucket).map(Number)) + 1;
+    const nums = Object.keys(state.bucket).map(Number).filter(n => !isNaN(n));
+    const maxId = (nums.length ? Math.max(0, ...nums) : 0) + 1;
     await FB.patch(`${FB.endpoints.bucket}/${maxId}`, data);
     state.bucket[maxId] = data;
     $("add-input").value = "";
@@ -292,6 +297,7 @@ $("edit-cancel").addEventListener("click", () => editModal.classList.add("hidden
 editModal.addEventListener("click", e => { if (e.target === editModal) editModal.classList.add("hidden"); });
 $("edit-save").addEventListener("click", async () => {
   const key  = $("edit-save").dataset.key;
+  if (!state.bucket[key]) { toast("アイテムが見つかりません","error"); return; }
   const data = {
     text: $("edit-text").value.trim() || state.bucket[key].text,
     urg:  $("edit-urg").value,
@@ -465,3 +471,70 @@ init();
   el.addEventListener('touchend',    snapBack, { passive: true });
   el.addEventListener('touchcancel', snapBack, { passive: true });
 })();
+
+// ==========================================
+// ユーザー切り替えダイアログ
+// ==========================================
+function showUserSwitcher() {
+  const USERS = [
+    { key: 'master', label: "Master's List" },
+    { key: 'hideki', label: "Hideki's List" },
+    { key: 'friend', label: "Friend's List" },
+    { key: 'f01',    label: "f01's List" },
+    { key: 'f02',    label: "f02's List" },
+    { key: 'f03',    label: "f03's List" },
+  ];
+  const current = typeof _U !== 'undefined' ? _U : 'master';
+
+  // オーバーレイ生成
+  const overlay = document.createElement('div');
+  overlay.id = 'user-switcher-overlay';
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,0.65);
+    display:flex;align-items:center;justify-content:center;`;
+
+  const box = document.createElement('div');
+  box.style.cssText = `
+    background:#1a1208;border:1px solid #6b5a3a;border-radius:12px;
+    padding:20px 24px;min-width:220px;`;
+
+  const title = document.createElement('div');
+  title.textContent = 'ユーザーを切り替え';
+  title.style.cssText = 'color:#d4b483;font-size:14px;font-weight:700;margin-bottom:14px;text-align:center;';
+  box.appendChild(title);
+
+  USERS.forEach(u => {
+    const btn = document.createElement('button');
+    btn.textContent = u.label;
+    const isCurrent = u.key === current;
+    btn.style.cssText = `
+      display:block;width:100%;padding:10px 14px;margin-bottom:8px;
+      border-radius:8px;border:1px solid ${isCurrent ? '#c89b3c' : '#4a3a1a'};
+      background:${isCurrent ? '#3a2a08' : 'transparent'};
+      color:${isCurrent ? '#f0c060' : '#c8b090'};
+      font-size:14px;font-weight:${isCurrent ? '700' : '400'};
+      cursor:pointer;text-align:left;`;
+    if (isCurrent) {
+      btn.textContent = '✓ ' + u.label;
+    }
+    btn.addEventListener('click', () => {
+      localStorage.setItem('bucket_user', u.key);
+      document.body.removeChild(overlay);
+      window.location.href = window.location.pathname + '?u=' + u.key;
+    });
+    box.appendChild(btn);
+  });
+
+  const cancel = document.createElement('button');
+  cancel.textContent = 'キャンセル';
+  cancel.style.cssText = `
+    display:block;width:100%;padding:8px;margin-top:4px;
+    border:none;background:transparent;color:#888;font-size:13px;cursor:pointer;`;
+  cancel.addEventListener('click', () => document.body.removeChild(overlay));
+  box.appendChild(cancel);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', e => { if (e.target === overlay) document.body.removeChild(overlay); });
+  document.body.appendChild(overlay);
+}
