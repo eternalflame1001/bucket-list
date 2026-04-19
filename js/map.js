@@ -340,11 +340,14 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   const objKey = Object.keys(_japanTopo.objects)[0];
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.6);
+  const H_proj = Math.round(W * 1.4); // 本州・北海道等に合わせた投影サイズ（元と同じ）
+  const H = Math.round(W * 1.9);      // SVG全高（沖縄を収める）
 
-  // 単一投影（沖縄含む全都道府県）
-  const allFC = { type: "FeatureCollection", features };
-  const projection = d3.geoMercator().fitExtent([[10, 10], [W-10, H-10]], allFC);
+  // 沖縄を除いた本州・北海道・四国・九州でフィット（元と同じ縮尺）
+  const isOk = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
+  const mainFeats = features.filter(f => !isOk(f));
+  const mainFC = { type: "FeatureCollection", features: mainFeats };
+  const projection = d3.geoMercator().fitExtent([[10, 10], [W-10, H_proj-10]], mainFC);
   const pathGen = d3.geoPath().projection(projection);
 
   const featPath = (feat, pg) => {
@@ -1277,11 +1280,14 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
   const objKey   = Object.keys(_japanTopo.objects)[0];
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.6);
+  const H_proj = Math.round(W * 1.4); // 本州・北海道等に合わせた投影サイズ（元と同じ）
+  const H = Math.round(W * 1.9);      // SVG全高（沖縄を収める）
 
-  // 単一投影（沖縄含む全都道府県）
-  const projection = d3.geoMercator().fitExtent([[10, 10], [W - 10, H - 10]],
-    { type: "FeatureCollection", features });
+  // 沖縄を除いた本州・北海道・四国・九州でフィット（元と同じ縮尺）
+  const isOkPref = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
+  const mainFeats = features.filter(f => !isOkPref(f));
+  const projection = d3.geoMercator().fitExtent([[10, 10], [W - 10, H_proj - 10]],
+    { type: "FeatureCollection", features: mainFeats });
   const pathGen = d3.geoPath().projection(projection);
 
   function getCoords(item) {
