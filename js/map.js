@@ -360,7 +360,7 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
     const fill = visited ? yearToColor(year) : "#e8e4dc";
     const d = pg(feat);
     if (!d) return '';
-    return `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" class="svg-pref"
+    return `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" vector-effect="non-scaling-stroke" class="svg-pref"
       data-name="${key}" style="cursor:${readOnly ? 'default' : 'pointer'}">
       <title>${full}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
@@ -437,7 +437,7 @@ async function renderChinaMap(visitData, containerId = "china-svg-container", re
     const fill = visited ? yearToColor(year) : "#e8e4dc";
     const d = pathGen(feat);
     if (!d) return;
-    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" class="svg-pref"
+    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" vector-effect="non-scaling-stroke" class="svg-pref"
       data-name="${key}" style="cursor:${readOnly ? 'default' : 'pointer'}">
       <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
@@ -507,7 +507,7 @@ async function renderWorldMap(visitData, containerId = "world-svg-container", re
     const fill = visited ? yearToColor(year) : "#e8e4dc";
     const d = pathGen(feat);
     if (!d) return;
-    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.5" class="svg-pref"
+    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.5" vector-effect="non-scaling-stroke" class="svg-pref"
       data-name="${key}" style="cursor:${readOnly ? 'default' : 'pointer'}">
       <title>${key}${year ? " "+year+"年" : visited ? " 訪問済" : " 未訪問"}</title>
     </path>`;
@@ -1324,7 +1324,7 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId, onVisitChang
     const val = japanVisit[key];
     const year = (val === true) ? null : (val || null);
     const fill = val ? yearToColor(year) : '#e8e4dc';
-    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8"/>`;
+    svg += `<path d="${d}" fill="${fill}" stroke="#555" stroke-width="0.8" vector-effect="non-scaling-stroke"/>`;
   });
   svg += `</g>`;
   // マーカーレイヤー（ズーム外・位置のみ更新）
@@ -1419,7 +1419,7 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
     const key   = prefShort(full);
     const val   = japanVisit[key];
     const year  = (val === true) ? null : (val || null);
-    svg += `<path d="${d}" fill="${val ? yearToColor(year) : '#e8e4dc'}" stroke="#555" stroke-width="0.8"/>`;
+    svg += `<path d="${d}" fill="${val ? yearToColor(year) : '#e8e4dc'}" stroke="#555" stroke-width="0.8" vector-effect="non-scaling-stroke"/>`;
   });
   svg += `</g>`;
 
