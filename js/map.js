@@ -1247,23 +1247,25 @@ const FOOD_REGION_ORDER = ['🌸 北海道・東北','🌿 関東','🍁 中部'
 // ==========================================
 // 地図マーカー描画（温泉・グルメ・ラーメン共通）
 // ==========================================
-function makeMarker(type, x, y, visited, name, year) {
+function makeMarker(type, x, y, visited, name, year, key) {
   const title = `${name}${year ? ' ' + year + '年' : visited ? ' 訪問済' : ' 未訪問'}`;
   const xt = x.toFixed(1), yt = y.toFixed(1);
+  const keyAttrs = key ? ` data-key="${key}" data-disp="${name}" data-type="${type}"` : '';
   if (type === 'onsen') {
     const fill = visited ? '#cc0000' : '#0055cc';
     return `<text x="${xt}" y="${yt}" text-anchor="middle" dominant-baseline="middle"
       fill="${fill}" font-size="15" class="map-marker" data-ox="${xt}" data-oy="${yt}"
-      data-base-font-size="15" style="user-select:none">♨<title>${title}</title></text>`;
+      data-base-font-size="15"${keyAttrs} style="user-select:none;cursor:pointer">♨<title>${title}</title></text>`;
   }
   const fill   = visited ? (type === 'gourmet' ? '#00aa00' : '#cc0000') : 'none';
   const stroke = type === 'gourmet' ? '#00aa00' : '#cc0000';
   return `<circle cx="${xt}" cy="${yt}" r="3.5" fill="${fill}" stroke="${stroke}" stroke-width="1.5"
-    class="map-marker" data-ox="${xt}" data-oy="${yt}" data-base-r="3.5" data-base-sw="1.5">
+    class="map-marker" data-ox="${xt}" data-oy="${yt}" data-base-r="3.5" data-base-sw="1.5"${keyAttrs}
+    style="cursor:pointer">
     <title>${title}</title></circle>`;
 }
 
-async function renderFoodMapSVG(type, DATA, visitData, containerId) {
+async function renderFoodMapSVG(type, DATA, visitData, containerId, onVisitChange) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -1313,12 +1315,31 @@ async function renderFoodMapSVG(type, DATA, visitData, containerId) {
     if (x < 0 || x > W || y < 0 || y > H) return;
     const val = visitData[item.key];
     const year = (val === true) ? null : (val || null);
-    markerSvg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year);
+    markerSvg += makeMarker(type, x, y, !!val, item.name || item.food || item.key, year, item.key);
   });
   svg += `<g class="zoom-markers">${markerSvg}</g>`;
   svg += `</svg>`;
   container.innerHTML = svg;
   attachMapZoom(container, 25);
+
+  // マーカークリック（世界遺産★と同様：未訪問→年入力 / 訪問済→削除確認）
+  container.querySelectorAll('.zoom-markers .map-marker[data-key]').forEach(el => {
+    el.addEventListener('click', async e => {
+      e.stopPropagation();
+      const key  = el.dataset.key;
+      const disp = el.dataset.disp;
+      const t    = el.dataset.type;
+      const vd   = window.appState?.visit?.[t] || {};
+      const val  = vd[key];
+      if (val) {
+        if (!confirm(`「${disp}」の訪問記録を削除しますか？`)) return;
+        await saveVisit(t, key, null);
+      } else {
+        await openYearDialog(t, disp, new Date().getFullYear(), key);
+      }
+      if (onVisitChange) onVisitChange();
+    });
+  });
 }
 
 function renderFoodTab(dataType) {
@@ -1445,7 +1466,7 @@ function renderFoodTab(dataType) {
   }
 
   container.innerHTML = html;
-  renderFoodMapSVG(dataType, DATA, visitData, `japan-${dataType}-map-svg`);
+  renderFoodMapSVG(dataType, DATA, visitData, `japan-${dataType}-map-svg`, () => renderFoodTab(dataType));
 
   // ボタンイベント
   container.querySelectorAll(".food-btn").forEach(btn => {
@@ -1618,7 +1639,7 @@ function renderOnsenTab() {
   }
 
   container.innerHTML = html;
-  renderFoodMapSVG('onsen', DATA, visitData, 'japan-onsen-map-svg');
+  renderFoodMapSVG('onsen', DATA, visitData, 'japan-onsen-map-svg', () => renderOnsenTab());
 
   // ボタンイベント
   container.querySelectorAll(".onsen-btn").forEach(btn => {
