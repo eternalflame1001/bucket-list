@@ -27,6 +27,9 @@ function toast(msg, type="ok") {
 
 // --- 初期化 ---
 async function init() {
+  // ユーザーラベル表示
+  const ulEl = document.getElementById('user-label');
+  if (ulEl && typeof USER_LABEL !== 'undefined') ulEl.textContent = USER_LABEL;
   showLoading(true);
   try {
     const [b, t, v] = await Promise.all([

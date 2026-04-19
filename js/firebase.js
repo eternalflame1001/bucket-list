@@ -3,8 +3,10 @@
 // REST API + WebSocketリアルタイム同期
 // ==========================================
 
-const DB   = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app";
-const USER = "users/hideki";
+const DB        = "https://my-bucket-list-1a786-default-rtdb.asia-southeast1.firebasedatabase.app";
+const _U        = new URLSearchParams(window.location.search).get('u') || 'hideki';
+const USER      = `users/${_U}`;
+const USER_LABEL = _U === 'friend' ? "Friend's List" : "HIDEKI's List";
 
 const FB = {
   // --- REST: 取得 ---
