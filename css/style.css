@@ -336,6 +336,21 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .heritage-history-section { margin-top: 24px; padding: 0 4px; }
 .heritage-history-title { font-size: 14px; font-weight: 700; color: var(--text2); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 8px; }
 .heritage-history-btn { font-size: 14px; font-weight: 700; max-width: none; white-space: normal; text-align: left; }
+/* 温泉・グルメ・ラーメン 一覧リスト */
+.extra-list-section { margin: 16px 4px 0; }
+.extra-list-title { font-size: 14px; font-weight: 700; color: var(--text2); border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+.extra-list-stat { font-size: 14px; font-weight: 700; color: var(--accent); }
+.extra-list { display: flex; flex-direction: column; gap: 2px; }
+.extra-list-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; border-left: 4px solid var(--border); background: var(--bg2); cursor: pointer; transition: opacity .15s; }
+.extra-list-item:active { opacity: .7; }
+.extra-list-item.visited { border-left-color: #e8c06a; background: #fdf8ee; }
+.eli-name { flex: 1; font-size: 14px; font-weight: 700; color: var(--text); }
+.eli-rank { font-size: 13px; letter-spacing: -1px; flex-shrink: 0; }
+.eli-status { font-size: 14px; font-weight: 700; flex-shrink: 0; min-width: 56px; text-align: right; }
+.eli-visited { color: var(--accent); }
+.eli-unvisited { color: var(--text2); }
+/* 訪問履歴ボタン共通 */
+.extra-history-btn { font-size: 14px; font-weight: 700; max-width: none; white-space: normal; text-align: left; }
 /* 地域ナビ */
 .heritage-region-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 4px 4px; }
 .hreg-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--bg2); font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }

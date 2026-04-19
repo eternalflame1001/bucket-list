@@ -1268,32 +1268,99 @@ function renderFoodTab(dataType) {
     html += `</div></div>`;
   });
 
+  // ---- 一覧リスト ----
+  html += `<div class="extra-list-section">
+    <div class="extra-list-title">一覧 <span class="extra-list-stat">${visitedTotal} / ${total}件</span></div>
+    <div class="extra-list">`;
+  DATA.forEach(item => {
+    const val = visitData[item.key];
+    const year = (val === true) ? null : (val || null);
+    const visited = !!val;
+    const color = visited ? yearToColor(year) : '';
+    html += `<div class="extra-list-item${visited ? ' visited' : ''}"
+      data-key="${item.key}" data-type="${dataType}" data-food="${item.food}" data-visited="${visited}"
+      ${visited ? `style="border-left-color:${color}"` : ''}>
+      <span class="eli-name">${item.food}</span>
+      <span class="eli-rank">${item.shop || item.pref || ''}</span>
+      <span class="eli-status ${visited ? 'eli-visited' : 'eli-unvisited'}">${visited ? (year ? `${year}年` : '✓') : '未訪問'}</span>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  // ---- 訪問履歴 ----
+  const visitedItems = DATA.filter(item => !!visitData[item.key]);
+  if (visitedItems.length > 0) {
+    const byYear = {}, noYear = [];
+    visitedItems.forEach(item => {
+      const v = visitData[item.key];
+      const yr = (v === true || !v) ? null : v;
+      if (yr) { if (!byYear[yr]) byYear[yr] = []; byYear[yr].push(item); }
+      else noYear.push(item);
+    });
+    html += `<div class="heritage-history-section">
+      <div class="heritage-history-title">訪問履歴 (${visitedItems.length}件)</div>`;
+    Object.keys(byYear).map(Number).sort((a, b) => b - a).forEach(yr => {
+      html += `<div class="history-year-group"><div class="history-year-label">${yr}年</div><div class="history-places">`;
+      byYear[yr].forEach(item => {
+        html += `<button class="history-place-btn extra-history-btn"
+          data-key="${item.key}" data-type="${dataType}" data-food="${item.food}" data-year="${yr}">${item.food}</button>`;
+      });
+      html += `</div></div>`;
+    });
+    if (noYear.length) {
+      html += `<div class="history-year-group"><div class="history-year-label">年不明</div><div class="history-places">`;
+      noYear.forEach(item => {
+        html += `<button class="history-place-btn extra-history-btn"
+          data-key="${item.key}" data-type="${dataType}" data-food="${item.food}" data-year="">${item.food}</button>`;
+      });
+      html += `</div></div>`;
+    }
+    html += `</div>`;
+  }
+
   container.innerHTML = html;
 
+  // ボタンイベント
   container.querySelectorAll(".food-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
-      const key     = btn.dataset.key;
-      const type    = btn.dataset.type;
-      const visited = btn.dataset.visited === "true";
-      const disp    = btn.dataset.food;
+      const key = btn.dataset.key, type = btn.dataset.type;
+      const visited = btn.dataset.visited === "true", disp = btn.dataset.food;
+      const syncPartner = () => {
+        const p = type === "gourmet" ? "ramen" : "gourmet";
+        if (document.getElementById(`japan-${p}`)?.classList.contains("active")) renderFoodTab(p);
+      };
       if (visited) {
-        if (confirm(`「${disp}」の食事記録を削除しますか？`)) {
-          await saveVisit(type, key, null);
-          renderFoodTab(type);
-          // 同期先も再描画
-          const partnerType = type === "gourmet" ? "ramen" : "gourmet";
-          if (document.getElementById(`japan-${partnerType}`)?.classList.contains("active")) {
-            renderFoodTab(partnerType);
-          }
-        }
-      } else {
-        await openYearDialog(type, disp, new Date().getFullYear(), key);
-        renderFoodTab(type);
-        const partnerType = type === "gourmet" ? "ramen" : "gourmet";
-        if (document.getElementById(`japan-${partnerType}`)?.classList.contains("active")) {
-          renderFoodTab(partnerType);
-        }
-      }
+        if (confirm(`「${disp}」の食事記録を削除しますか？`)) { await saveVisit(type, key, null); renderFoodTab(type); syncPartner(); }
+      } else { await openYearDialog(type, disp, new Date().getFullYear(), key); renderFoodTab(type); syncPartner(); }
+    });
+  });
+
+  // 一覧リストイベント
+  container.querySelectorAll(".extra-list-item").forEach(row => {
+    row.addEventListener("click", async () => {
+      const key = row.dataset.key, type = row.dataset.type, disp = row.dataset.food;
+      const visited = row.dataset.visited === "true";
+      const syncPartner = () => {
+        const p = type === "gourmet" ? "ramen" : "gourmet";
+        if (document.getElementById(`japan-${p}`)?.classList.contains("active")) renderFoodTab(p);
+      };
+      if (visited) {
+        if (confirm(`「${disp}」の食事記録を削除しますか？`)) { await saveVisit(type, key, null); renderFoodTab(type); syncPartner(); }
+      } else { await openYearDialog(type, disp, new Date().getFullYear(), key); renderFoodTab(type); syncPartner(); }
+    });
+  });
+
+  // 訪問履歴ボタンイベント
+  container.querySelectorAll(".extra-history-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const key = btn.dataset.key, type = btn.dataset.type, disp = btn.dataset.food;
+      const yr = Number(btn.dataset.year) || new Date().getFullYear();
+      const syncPartner = () => {
+        const p = type === "gourmet" ? "ramen" : "gourmet";
+        if (document.getElementById(`japan-${p}`)?.classList.contains("active")) renderFoodTab(p);
+      };
+      if (confirm(`「${disp}」の食事記録を削除しますか？`)) { await saveVisit(type, key, null); renderFoodTab(type); syncPartner(); }
+      else { await openYearDialog(type, disp, yr, key); renderFoodTab(type); syncPartner(); }
     });
   });
 }
@@ -1312,7 +1379,7 @@ function renderOnsenTab() {
 
   const visitData = window.appState?.visit?.onsen || {};
 
-  // 地域グループ化（regionフィールドで直接グループ）
+  // 地域グループ化
   const regionMap = {};
   DATA.forEach(item => {
     if (!regionMap[item.region]) regionMap[item.region] = [];
@@ -1323,11 +1390,15 @@ function renderOnsenTab() {
   const total = DATA.length;
   const pct = total ? Math.round(visitedTotal / total * 100) : 0;
 
+  // ★ → ♨️ 変換ヘルパー
+  const toOnsenStar = str => (str || '').replace(/⭐/g, '♨️');
+
   let html = `<div class="map-header-bar">
-    <h2 class="map-title">♨ 温泉</h2>
+    <h2 class="map-title">♨️ 温泉</h2>
     <div class="map-stats-line"><span class="mstat-num">${visitedTotal}</span> / ${total} <span class="mstat-pct">${pct}%</span></div>
   </div>`;
 
+  // ---- ボタングリッド ----
   ONSEN_REGION_ORDER.forEach(region => {
     const items = regionMap[region];
     if (!items) return;
@@ -1349,28 +1420,92 @@ function renderOnsenTab() {
         data-key="${item.key}" data-name="${item.name}" data-visited="${visited}"
         ${visited ? `style="background:${color};border-color:${color}"` : ""}>
         ${item.name}
-        <small>${visited ? (year ? year : "✓") : item.starStr}</small>
+        <small>${visited ? (year ? year : "✓") : toOnsenStar(item.starStr)}</small>
       </button>`;
     });
     html += `</div></div>`;
   });
 
+  // ---- 一覧リスト ----
+  html += `<div class="extra-list-section">
+    <div class="extra-list-title">一覧 <span class="extra-list-stat">${visitedTotal} / ${total}件</span></div>
+    <div class="extra-list">`;
+  DATA.forEach(item => {
+    const val = visitData[item.key];
+    const year = (val === true) ? null : (val || null);
+    const visited = !!val;
+    const color = visited ? yearToColor(year) : '';
+    html += `<div class="extra-list-item${visited ? ' visited' : ''}"
+      data-key="${item.key}" data-name="${item.name}" data-visited="${visited}"
+      ${visited ? `style="border-left-color:${color}"` : ''}>
+      <span class="eli-name">${item.name}</span>
+      <span class="eli-rank">${toOnsenStar(item.starStr)}</span>
+      <span class="eli-status ${visited ? 'eli-visited' : 'eli-unvisited'}">${visited ? (year ? `${year}年` : '✓') : '未訪問'}</span>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  // ---- 訪問履歴 ----
+  const visitedItems = DATA.filter(item => !!visitData[item.key]);
+  if (visitedItems.length > 0) {
+    const byYear = {}, noYear = [];
+    visitedItems.forEach(item => {
+      const v = visitData[item.key];
+      const yr = (v === true || !v) ? null : v;
+      if (yr) { if (!byYear[yr]) byYear[yr] = []; byYear[yr].push(item); }
+      else noYear.push(item);
+    });
+    html += `<div class="heritage-history-section">
+      <div class="heritage-history-title">訪問履歴 (${visitedItems.length}件)</div>`;
+    Object.keys(byYear).map(Number).sort((a, b) => b - a).forEach(yr => {
+      html += `<div class="history-year-group"><div class="history-year-label">${yr}年</div><div class="history-places">`;
+      byYear[yr].forEach(item => {
+        html += `<button class="history-place-btn extra-history-btn"
+          data-key="${item.key}" data-name="${item.name}" data-year="${yr}">${item.name}</button>`;
+      });
+      html += `</div></div>`;
+    });
+    if (noYear.length) {
+      html += `<div class="history-year-group"><div class="history-year-label">年不明</div><div class="history-places">`;
+      noYear.forEach(item => {
+        html += `<button class="history-place-btn extra-history-btn"
+          data-key="${item.key}" data-name="${item.name}" data-year="">${item.name}</button>`;
+      });
+      html += `</div></div>`;
+    }
+    html += `</div>`;
+  }
+
   container.innerHTML = html;
 
+  // ボタンイベント
   container.querySelectorAll(".onsen-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
-      const key     = btn.dataset.key;
-      const name    = btn.dataset.name;
+      const key = btn.dataset.key, name = btn.dataset.name;
       const visited = btn.dataset.visited === "true";
       if (visited) {
-        if (confirm(`「${name}」の訪問記録を削除しますか？`)) {
-          await saveVisit("onsen", key, null);
-          renderOnsenTab();
-        }
-      } else {
-        await openYearDialog("onsen", name, new Date().getFullYear(), key);
-        renderOnsenTab();
-      }
+        if (confirm(`「${name}」の訪問記録を削除しますか？`)) { await saveVisit("onsen", key, null); renderOnsenTab(); }
+      } else { await openYearDialog("onsen", name, new Date().getFullYear(), key); renderOnsenTab(); }
+    });
+  });
+
+  // 一覧リストイベント
+  container.querySelectorAll(".extra-list-item").forEach(row => {
+    row.addEventListener("click", async () => {
+      const key = row.dataset.key, name = row.dataset.name;
+      const visited = row.dataset.visited === "true";
+      if (visited) {
+        if (confirm(`「${name}」の訪問記録を削除しますか？`)) { await saveVisit("onsen", key, null); renderOnsenTab(); }
+      } else { await openYearDialog("onsen", name, new Date().getFullYear(), key); renderOnsenTab(); }
+    });
+  });
+
+  // 訪問履歴ボタンイベント
+  container.querySelectorAll(".extra-history-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const key = btn.dataset.key, name = btn.dataset.name, yr = Number(btn.dataset.year) || new Date().getFullYear();
+      if (confirm(`「${name}」の訪問記録を削除しますか？`)) { await saveVisit("onsen", key, null); renderOnsenTab(); }
+      else { await openYearDialog("onsen", name, yr, key); renderOnsenTab(); }
     });
   });
 }
