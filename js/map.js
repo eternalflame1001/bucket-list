@@ -1268,21 +1268,28 @@ function renderFoodTab(dataType) {
     html += `</div></div>`;
   });
 
-  // ---- 一覧リスト ----
+  // ---- 一覧リスト（世界遺産スタイル） ----
+  const foodIcon = dataType === 'gourmet' ? '🍽' : '🍜';
   html += `<div class="extra-list-section">
     <div class="extra-list-title">一覧 <span class="extra-list-stat">${visitedTotal} / ${total}件</span></div>
-    <div class="extra-list">`;
+    <div class="heritage-list">`;
   DATA.forEach(item => {
     const val = visitData[item.key];
     const year = (val === true) ? null : (val || null);
     const visited = !!val;
-    const color = visited ? yearToColor(year) : '';
-    html += `<div class="extra-list-item${visited ? ' visited' : ''}"
-      data-key="${item.key}" data-type="${dataType}" data-food="${item.food}" data-visited="${visited}"
-      ${visited ? `style="border-left-color:${color}"` : ''}>
-      <span class="eli-name">${item.food}</span>
-      <span class="eli-rank">${item.shop || item.pref || ''}</span>
-      <span class="eli-status ${visited ? 'eli-visited' : 'eli-unvisited'}">${visited ? (year ? `${year}年` : '✓') : '未訪問'}</span>
+    html += `<div class="heritage-item${visited ? ' visited' : ''}"
+      data-key="${item.key}" data-type="${dataType}" data-food="${item.food}" data-visited="${visited}">
+      <div class="heritage-star-icon">${visited ? '★' : '☆'}</div>
+      <div class="heritage-item-body">
+        <div class="heritage-item-name">${esc(item.food)}</div>
+        <div class="heritage-item-meta">
+          <span class="extra-food-badge">${foodIcon}</span>
+          <span class="heritage-country">${esc(item.pref)}${item.city ? ' · ' + esc(item.city) : ''}</span>
+          ${visited ? `<span class="heritage-visit-year">${year ? year + '年訪問' : '訪問済'}</span>` : ''}
+        </div>
+        ${item.shop ? `<div class="heritage-item-desc">📍 ${esc(item.shop)}</div>` : ''}
+        ${item.desc ? `<div class="extra-item-sub">${esc(item.desc)}</div>` : ''}
+      </div>
     </div>`;
   });
   html += `</div></div>`;
@@ -1336,7 +1343,7 @@ function renderFoodTab(dataType) {
   });
 
   // 一覧リストイベント
-  container.querySelectorAll(".extra-list-item").forEach(row => {
+  container.querySelectorAll(".extra-list-section .heritage-item").forEach(row => {
     row.addEventListener("click", async () => {
       const key = row.dataset.key, type = row.dataset.type, disp = row.dataset.food;
       const visited = row.dataset.visited === "true";
@@ -1426,21 +1433,26 @@ function renderOnsenTab() {
     html += `</div></div>`;
   });
 
-  // ---- 一覧リスト ----
+  // ---- 一覧リスト（世界遺産スタイル） ----
   html += `<div class="extra-list-section">
     <div class="extra-list-title">一覧 <span class="extra-list-stat">${visitedTotal} / ${total}件</span></div>
-    <div class="extra-list">`;
+    <div class="heritage-list">`;
   DATA.forEach(item => {
     const val = visitData[item.key];
     const year = (val === true) ? null : (val || null);
     const visited = !!val;
-    const color = visited ? yearToColor(year) : '';
-    html += `<div class="extra-list-item${visited ? ' visited' : ''}"
-      data-key="${item.key}" data-name="${item.name}" data-visited="${visited}"
-      ${visited ? `style="border-left-color:${color}"` : ''}>
-      <span class="eli-name">${item.name}</span>
-      <span class="eli-rank">${toOnsenStar(item.starStr)}</span>
-      <span class="eli-status ${visited ? 'eli-visited' : 'eli-unvisited'}">${visited ? (year ? `${year}年` : '✓') : '未訪問'}</span>
+    html += `<div class="heritage-item${visited ? ' visited' : ''}"
+      data-key="${item.key}" data-name="${item.name}" data-visited="${visited}">
+      <div class="heritage-star-icon">${visited ? '★' : '☆'}</div>
+      <div class="heritage-item-body">
+        <div class="heritage-item-name">${esc(item.name)}</div>
+        <div class="heritage-item-meta">
+          ${item.starStr ? `<span class="extra-rank-badge">${toOnsenStar(item.starStr)}</span>` : ''}
+          <span class="heritage-country">${esc(item.pref)}</span>
+          ${visited ? `<span class="heritage-visit-year">${year ? year + '年訪問' : '訪問済'}</span>` : ''}
+        </div>
+        ${item.dayBath ? `<div class="heritage-item-desc">日帰り: ${esc(item.dayBath)}</div>` : ''}
+      </div>
     </div>`;
   });
   html += `</div></div>`;
@@ -1490,7 +1502,7 @@ function renderOnsenTab() {
   });
 
   // 一覧リストイベント
-  container.querySelectorAll(".extra-list-item").forEach(row => {
+  container.querySelectorAll(".extra-list-section .heritage-item").forEach(row => {
     row.addEventListener("click", async () => {
       const key = row.dataset.key, name = row.dataset.name;
       const visited = row.dataset.visited === "true";

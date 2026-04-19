@@ -351,6 +351,11 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .eli-unvisited { color: var(--text2); }
 /* 訪問履歴ボタン共通 */
 .extra-history-btn { font-size: 14px; font-weight: 700; max-width: none; white-space: normal; text-align: left; }
+/* 温泉ランク・食カテゴリバッジ */
+.extra-rank-badge { font-size: 13px; letter-spacing: -1px; }
+.extra-food-badge { font-size: 15px; }
+/* ラーメン説明文（薄いテキスト） */
+.extra-item-sub { font-size: 14px; font-weight: 700; color: var(--text2); margin-top: 2px; line-height: 1.4; }
 /* 地域ナビ */
 .heritage-region-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 4px 4px; }
 .hreg-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--bg2); font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
