@@ -1390,7 +1390,7 @@ function renderFoodTab(dataType) {
   const visitedTotal = DATA.filter(item => !!visitData[item.key]).length;
   const total = DATA.length;
   const pct = total ? Math.round(visitedTotal / total * 100) : 0;
-  const label = dataType === "gourmet" ? "🍽 Soul Food" : "🍜 ラーメン";
+  const label = dataType === "gourmet" ? "🍱 Soul Food" : "🍜 ラーメン";
 
   let html = `<div class="map-header-bar">
     <h2 class="map-title">${label}</h2>
@@ -1437,7 +1437,7 @@ function renderFoodTab(dataType) {
   }
 
   // ---- 一覧リスト（世界遺産スタイル） ----
-  const foodIcon = dataType === 'gourmet' ? '🍽' : '🍜';
+  const foodIcon = dataType === 'gourmet' ? '🍱' : '🍜';
   html += `<div class="extra-list-section">
     <div class="extra-list-title">一覧 <span class="extra-list-stat">${visitedTotal} / ${total}件</span></div>
     <div class="heritage-list">`;
