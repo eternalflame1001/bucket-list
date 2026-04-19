@@ -1401,7 +1401,7 @@ function renderOnsenTab() {
   const toOnsenStar = str => (str || '').replace(/⭐/g, '♨️');
 
   let html = `<div class="map-header-bar">
-    <h2 class="map-title">♨️ 温泉</h2>
+    <h2 class="map-title">♨️ 温泉日本の１００名湯＋１１名湯</h2>
     <div class="map-stats-line"><span class="mstat-num">${visitedTotal}</span> / ${total} <span class="mstat-pct">${pct}%</span></div>
   </div>`;
 
