@@ -1390,7 +1390,7 @@ function renderFoodTab(dataType) {
   const visitedTotal = DATA.filter(item => !!visitData[item.key]).length;
   const total = DATA.length;
   const pct = total ? Math.round(visitedTotal / total * 100) : 0;
-  const label = dataType === "gourmet" ? "🍽 グルメ" : "🍜 ラーメン";
+  const label = dataType === "gourmet" ? "🍽 Soul Food" : "🍜 ラーメン";
 
   let html = `<div class="map-header-bar">
     <h2 class="map-title">${label}</h2>
