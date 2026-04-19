@@ -412,7 +412,7 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
     });
   }
   attachHeritageClicks(container, 'japan');
-  attachMapZoom(container, 25, 1.69);  // 初期ズーム1.69倍 (1.3×1.3)
+  attachMapZoom(container, 25, 2.2);  // 初期ズーム2.2倍 (1.3×1.3×1.3)
 }
 
 // ==========================================
@@ -1410,7 +1410,7 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
   svg += `<g class="zoom-markers">${markerSvg}</g>`;
   svg += `</svg>`;
   container.innerHTML = svg;
-  attachMapZoom(container, 25, 1.69);  // 初期ズーム1.69倍 (1.3×1.3)
+  attachMapZoom(container, 25, 2.2);  // 初期ズーム2.2倍 (1.3×1.3×1.3)
 
   // 世界遺産★クリック
   container.querySelectorAll('.heritage-star').forEach(el => {
