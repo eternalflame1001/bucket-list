@@ -340,7 +340,7 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   const objKey = Object.keys(_japanTopo.objects)[0];
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.4);
+  const H = Math.round(W * 1.82);  // 1.4 × 1.3
 
   // 沖縄を除いた本州・北海道・四国・九州でフィット
   const isOk = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
@@ -1307,7 +1307,7 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
   const features = topojson.feature(_japanTopo, _japanTopo.objects[objKey]).features;
 
   const W = container.clientWidth || 370;
-  const H = Math.round(W * 1.4);
+  const H = Math.round(W * 1.82);  // 1.4 × 1.3
 
   // 沖縄を除いた本州・北海道・四国・九州でフィット
   const isOkPref  = f => (f.properties.nam_ja || f.properties.name || '').includes('沖縄');
