@@ -428,6 +428,10 @@ init();
       startDist  = pinchDist(e.touches);
       startScale = curScale;
       el.style.transition = 'none';
+      // ピンチの中心点を body 座標系で設定（スクロール量を加算）
+      const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const my = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      el.style.transformOrigin = `${mx + window.scrollX}px ${my + window.scrollY}px`;
     }
   }, { passive: true });
 
@@ -436,7 +440,6 @@ init();
     e.preventDefault();
     const ratio = pinchDist(e.touches) / startDist;
     curScale = Math.min(SCALE_MAX, Math.max(1, startScale * ratio));
-    el.style.transformOrigin = 'center top';
     el.style.transform = `scale(${curScale})`;
   }, { passive: false });
 
