@@ -320,7 +320,7 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 /* 温泉・グルメ・ラーメン 一覧リスト */
 .extra-list-section { margin: 16px 4px 0; }
 .extra-list-title { font-size: 14px; font-weight: 700; color: var(--text2); border-bottom: 2px solid var(--border); padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-.extra-list-stat { font-size: 14px; font-weight: 700; color: var(--accent); }
+.extra-list-stat { font-size: 20px; font-weight: 700; color: var(--accent); font-family: var(--font-en); }
 .extra-list { display: flex; flex-direction: column; gap: 2px; }
 .extra-list-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; border-left: 4px solid var(--border); background: var(--bg2); cursor: pointer; transition: opacity .15s; }
 .extra-list-item:active { opacity: .7; }
