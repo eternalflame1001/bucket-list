@@ -226,15 +226,15 @@ function _yearChart(yearMap, years) {
   ));
 
   const SVG_W  = 370;
-  const YEAR_W = 42;   // 年ラベル幅
+  const YEAR_W = 52;   // 年ラベル幅（20px Cormorant対応）
   const CNT_W  = 28;   // カウント幅
   const GAP    = 6;
   const BAR_W  = SVG_W - YEAR_W - CNT_W - GAP * 2;  // バー幅
-  const ROW_H  = 22;
+  const ROW_H  = 28;
   const ROW_G  = 4;
   const svgH   = sorted.length * (ROW_H + ROW_G);
 
-  let out = `<div class="ychart-outer"><svg width="${SVG_W}" height="${svgH}" style="display:block">`;
+  let out = `<div class="ychart-outer">${legend}<svg width="${SVG_W}" height="${svgH}" style="display:block;margin-top:10px">`;
 
   sorted.forEach((yr, i) => {
     const y     = i * (ROW_H + ROW_G);
@@ -243,7 +243,7 @@ function _yearChart(yearMap, years) {
 
     // 年ラベル（右揃え）
     out += `<text x="${YEAR_W}" y="${midY}" text-anchor="end"
-      font-size="13" font-weight="700" fill="#8b2500"
+      font-size="20" font-weight="700" fill="#8b2500"
       font-family="Cormorant Garamond, serif">${yr}</text>`;
 
     // 横積みバー
@@ -263,19 +263,20 @@ function _yearChart(yearMap, years) {
     if (total > 0) {
       const topColor = COLORS[SCOPES.find(sc => (yearMap[yr][sc] || 0) > 0)] || '#8b2500';
       out += `<text x="${YEAR_W + GAP + BAR_W + GAP}" y="${midY}" text-anchor="start"
-        font-size="13" font-weight="700" fill="${topColor}">${total}</text>`;
+        font-size="20" font-weight="700" fill="${topColor}"
+        font-family="Cormorant Garamond, serif">${total}</text>`;
     }
   });
 
-  out += `</svg>`;
-
-  // 凡例（使用スコープのみ）
+  // 凡例（使用スコープのみ）— SVGの前に出力
   const usedScopes = SCOPES.filter(sc => sorted.some(yr => (yearMap[yr][sc] || 0) > 0));
-  out += `<div class="ychart-legend">`;
+  let legend = `<div class="ychart-legend">`;
   usedScopes.forEach(sc => {
-    out += `<span class="ychart-legend-item"><span class="ychart-dot" style="background:${COLORS[sc]}"></span>${LABELS[sc]}</span>`;
+    legend += `<span class="ychart-legend-item"><span class="ychart-dot" style="background:${COLORS[sc]}"></span>${LABELS[sc]}</span>`;
   });
-  out += `</div></div>`;
+  legend += `</div>`;
+
+  out += `</svg></div>`;
 
   return out;
 }
