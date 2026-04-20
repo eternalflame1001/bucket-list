@@ -154,7 +154,7 @@ function renderStats() {
     { scope:'china',    icon:'🇨🇳',label:'中国省',   total:34,          color:'#e07b4a' },
     { scope:'world',    icon:'🌍', label:'世界各国', total:195,         color:'#4a90d9' },
     { scope:'onsen',    icon:'♨️', label:'温泉',     total:onsenTotal,  color:'#c4813a' },
-    { scope:'gourmet',  icon:'🍜', label:'グルメ',   total:gourmetTotal,color:'#9b7ec8' },
+    { scope:'gourmet',  icon:'🍽️', label:'グルメ',   total:gourmetTotal,color:'#9b7ec8' },
     { scope:'ramen',    icon:'🍜', label:'ラーメン', total:ramenTotal,  color:'#d94a4a' },
     { scope:'heritage', icon:'⭐', label:'世界遺産', total:heritageTotal,color:'#d4a800' },
   ].forEach(({ scope, icon, label, total, color }) => {
