@@ -172,9 +172,9 @@ function renderStats() {
   });
 
   // 世界遺産 JP・CN・合計
-  html += _progBar('🌍 世界遺産 合計', herAllDone, herAllIds.size, '#d4a800');
-  html += _progBar('🇯🇵 日本 世界遺産', herJpDone,  herJpIds.size,  '#5ab87e');
-  html += _progBar('🇨🇳 中国 世界遺産', herCnDone,  herCnIds.size,  '#e07b4a');
+  html += _progBar('⭐️世界遺産🇯🇵', herJpDone,  herJpIds.size,  '#5ab87e');
+  html += _progBar('⭐️世界遺産🇨🇳', herCnDone,  herCnIds.size,  '#e07b4a');
+  html += _progBar('⭐️世界遺産🌍',  herAllDone, herAllIds.size, '#d4a800');
   html += `</div>`;
 
   // 年別訪問グラフ
