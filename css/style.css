@@ -203,7 +203,7 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .visit-group { padding: 0 12px 8px; }
 .visit-group-label { position: relative; display: flex; align-items: center; font-size: 14px; font-weight: 700; color: var(--text); padding: 8px 4px 5px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
 .group-label-text { letter-spacing: 2px; }
-.group-label-stat { position: absolute; left: 50%; transform: translateX(-50%); font-family: var(--font-en); font-size: 15px; font-weight: 700; color: var(--accent2); letter-spacing: 0; white-space: nowrap; }
+.group-label-stat { position: absolute; left: 50%; transform: translateX(-50%); font-family: var(--font-en); font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0; white-space: nowrap; }
 .group-label-stat em { color: var(--accent); font-style: normal; margin-left: 4px; }
 .visit-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
 .visit-btn {
