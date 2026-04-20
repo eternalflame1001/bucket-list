@@ -251,7 +251,7 @@ function _yearChart(yearMap, years) {
 
     // 年ラベル（右揃え）
     out += `<text x="${YEAR_W}" y="${midY}" text-anchor="end"
-      font-size="20" font-weight="700" fill="#8b2500"
+      font-size="24" font-weight="700" fill="#8b2500"
       font-family="Cormorant Garamond, serif">${yr}</text>`;
 
     // 横積みバー
@@ -271,7 +271,7 @@ function _yearChart(yearMap, years) {
     if (total > 0) {
       const topColor = COLORS[SCOPES.find(sc => (yearMap[yr][sc] || 0) > 0)] || '#8b2500';
       out += `<text x="${YEAR_W + GAP + BAR_W + GAP}" y="${midY}" text-anchor="start"
-        font-size="20" font-weight="700" fill="${topColor}"
+        font-size="24" font-weight="700" fill="${topColor}"
         font-family="Cormorant Garamond, serif">${total}</text>`;
     }
   });
