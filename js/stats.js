@@ -144,12 +144,19 @@ function renderStats() {
   // 訪問スコア
   html += `<div class="stats-sub-sec" style="margin-top:18px">訪問スコア</div>
     <div class="prog-chart">`;
+  const gourmetTotal  = typeof GOURMET_DATA   !== 'undefined' ? GOURMET_DATA.length   : null;
+  const ramenTotal    = typeof RAMEN_DATA     !== 'undefined' ? RAMEN_DATA.length     : null;
+  const onsenTotal    = typeof ONSEN_DATA     !== 'undefined' ? ONSEN_DATA.length     : null;
+  const heritageTotal = typeof HERITAGE_JP_CN !== 'undefined' ? HERITAGE_JP_CN.length : null;
+
   [
-    { scope:'japan',    icon:'🗾', label:'都道府県', total:47,   color:'#5ab87e' },
-    { scope:'china',    icon:'🇨🇳',label:'中国省',   total:34,   color:'#e07b4a' },
-    { scope:'world',    icon:'🌍', label:'世界各国', total:195,  color:'#4a90d9' },
-    { scope:'onsen',    icon:'♨️', label:'温泉',     total:null, color:'#c4813a' },
-    { scope:'heritage', icon:'⭐', label:'世界遺産', total:null, color:'#d4a800' },
+    { scope:'japan',    icon:'🗾', label:'都道府県', total:47,          color:'#5ab87e' },
+    { scope:'china',    icon:'🇨🇳',label:'中国省',   total:34,          color:'#e07b4a' },
+    { scope:'world',    icon:'🌍', label:'世界各国', total:195,         color:'#4a90d9' },
+    { scope:'onsen',    icon:'♨️', label:'温泉',     total:onsenTotal,  color:'#c4813a' },
+    { scope:'gourmet',  icon:'🍜', label:'グルメ',   total:gourmetTotal,color:'#9b7ec8' },
+    { scope:'ramen',    icon:'🍜', label:'ラーメン', total:ramenTotal,  color:'#d94a4a' },
+    { scope:'heritage', icon:'⭐', label:'世界遺産', total:heritageTotal,color:'#d4a800' },
   ].forEach(({ scope, icon, label, total, color }) => {
     const cnt = Object.values(visit[scope] || {}).filter(v => !!v).length;
     html += _progBar(`${icon} ${label}`, cnt, total, color);
