@@ -191,8 +191,28 @@ async function toggleDone(key) {
   const item = state.bucket[key];
   if (!item) return;
   const newDone = !item.done;
+
+  // アニメ用: 再描画前にチェックボタンの位置を取得
+  const checkEl = bucketUL.querySelector(`.item-check[data-key="${key}"]`);
+  const rect = checkEl ? checkEl.getBoundingClientRect() : null;
+  const cx = rect ? rect.left + rect.width / 2 : 0;
+  const cy = rect ? rect.top  + rect.height / 2 : 0;
+
   state.bucket[key].done = newDone;
   renderBucket();
+
+  // 達成時: 行グロー + コンフェッティ
+  if (newDone && rect) {
+    requestAnimationFrame(() => {
+      const li = bucketUL.querySelector(`.item-check[data-key="${key}"]`)?.closest('li');
+      if (li) {
+        li.classList.add('just-done');
+        li.addEventListener('animationend', () => li.classList.remove('just-done'), { once: true });
+      }
+      window.popConfetti?.(cx, cy, 14);
+    });
+  }
+
   try {
     await FB.patch(`${FB.endpoints.bucket}/${key}`, { done: newDone });
     toast(newDone ? "達成！🎉" : "未達成に戻しました");
@@ -424,6 +444,30 @@ function startListener() {
   });
 
 }
+
+// --- コンフェッティ ---
+window.popConfetti = function(cx, cy, count = 12) {
+  const colors = ['#c4813a','#e8c06a','#5ab87e','#4a90d9','#e07b4a','#9b7ec8','#cc3333'];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+    const dist  = 45 + Math.random() * 65;
+    const tx    = Math.cos(angle) * dist;
+    const ty    = Math.sin(angle) * dist - 15;
+    const size  = 5 + Math.random() * 6;
+    el.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;` +
+      `width:${size}px;height:${size}px;` +
+      `background:${colors[Math.floor(Math.random() * colors.length)]};` +
+      `border-radius:${Math.random() > 0.5 ? '50%' : '2px'};` +
+      `pointer-events:none;z-index:9999;`;
+    document.body.appendChild(el);
+    el.animate([
+      { transform: 'translate(-50%,-50%) scale(1) rotate(0deg)',   opacity: 1 },
+      { transform: `translate(calc(-50% + ${tx}px),calc(-50% + ${ty}px)) scale(0) rotate(180deg)`, opacity: 0 }
+    ], { duration: 550 + Math.random() * 300, easing: 'ease-out', fill: 'forwards' })
+      .onfinish = () => el.remove();
+  }
+};
 
 init();
 

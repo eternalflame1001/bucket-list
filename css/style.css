@@ -455,4 +455,25 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
   width: 10px; height: 10px; border-radius: 2px; display: inline-block;
 }
 
+/* アニメーション */
+@keyframes itemDoneGlow {
+  0%   { box-shadow: 0 0 0px  0px #e8c06a; border-left-color: #e8c06a; opacity: 1; }
+  30%  { box-shadow: 0 0 18px 6px #e8c06a; border-left-color: #e8c06a; opacity: 1; }
+  70%  { box-shadow: 0 0 10px 3px #c4813a; border-left-color: #c4813a; opacity: 1; }
+  100% { box-shadow: 0 0 0px  0px transparent; opacity: .65; }
+}
+.item.just-done {
+  animation: itemDoneGlow 0.75s ease-out forwards;
+}
+
+@keyframes visitBtnPop {
+  0%   { transform: scale(1);    background: var(--accent2); }
+  35%  { transform: scale(1.28); background: #e8c06a; }
+  65%  { transform: scale(0.92); background: #5ab87e; }
+  100% { transform: scale(1);    background: #5ab87e; }
+}
+.visit-btn.just-visited {
+  animation: visitBtnPop 0.5s cubic-bezier(.36,.07,.19,.97) forwards;
+}
+
 /* 年号ダイアログ */
