@@ -234,6 +234,14 @@ function _yearChart(yearMap, years) {
   const ROW_G  = 4;
   const svgH   = sorted.length * (ROW_H + ROW_G);
 
+  // 凡例（使用スコープのみ）— SVGの前に出力
+  const usedScopes = SCOPES.filter(sc => sorted.some(yr => (yearMap[yr][sc] || 0) > 0));
+  let legend = `<div class="ychart-legend">`;
+  usedScopes.forEach(sc => {
+    legend += `<span class="ychart-legend-item"><span class="ychart-dot" style="background:${COLORS[sc]}"></span>${LABELS[sc]}</span>`;
+  });
+  legend += `</div>`;
+
   let out = `<div class="ychart-outer">${legend}<svg width="${SVG_W}" height="${svgH}" style="display:block;margin-top:10px">`;
 
   sorted.forEach((yr, i) => {
@@ -267,14 +275,6 @@ function _yearChart(yearMap, years) {
         font-family="Cormorant Garamond, serif">${total}</text>`;
     }
   });
-
-  // 凡例（使用スコープのみ）— SVGの前に出力
-  const usedScopes = SCOPES.filter(sc => sorted.some(yr => (yearMap[yr][sc] || 0) > 0));
-  let legend = `<div class="ychart-legend">`;
-  usedScopes.forEach(sc => {
-    legend += `<span class="ychart-legend-item"><span class="ychart-dot" style="background:${COLORS[sc]}"></span>${LABELS[sc]}</span>`;
-  });
-  legend += `</div>`;
 
   out += `</svg></div>`;
 
