@@ -11,7 +11,7 @@ const ALLOWED_USERS = new Set(['master','hideki','friend','f01','f02','f03']);
 // Cookie操作（SafariとPWAで共有される唯一の手段）
 function _setCookie(val) {
   const exp = new Date(Date.now() + 365 * 864e5).toUTCString();
-  document.cookie = `bucket_user=${val};expires=${exp};path=/`;
+  document.cookie = `bucket_user=${val};expires=${exp};path=/;SameSite=Lax`;
 }
 function _getCookie() {
   const m = document.cookie.match(/(?:^|; )bucket_user=([^;]+)/);
