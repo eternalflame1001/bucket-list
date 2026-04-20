@@ -844,7 +844,7 @@ function refreshTab(type) {
 
   // 統計
   const statsEl = document.getElementById(`${type}-map-stats`);
-  if (statsEl) statsEl.innerHTML = `<span class="mstat-num">${visitedCount}</span> / ${total} <span class="mstat-pct">${pct}%</span>`;
+  if (statsEl) statsEl.innerHTML = `<span class="mstat-num">${visitedCount}</span>/${total} <span class="mstat-pct">${pct}%</span>`;
 
   // ボタン
   const btnEl = document.getElementById(`${type}-btn-container`);
