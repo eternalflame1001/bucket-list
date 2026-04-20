@@ -157,13 +157,13 @@ function renderBucket() {
           ${item.cat?`<span class="item-cat-badge">${CAT_ICONS[item.cat]||""}</span>`:""}
           <span class="item-score">${toZen(s)}</span>
           <span class="prio-group">
-            <span class="prio-row-label">急</span>
+            <span class="prio-row-label">緊急度</span>
             <span class="prio-tag${item.urg==="高"?" on":""}">高</span>
             <span class="prio-tag${item.urg==="中"?" on":""}">中</span>
             <span class="prio-tag${item.urg==="低"?" on":""}">低</span>
           </span>
           <span class="prio-group">
-            <span class="prio-row-label">重</span>
+            <span class="prio-row-label">重要度</span>
             <span class="prio-tag${item.prio==="高"?" on":""}">高</span>
             <span class="prio-tag${item.prio==="中"?" on":""}">中</span>
             <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
