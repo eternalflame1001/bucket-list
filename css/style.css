@@ -450,7 +450,7 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 }
 .ychart-legend-item {
   display: flex; align-items: center; gap: 4px;
-  font-size: 11px; color: var(--text2);
+  font-size: 14px; color: var(--text2);
 }
 .ychart-dot {
   width: 10px; height: 10px; border-radius: 2px; display: inline-block;

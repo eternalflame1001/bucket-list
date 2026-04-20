@@ -222,11 +222,11 @@ function _yearChart(yearMap, years) {
     SCOPES.reduce((s, sc) => s + (yearMap[yr][sc] || 0), 0)
   ));
 
-  const BAR_W  = 26;
-  const GAP    = 5;
-  const BAR_H  = 72;
-  const PAD_T  = 14;   // space above bar for count label
-  const PAD_B  = 20;   // space below bar for year label
+  const BAR_W  = 34;
+  const GAP    = 6;
+  const BAR_H  = 100;
+  const PAD_T  = 22;   // space above bar for count label
+  const PAD_B  = 36;   // space below bar for year label
   const svgW   = years.length * (BAR_W + GAP);
   const svgH   = PAD_T + BAR_H + PAD_B;
 
@@ -256,16 +256,16 @@ function _yearChart(yearMap, years) {
         const n = yearMap[yr][sc] || 0;
         return n ? acc - Math.max(2, Math.round((n / maxTotal) * BAR_H)) : acc;
       }, PAD_T + BAR_H);
-      out += `<text x="${x + BAR_W / 2}" y="${topBarY - 2}"
-        text-anchor="middle" font-size="7" fill="#7a6a55">${total}</text>`;
+      out += `<text x="${x + BAR_W / 2}" y="${topBarY - 3}"
+        text-anchor="middle" font-size="12" font-weight="700" fill="${COLORS[SCOPES.find(sc => (yearMap[yr][sc]||0)>0)]}">${total}</text>`;
     }
 
-    // year label (rotated -50°)
+    // year label (rotated -90°)
     const lx = x + BAR_W / 2;
-    const ly = PAD_T + BAR_H + 14;
-    out += `<text x="${lx}" y="${ly}" text-anchor="end"
-      font-size="8" fill="#7a6a55"
-      transform="rotate(-50,${lx},${ly})">${yr}</text>`;
+    const ly = PAD_T + BAR_H + 4;
+    out += `<text x="${lx}" y="${ly}" text-anchor="start"
+      font-size="12" fill="#7a6a55"
+      transform="rotate(-90,${lx},${ly})">${yr}</text>`;
   });
 
   out += `</svg>`;
