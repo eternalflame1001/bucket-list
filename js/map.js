@@ -1125,11 +1125,12 @@ async function renderHeritageList(scope) {
       const countryText = isoArr.filter(Boolean).map(c => ISO_JA[c] || String(c).toUpperCase()).join('・')
         + (locSuffix ? `（${locSuffix}）` : '');
 
+      const itemFlags = isoArr.map(c => isoFlag(c)).filter(Boolean).join('');
       html += `<div class="heritage-item${visited ? ' visited' : ''}"
         data-id="${s.id}" data-scope="${scope}" data-name="${encodeURIComponent(name)}">
         <div class="heritage-star-icon">${visited ? '★' : '☆'}</div>
         <div class="heritage-item-body">
-          <div class="heritage-item-name">${esc(name)}</div>
+          <div class="heritage-item-name">${itemFlags}${esc(name)}</div>
           <div class="heritage-item-meta">
             <span class="heritage-cat-badge ${catCls}">${catIcon} ${esc(s.cat_ja || s.cat)}</span>
             ${countryText ? `<span class="heritage-country">${esc(countryText)}</span>` : ''}
@@ -1172,10 +1173,12 @@ async function renderHeritageList(scope) {
       html += `<div class="history-year-group"><div class="history-year-label">${yr}年</div><div class="history-places">`;
       byYear[yr].forEach(e => {
         const n = (e.site.name_ja && e.site.name_ja !== e.site.name) ? e.site.name_ja : e.site.name;
+        const eIso = Array.isArray(e.site.iso) ? e.site.iso : (e.site.iso ? [e.site.iso] : []);
+        const eFlags = eIso.map(c => isoFlag(c)).filter(Boolean).join('');
         html += `<button class="history-place-btn heritage-history-btn"
           data-hid="${e.id}" data-scope="${scope}"
           data-hname="${encodeURIComponent(n)}"
-          data-year="${yr}">${esc(n)}</button>`;
+          data-year="${yr}">${eFlags}${esc(n)}</button>`;
       });
       html += `</div></div>`;
     });
@@ -1183,10 +1186,12 @@ async function renderHeritageList(scope) {
       html += `<div class="history-year-group"><div class="history-year-label">年不明</div><div class="history-places">`;
       noYear.forEach(e => {
         const n = (e.site.name_ja && e.site.name_ja !== e.site.name) ? e.site.name_ja : e.site.name;
+        const eIso = Array.isArray(e.site.iso) ? e.site.iso : (e.site.iso ? [e.site.iso] : []);
+        const eFlags = eIso.map(c => isoFlag(c)).filter(Boolean).join('');
         html += `<button class="history-place-btn heritage-history-btn"
           data-hid="${e.id}" data-scope="${scope}"
           data-hname="${encodeURIComponent(n)}"
-          data-year="">${esc(n)}</button>`;
+          data-year="">${eFlags}${esc(n)}</button>`;
       });
       html += `</div></div>`;
     }
