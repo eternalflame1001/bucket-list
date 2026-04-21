@@ -425,7 +425,7 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .prog-chart { display: flex; flex-direction: column; gap: 7px; }
 .prog-row {
   display: grid;
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 120px 1fr 160px;
   align-items: center; gap: 6px;
 }
 .prog-label { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
