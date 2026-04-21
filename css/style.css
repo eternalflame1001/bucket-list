@@ -374,6 +374,59 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 
 .stats-section { margin-bottom: 24px; }
 
+/* 金言セクション */
+.kingen-section {
+  background: #fdf6ee;
+  border: 1.5px solid #d4a870;
+  border-radius: 10px;
+  padding: 18px 20px 20px;
+  margin-top: 28px;
+}
+.kingen-list {
+  margin: 14px 0 0 0;
+  padding-left: 22px;
+  list-style: decimal;
+}
+.kingen-list li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.kingen-main {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3a2000;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.kingen-sub {
+  display: block;
+  font-size: 13px;
+  color: #7a5a30;
+  margin-top: 2px;
+  padding-left: 4px;
+}
+.kingen-quote {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: #fff8ee;
+  border-left: 3px solid #8b2500;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3a2000;
+  line-height: 1.8;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.kingen-source {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #8b2500;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  text-align: right;
+}
+
 .stats-sec-title {
   font-size: 24px; font-weight: 700; color: #8b2500;
   font-family: 'Cormorant Garamond', serif;

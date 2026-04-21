@@ -189,6 +189,42 @@ function renderStats() {
 
   html += `</div>`;
 
+  // ---- 金言セクション ----
+  html += `<div class="stats-section kingen-section">
+    <div class="stats-sec-title">📜 人が死ぬ前に後悔する10のこと</div>
+    <ol class="kingen-list">
+      <li>
+        <span class="kingen-main">本当にやりたいことをやらなかったこと</span>
+        <span class="kingen-sub">自分の人生を生きなかった、他人の期待に応じすぎた<br>自分を幸せにすることをしなかった、勇気を持たなかった</span>
+      </li>
+      <li><span class="kingen-main">健康を大切にしなかったこと</span></li>
+      <li>
+        <span class="kingen-main">仕事ばかりしていたこと</span>
+        <span class="kingen-sub">家族との時間を大切にしなかった など</span>
+      </li>
+      <li>
+        <span class="kingen-main">会いたい人に会いに行かなかったこと</span>
+        <span class="kingen-sub">友人関係を大切にしなかった</span>
+      </li>
+      <li><span class="kingen-main">学ぶべきことを学ばなかったこと</span></li>
+      <li>
+        <span class="kingen-main">人を許さなかったこと</span>
+        <span class="kingen-sub">人を助けなかった など</span>
+      </li>
+      <li><span class="kingen-main">人の意見に耳を貸さなかったこと</span></li>
+      <li>
+        <span class="kingen-main">人に感謝の言葉を伝えられなかったこと</span>
+        <span class="kingen-sub">感情を表現しなかった</span>
+      </li>
+      <li><span class="kingen-main">死の準備をしておかなかったこと</span></li>
+      <li><span class="kingen-main">生きた証を残さなかったこと</span></li>
+    </ol>
+    <div class="kingen-quote">
+      葬式の弔辞の際に人から言われたいことが、<br>この人生で自分が一番大切なこと
+      <span class="kingen-source">――『7つの習慣』</span>
+    </div>
+  </div>`;
+
   container.innerHTML = html;
 }
 
