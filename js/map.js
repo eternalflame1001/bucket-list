@@ -515,6 +515,8 @@ async function renderJapanMap(visitData, containerId = "japan-svg-container", re
   }
   attachHeritageClicks(container, 'japan');
   attachMapZoom(container, 25, 1.99, -200, -150);  // 初期ズーム1.99倍、北200km・西150kmオフセット
+  container._mapProjection = projection;
+  ensureMyLocationButton(container);
 }
 
 // ==========================================
@@ -580,6 +582,8 @@ async function renderChinaMap(visitData, containerId = "china-svg-container", re
   }
   attachHeritageClicks(container, 'china');
   attachMapZoom(container, 10);
+  container._mapProjection = projection;
+  ensureMyLocationButton(container);
 }
 
 // ==========================================
@@ -650,6 +654,8 @@ async function renderWorldMap(visitData, containerId = "world-svg-container", re
   }
   attachHeritageClicks(container, 'world');
   attachMapZoom(container, 8);
+  container._mapProjection = projection;
+  ensureMyLocationButton(container);
 }
 
 // ==========================================
@@ -1541,6 +1547,8 @@ async function renderCombinedJapanMap(containerId, onVisitChange) {
   svg += `</svg>`;
   container.innerHTML = svg;
   attachMapZoom(container, 25, 1.99, -200, -150);  // 初期ズーム1.99倍、北200km・西150kmオフセット
+  container._mapProjection = projection;
+  ensureMyLocationButton(container);
 
   // 世界遺産★クリック
   container.querySelectorAll('.heritage-star').forEach(el => {
@@ -2102,6 +2110,81 @@ function renderOnsenTab() {
 }
 
 window.renderOnsenTab = renderOnsenTab;
+
+// ==========================================
+// 現在地マーカー
+// ==========================================
+function ensureMyLocationButton(container) {
+  const parent = container.parentElement;
+  if (!parent || parent.querySelector('.my-loc-btn')) return;
+  const btn = document.createElement('button');
+  btn.className = 'my-loc-btn';
+  btn.textContent = '📍 現在地を表示';
+  btn.addEventListener('click', () => showMyLocation(container));
+  parent.insertBefore(btn, container);
+}
+
+function showMyLocation(container) {
+  const projection = container._mapProjection;
+  if (!projection) return;
+  if (!navigator.geolocation) {
+    toast('位置情報を利用できません', 'error');
+    return;
+  }
+  const btn = container.parentElement?.querySelector('.my-loc-btn');
+  if (btn) btn.textContent = '📍 取得中...';
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    if (btn) btn.textContent = '📍 現在地を表示';
+    const { latitude, longitude } = pos.coords;
+    const pt = projection([longitude, latitude]);
+    if (!pt || isNaN(pt[0]) || isNaN(pt[1])) {
+      toast('現在地はこの地図の範囲外です', 'error');
+      return;
+    }
+    const [ox, oy] = pt;
+    const oxt = ox.toFixed(2), oyt = oy.toFixed(2);
+
+    const svgEl = container.querySelector('svg');
+    if (!svgEl) return;
+
+    let mkG = svgEl.querySelector('g.zoom-markers');
+    if (!mkG) {
+      mkG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      mkG.setAttribute('class', 'zoom-markers');
+      svgEl.appendChild(mkG);
+    }
+
+    mkG.querySelectorAll('.my-loc-marker').forEach(e => e.remove());
+
+    const ns = 'http://www.w3.org/2000/svg';
+
+    const outer = document.createElementNS(ns, 'circle');
+    outer.setAttribute('cx', oxt); outer.setAttribute('cy', oyt);
+    outer.setAttribute('r', '9');
+    outer.setAttribute('fill', 'rgba(26,115,232,0.22)');
+    outer.setAttribute('stroke', '#1a73e8'); outer.setAttribute('stroke-width', '1.5');
+    outer.setAttribute('class', 'map-marker my-loc-marker');
+    outer.dataset.ox = oxt; outer.dataset.oy = oyt;
+    outer.dataset.baseR = '9'; outer.dataset.baseSw = '1.5';
+
+    const inner = document.createElementNS(ns, 'circle');
+    inner.setAttribute('cx', oxt); inner.setAttribute('cy', oyt);
+    inner.setAttribute('r', '5');
+    inner.setAttribute('fill', '#1a73e8');
+    inner.setAttribute('stroke', 'white'); inner.setAttribute('stroke-width', '2');
+    inner.setAttribute('class', 'map-marker my-loc-marker');
+    inner.dataset.ox = oxt; inner.dataset.oy = oyt;
+    inner.dataset.baseR = '5'; inner.dataset.baseSw = '2';
+
+    mkG.appendChild(outer);
+    mkG.appendChild(inner);
+
+  }, () => {
+    if (btn) btn.textContent = '📍 現在地を表示';
+    toast('位置情報の取得に失敗しました', 'error');
+  }, { enableHighAccuracy: true, timeout: 10000 });
+}
 
 function filterOnsenContent() {
   const container = document.getElementById("japan-onsen-container");
