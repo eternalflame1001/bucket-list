@@ -169,11 +169,6 @@ function renderBucket() {
             <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
           </span>
         </div>
-        ${hasDetail?`<div class="item-detail-preview">
-          ${item.date ?`📅 ${esc(item.date)}　`:""}
-          ${item.place?`📍 ${esc(item.place)}`:""}
-          ${item.memo ?`<br>📝 ${esc(item.memo)}`:""}
-        </div>`:""}
         <div class="detail-panel hidden" id="dp-${key}">
           <div class="detail-field"><label>📝 メモ</label><textarea class="dp-memo">${esc(item.memo||"")}</textarea></div>
           <div class="detail-field"><label>📅 目標日・期限</label><input class="dp-date" type="text" value="${esc(item.date||"")}"></div>
@@ -182,7 +177,7 @@ function renderBucket() {
         </div>
       </div>
       <div class="item-actions">
-        <button class="act-detail" data-key="${key}">📋</button>
+        <button class="act-detail${hasDetail?' has-content':''}" data-key="${key}">📋</button>
         <button class="act-edit"   data-key="${key}">✏️</button>
         <button class="act-trash"  data-key="${key}">×</button>
       </div>`;
