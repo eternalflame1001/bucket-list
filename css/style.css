@@ -83,6 +83,9 @@ ul { list-style: none; padding: 0; margin-top: 6px; }
 .item-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
 .item-actions button { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; width: 26px; height: 26px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .act-detail.has-content { background: #3a2810; border-color: #c89b3c; color: #f0c060; }
+.detail-view { margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
+.detail-view.hidden { display: none; }
+.dv-row { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.8; white-space: pre-wrap; word-break: break-word; }
 .act-detail.open { background: var(--accent); color: #fff; border-color: var(--accent); }
 .empty { text-align: center; color: var(--text2); padding: 40px 0; }
 

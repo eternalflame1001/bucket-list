@@ -169,6 +169,11 @@ function renderBucket() {
             <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
           </span>
         </div>
+        ${hasDetail?`<div class="detail-view hidden" id="dv-${key}">
+          ${item.memo ?`<div class="dv-row">📝 ${esc(item.memo)}</div>`:""}
+          ${item.date ?`<div class="dv-row">📅 ${esc(item.date)}</div>`:""}
+          ${item.place?`<div class="dv-row">📍 ${esc(item.place)}</div>`:""}
+        </div>`:""}
         <div class="detail-panel hidden" id="dp-${key}">
           <div class="detail-field"><label>📝 メモ</label><textarea class="dp-memo">${esc(item.memo||"")}</textarea></div>
           <div class="detail-field"><label>📅 目標日・期限</label><input class="dp-date" type="text" value="${esc(item.date||"")}"></div>
@@ -342,16 +347,22 @@ bucketUL.addEventListener("click", e => {
   if (!key) return;
 
   if (btn.classList.contains("item-check"))  toggleDone(key);
-  if (btn.classList.contains("act-edit"))    openEdit(key);
+  if (btn.classList.contains("act-edit")) {
+    const panel = $(`dp-${key}`);
+    if (!panel) return;
+    const isOpen = !panel.classList.contains("hidden");
+    panel.classList.toggle("hidden", isOpen);
+    btn.classList.toggle("open", !isOpen);
+  }
   if (btn.classList.contains("act-trash"))   moveToTrash(key);
   if (btn.classList.contains("act-restore")) restoreFromTrash(key);
   if (btn.classList.contains("act-delete"))  deleteFromTrash(key);
   if (btn.classList.contains("dp-save"))     saveDetail(key);
   if (btn.classList.contains("act-detail")) {
-    const panel = $(`dp-${key}`);
-    if (!panel) return;
-    const isOpen = !panel.classList.contains("hidden");
-    panel.classList.toggle("hidden", isOpen);
+    const view = $(`dv-${key}`);
+    if (!view) return;
+    const isOpen = !view.classList.contains("hidden");
+    view.classList.toggle("hidden", isOpen);
     btn.classList.toggle("open", !isOpen);
   }
 });
