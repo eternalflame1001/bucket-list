@@ -149,6 +149,15 @@ function renderBucket() {
     li.className = `item${item.done?" done":""}`;
     const s = score(item);
     const hasDetail = item.memo || item.date || item.place;
+    // detail-view HTML を外で組み立て（三重ネスト回避）
+    let dvHtml = '';
+    if (hasDetail) {
+      let rows = '';
+      if (item.memo)  rows += '<div class="dv-row">📝 ' + esc(item.memo)  + '</div>';
+      if (item.date)  rows += '<div class="dv-row">📅 ' + esc(item.date)  + '</div>';
+      if (item.place) rows += '<div class="dv-row">📍 ' + esc(item.place) + '</div>';
+      dvHtml = '<div class="detail-view hidden" id="dv-' + key + '">' + rows + '</div>';
+    }
     li.innerHTML = `
       <div class="item-check" data-key="${key}">${item.done?"✓":""}</div>
       <div class="item-body">
@@ -169,11 +178,7 @@ function renderBucket() {
             <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
           </span>
         </div>
-        ${hasDetail?`<div class="detail-view hidden" id="dv-${key}">
-          ${item.memo ?`<div class="dv-row">📝 ${esc(item.memo)}</div>`:""}
-          ${item.date ?`<div class="dv-row">📅 ${esc(item.date)}</div>`:""}
-          ${item.place?`<div class="dv-row">📍 ${esc(item.place)}</div>`:""}
-        </div>`:""}
+        ${dvHtml}
         <div class="detail-panel hidden" id="dp-${key}">
           <div class="detail-field"><label>📝 メモ</label><textarea class="dp-memo">${esc(item.memo||"")}</textarea></div>
           <div class="detail-field"><label>📅 目標日・期限</label><input class="dp-date" type="text" value="${esc(item.date||"")}"></div>
@@ -360,7 +365,7 @@ bucketUL.addEventListener("click", e => {
   if (btn.classList.contains("dp-save"))     saveDetail(key);
   if (btn.classList.contains("act-detail")) {
     const view = $(`dv-${key}`);
-    if (!view) return;
+    if (!view) { /* メモなし → 何もしない */ return; }
     const isOpen = !view.classList.contains("hidden");
     view.classList.toggle("hidden", isOpen);
     btn.classList.toggle("open", !isOpen);
