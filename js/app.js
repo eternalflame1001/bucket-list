@@ -41,9 +41,6 @@ async function init() {
   const ulEl = document.getElementById('user-label');
   if (ulEl && typeof USER_LABEL !== 'undefined') {
     ulEl.textContent = USER_LABEL;
-    ulEl.title = 'タップでユーザー切り替え';
-    ulEl.style.cursor = 'pointer';
-    ulEl.addEventListener('click', showUserSwitcher);
   }
   showLoading(true);
   try {
@@ -65,8 +62,8 @@ async function init() {
 
 // --- 統計・カテゴリバー更新 ---
 function updateStats() {
-  const all   = Object.values(state.bucket);
-  const trash = Object.values(state.trash);
+  const all   = Object.values(state.bucket).filter(v => v != null);
+  const trash = Object.values(state.trash).filter(v => v != null);
   const total = all.length;
   const done  = all.filter(i => i.done).length;
   $("stat-total").textContent  = total;
@@ -105,7 +102,7 @@ function renderBucket() {
 
   // ゴミ箱表示
   if (cf === "__trash__") {
-    const items = Object.entries(state.trash);
+    const items = Object.entries(state.trash).filter(([, v]) => v != null);
     bucketUL.innerHTML = items.length ? "" : `<li class="empty">ゴミ箱は空です</li>`;
     items.forEach(([key, item]) => {
       const li = document.createElement("li");
@@ -125,6 +122,7 @@ function renderBucket() {
   }
 
   let items = Object.entries(state.bucket).filter(([, v]) => {
+    if (v == null) return false;
     if (cf === "__done__" && !v.done) return false;
     if (cf !== "__done__" && cf && v.cat !== cf) return false;
     if (q && !v.text?.toLowerCase().includes(q) &&
@@ -351,24 +349,26 @@ bucketUL.addEventListener("click", e => {
   const key = btn.dataset.key;
   if (!key) return;
 
-  if (btn.classList.contains("item-check"))  toggleDone(key);
-  if (btn.classList.contains("act-edit")) {
+  if (btn.classList.contains("item-check"))  { toggleDone(key); }
+  else if (btn.classList.contains("act-edit")) {
     const panel = $(`dp-${key}`);
-    if (!panel) return;
-    const isOpen = !panel.classList.contains("hidden");
-    panel.classList.toggle("hidden", isOpen);
-    btn.classList.toggle("open", !isOpen);
+    if (panel) {
+      const isOpen = !panel.classList.contains("hidden");
+      panel.classList.toggle("hidden", isOpen);
+      btn.classList.toggle("open", !isOpen);
+    }
   }
-  if (btn.classList.contains("act-trash"))   moveToTrash(key);
-  if (btn.classList.contains("act-restore")) restoreFromTrash(key);
-  if (btn.classList.contains("act-delete"))  deleteFromTrash(key);
-  if (btn.classList.contains("dp-save"))     saveDetail(key);
-  if (btn.classList.contains("act-detail")) {
+  else if (btn.classList.contains("act-trash"))   { moveToTrash(key); }
+  else if (btn.classList.contains("act-restore")) { restoreFromTrash(key); }
+  else if (btn.classList.contains("act-delete"))  { deleteFromTrash(key); }
+  else if (btn.classList.contains("dp-save"))     { saveDetail(key); }
+  else if (btn.classList.contains("act-detail")) {
     const view = $(`dv-${key}`);
-    if (!view) { /* メモなし → 何もしない */ return; }
-    const isOpen = !view.classList.contains("hidden");
-    view.classList.toggle("hidden", isOpen);
-    btn.classList.toggle("open", !isOpen);
+    if (view) {
+      const isOpen = !view.classList.contains("hidden");
+      view.classList.toggle("hidden", isOpen);
+      btn.classList.toggle("open", !isOpen);
+    }
   }
 });
 
@@ -539,69 +539,3 @@ init();
   el.addEventListener('touchcancel', snapBack, { passive: true });
 })();
 
-// ==========================================
-// ユーザー切り替えダイアログ
-// ==========================================
-function showUserSwitcher() {
-  const USERS = [
-    { key: 'master', label: "Master's List" },
-    { key: 'hideki', label: "Hideki's List" },
-    { key: 'friend', label: "Friend's List" },
-    { key: 'f01',    label: "f01's List" },
-    { key: 'f02',    label: "f02's List" },
-    { key: 'f03',    label: "f03's List" },
-  ];
-  const current = typeof _U !== 'undefined' ? _U : 'master';
-
-  // オーバーレイ生成
-  const overlay = document.createElement('div');
-  overlay.id = 'user-switcher-overlay';
-  overlay.style.cssText = `
-    position:fixed;inset:0;z-index:9999;
-    background:rgba(0,0,0,0.65);
-    display:flex;align-items:center;justify-content:center;`;
-
-  const box = document.createElement('div');
-  box.style.cssText = `
-    background:#1a1208;border:1px solid #6b5a3a;border-radius:12px;
-    padding:20px 24px;min-width:220px;`;
-
-  const title = document.createElement('div');
-  title.textContent = 'ユーザーを切り替え';
-  title.style.cssText = 'color:#d4b483;font-size:14px;font-weight:700;margin-bottom:14px;text-align:center;';
-  box.appendChild(title);
-
-  USERS.forEach(u => {
-    const btn = document.createElement('button');
-    btn.textContent = u.label;
-    const isCurrent = u.key === current;
-    btn.style.cssText = `
-      display:block;width:100%;padding:10px 14px;margin-bottom:8px;
-      border-radius:8px;border:1px solid ${isCurrent ? '#c89b3c' : '#4a3a1a'};
-      background:${isCurrent ? '#3a2a08' : 'transparent'};
-      color:${isCurrent ? '#f0c060' : '#c8b090'};
-      font-size:14px;font-weight:${isCurrent ? '700' : '400'};
-      cursor:pointer;text-align:left;`;
-    if (isCurrent) {
-      btn.textContent = '✓ ' + u.label;
-    }
-    btn.addEventListener('click', () => {
-      localStorage.setItem('bucket_user', u.key);
-      document.body.removeChild(overlay);
-      window.location.href = window.location.pathname + '?u=' + u.key;
-    });
-    box.appendChild(btn);
-  });
-
-  const cancel = document.createElement('button');
-  cancel.textContent = 'キャンセル';
-  cancel.style.cssText = `
-    display:block;width:100%;padding:8px;margin-top:4px;
-    border:none;background:transparent;color:#888;font-size:13px;cursor:pointer;`;
-  cancel.addEventListener('click', () => document.body.removeChild(overlay));
-  box.appendChild(cancel);
-
-  overlay.appendChild(box);
-  overlay.addEventListener('click', e => { if (e.target === overlay) document.body.removeChild(overlay); });
-  document.body.appendChild(overlay);
-}
