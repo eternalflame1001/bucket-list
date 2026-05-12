@@ -73,7 +73,7 @@ const FB = {
     });
     es.addEventListener("patch", e => {
       const msg = JSON.parse(e.data);
-      callback(null, msg.data); // patch通知
+      if (msg.data) callback(null, msg.data);
     });
     es.onerror = () => {
       document.getElementById("sync-dot")?.classList.remove("active");

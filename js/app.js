@@ -372,6 +372,13 @@ bucketUL.addEventListener("click", e => {
     return;
   }
 
+  const titleEl = e.target.closest(".item-title");
+  if (titleEl) {
+    const key = titleEl.closest("li")?.querySelector(".item-check")?.dataset.key;
+    if (key) openEdit(key);
+    return;
+  }
+
   const btn = e.target.closest("button, .item-check");
   if (!btn) return;
   const key = btn.dataset.key;
@@ -484,8 +491,14 @@ document.querySelectorAll(".sub-tab").forEach(btn => {
 
 // --- リアルタイムリスナー ---
 function startListener() {
-  FB.listen(FB.endpoints.bucket, data => {
-    if (data) {
+  FB.listen(FB.endpoints.bucket, (data, patch) => {
+    if (patch) {
+      Object.entries(patch).forEach(([k, v]) => {
+        if (v === null) delete state.bucket[k];
+        else state.bucket[k] = v;
+      });
+      renderBucket();
+    } else if (data) {
       state.bucket = data;
       renderBucket();
     }
