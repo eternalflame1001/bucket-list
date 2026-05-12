@@ -163,17 +163,17 @@ function renderBucket() {
         <div class="item-meta">
           ${item.cat?`<span class="item-cat-badge">${CAT_ICONS[item.cat]||""}</span>`:""}
           <span class="item-score">${toZen(s)}</span>
-          <span class="prio-group">
+          <span class="prio-group" data-type="urg" data-key="${key}">
             <span class="prio-row-label">緊急度</span>
-            <span class="prio-tag${item.urg==="高"?" on":""}">高</span>
-            <span class="prio-tag${item.urg==="中"?" on":""}">中</span>
-            <span class="prio-tag${item.urg==="低"?" on":""}">低</span>
+            <span class="prio-tag${item.urg==="高"?" on":""}" data-val="高">高</span>
+            <span class="prio-tag${item.urg==="中"?" on":""}" data-val="中">中</span>
+            <span class="prio-tag${item.urg==="低"?" on":""}" data-val="低">低</span>
           </span>
-          <span class="prio-group">
+          <span class="prio-group" data-type="prio" data-key="${key}">
             <span class="prio-row-label">重要度</span>
-            <span class="prio-tag${item.prio==="高"?" on":""}">高</span>
-            <span class="prio-tag${item.prio==="中"?" on":""}">中</span>
-            <span class="prio-tag${item.prio==="低"?" on":""}">低</span>
+            <span class="prio-tag${item.prio==="高"?" on":""}" data-val="高">高</span>
+            <span class="prio-tag${item.prio==="中"?" on":""}" data-val="中">中</span>
+            <span class="prio-tag${item.prio==="低"?" on":""}" data-val="低">低</span>
           </span>
         </div>
         ${dvHtml}
@@ -342,8 +342,36 @@ $("edit-save").addEventListener("click", async () => {
   showLoading(false);
 });
 
+// --- 緊急度・重要度更新 ---
+async function updatePrio(key, type, val) {
+  const item = state.bucket[key];
+  if (!item) return;
+  const prev = type === "urg" ? item.urg : item.prio;
+  const data = type === "urg" ? { urg: val } : { prio: val };
+  state.bucket[key] = { ...item, ...data };
+  renderBucket();
+  try {
+    await FB.patch(`${FB.endpoints.bucket}/${key}`, data);
+  } catch(e) {
+    state.bucket[key] = { ...state.bucket[key], ...(type === "urg" ? { urg: prev } : { prio: prev }) };
+    renderBucket();
+    toast("保存エラー", "error");
+  }
+}
+
 // --- イベント委任 ---
 bucketUL.addEventListener("click", e => {
+  const tag = e.target.closest(".prio-tag");
+  if (tag) {
+    const group = tag.closest(".prio-group");
+    if (!group) return;
+    const key = group.dataset.key;
+    const type = group.dataset.type;
+    const val = tag.dataset.val;
+    if (key && type && val) updatePrio(key, type, val);
+    return;
+  }
+
   const btn = e.target.closest("button, .item-check");
   if (!btn) return;
   const key = btn.dataset.key;
