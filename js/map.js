@@ -347,7 +347,7 @@ function attachHeritageClicks(container, tabType) {
         const saved = await openYearDialog('heritage', name, new Date().getFullYear(), id);
         if (saved) window.popConfetti?.(cx, cy, 12);
       }
-      refreshTab(tabType);
+      renderHeritageList(tabType);
     });
   });
 }

@@ -230,11 +230,29 @@ async function toggleDone(key) {
 }
 
 // --- 追加 ---
+// --- カテゴリ選択で「＋ 新しいカテゴリ」が選ばれたらインライン入力を表示 ---
+$("add-cat").addEventListener("change", () => {
+  const custom = $("add-cat-custom");
+  if ($("add-cat").value === "__new__") {
+    custom.style.display = "";
+    custom.focus();
+  } else {
+    custom.style.display = "none";
+    custom.value = "";
+  }
+});
+
 async function addItem() {
   let text = $("add-input").value.trim();
   let cat  = $("add-cat").value;
   if (!text) { toast("タイトルを入力してください","error"); return; }
-  if (cat === "__new__") { cat = prompt("新しいカテゴリ名を入力") || ""; }
+  if (cat === "__new__") {
+    cat = $("add-cat-custom").value.trim();
+    if (!cat) { toast("カテゴリ名を入力してください","error"); return; }
+    $("add-cat-custom").style.display = "none";
+    $("add-cat-custom").value = "";
+    $("add-cat").value = "";
+  }
   const data = { text, cat, prio: state.newPrio, urg: state.newUrg, done: false, memo:"", date:"", place:"", createdAt: Date.now() };
   showLoading(true);
   try {
