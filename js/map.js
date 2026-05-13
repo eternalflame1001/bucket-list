@@ -681,7 +681,6 @@ function renderHistory(container, visitData, type) {
     if (!val) return;
     const name = normalizeName(rawName);
     const year = (val === true) ? null : val;
-    const key = `${name}__${year}`;
     if (seen.has(name)) return; // 重複スキップ
     seen.add(name);
     if (year) {
@@ -903,7 +902,10 @@ function refreshTab(type) {
   const groups = type === "japan" ? JAPAN_REGIONS : type === "china" ? CHINA_REGIONS : WORLD_REGIONS;
   const allItems = groups.flatMap(g => g.prefs || g.areas || g.countries || []);
   const total = allItems.length;
-  const visitedCount = Object.keys(visitData).length;
+  const visitedCount = allItems.filter(n => {
+    const key = type === "japan" ? prefShort(n) : n;
+    return !!visitData[key];
+  }).length;
   const pct = total ? Math.round(visitedCount / total * 100) : 0;
 
   // 統計
