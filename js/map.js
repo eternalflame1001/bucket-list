@@ -1804,13 +1804,6 @@ window.renderFoodTab = renderFoodTab;
 // ==========================================
 // 温泉タブ描画
 // ==========================================
-if (!window.onsenFilter) window.onsenFilter = { milky: false, mixed: false, hito: false, search: '' };
-
-window.toggleOnsenFilter = function(type) {
-  window.onsenFilter[type] = !window.onsenFilter[type];
-  renderOnsenTab();
-};
-
 // ==========================================
 // 温泉タブ描画（フィルター・バッジ対応版）
 // ==========================================
@@ -1824,19 +1817,10 @@ function renderOnsenTab() {
 
   const visitData = window.appState?.visit?.onsen || {};
 
-  // フィルター適用
-  let filteredData = DATA;
-  if (window.onsenFilter.hito)   filteredData = filteredData.filter(i => i.key.startsWith('秘湯_') || i.hito);
-  if (window.onsenFilter.milky)  filteredData = filteredData.filter(i => hasMilky(i.flags || 0));
-  if (window.onsenFilter.mixed)  filteredData = filteredData.filter(i => hasMixed(i.flags || 0));
-  if (window.onsenFilter.search) {
-    const q = window.onsenFilter.search;
-    filteredData = filteredData.filter(i =>
-      i.name.includes(q) || i.pref.includes(q) || (i.dayBath||'').includes(q)
-    );
-  }
-  const isFiltering = window.onsenFilter.hito || window.onsenFilter.milky || window.onsenFilter.mixed || !!window.onsenFilter.search;
-  const filteredKeys = new Set(filteredData.map(i => i.key));
+  // フィルターは filterOnsenContent() で DOM show/hide として処理
+  const filteredData = DATA;
+  const isFiltering = false;
+  const filteredKeys = new Set();
 
   // 地域グループ化
   const regionMap = {};
