@@ -73,7 +73,12 @@ const FB = {
     });
     es.addEventListener("patch", e => {
       const msg = JSON.parse(e.data);
-      if (msg.data) callback(null, msg.data);
+      if (!msg.data) return;
+      // msg.path が "/abc123" の場合は { abc123: data } に正規化
+      const patchData = (msg.path === '/' || !msg.path)
+        ? msg.data
+        : { [msg.path.replace(/^\//, '')]: msg.data };
+      callback(null, patchData);
     });
     es.onerror = () => {
       document.getElementById("sync-dot")?.classList.remove("active");
