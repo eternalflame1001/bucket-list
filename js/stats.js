@@ -18,49 +18,142 @@ function _getBadgeCounts() {
   const wld = Object.values(visit.world    || {}).filter(v => !!v).length;
   const her = Object.values(visit.heritage || {}).filter(v => !!v).length;
   const ons = Object.values(visit.onsen    || {}).filter(v => !!v).length;
+  const grm = Object.values(visit.gourmet  || {}).filter(v => !!v).length;
+  const ram = Object.values(visit.ramen    || {}).filter(v => !!v).length;
 
-  // 関東7都県全制覇チェック（prefShortキー）
   const jpD = visit.japan || {};
-  const KANTO = ["茨城","栃木","群馬","埼玉","千葉","東京","神奈川"];
-  const kantoOk = KANTO.every(p => !!jpD[p]);
+  const KANTO    = ["茨城","栃木","群馬","埼玉","千葉","東京","神奈川"];
+  const TOHOKU   = ["北海道","青森","岩手","宮城","秋田","山形","福島"];
+  const KANSAI   = ["大阪","兵庫","京都","滋賀","奈良","和歌山"];
+  const KYUSHU   = ["福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島"];
+  const SHIKOKU  = ["徳島","香川","愛媛","高知"];
+  const CHUGOKU  = ["鳥取","島根","岡山","広島","山口"];
+  const HOKURIKU = ["富山","石川","福井"];
+  const TOKAI    = ["愛知","静岡","岐阜","三重"];
 
-  // 北海道東北全制覇
-  const TOHOKU = ["北海道","青森","岩手","宮城","秋田","山形","福島"];
-  const tohokuOk = TOHOKU.every(p => !!jpD[p]);
+  const kantoOk    = KANTO.every(p => !!jpD[p]);
+  const tohokuOk   = TOHOKU.every(p => !!jpD[p]);
+  const kansaiOk   = KANSAI.every(p => !!jpD[p]);
+  const kyushuOk   = KYUSHU.every(p => !!jpD[p]);
+  const shikokuOk  = SHIKOKU.every(p => !!jpD[p]);
+  const chugokuOk  = CHUGOKU.every(p => !!jpD[p]);
+  const hokurikuOk = HOKURIKU.every(p => !!jpD[p]);
+  const tokaiOk    = TOKAI.every(p => !!jpD[p]);
 
-  return { doneCount, jp, cn, wld, her, ons, kantoOk, tohokuOk };
+  return { doneCount, jp, cn, wld, her, ons, grm, ram,
+           kantoOk, tohokuOk, kansaiOk, kyushuOk, shikokuOk, chugokuOk, hokurikuOk, tokaiOk };
 }
 
 const BADGE_DEFS = [
-  // BucketList
-  { id:'bl_1',   icon:'🌱', name:'最初の一歩',      desc:'1つ達成',              cat:'BucketList', check: c => c.doneCount >= 1  },
-  { id:'bl_10',  icon:'⭐', name:'10達成',           desc:'10個達成',             cat:'BucketList', check: c => c.doneCount >= 10 },
-  { id:'bl_25',  icon:'🏆', name:'25達成',           desc:'25個達成',             cat:'BucketList', check: c => c.doneCount >= 25 },
-  { id:'bl_50',  icon:'👑', name:'50達成！',         desc:'50個達成',             cat:'BucketList', check: c => c.doneCount >= 50 },
-  // 日本
-  { id:'jp_1',   icon:'🗾', name:'日本デビュー',     desc:'1都道府県訪問',        cat:'日本',       check: c => c.jp >= 1  },
-  { id:'jp_10',  icon:'🌸', name:'10県達成',         desc:'10都道府県訪問',       cat:'日本',       check: c => c.jp >= 10 },
-  { id:'jp_25',  icon:'🗻', name:'25県達成',         desc:'25都道府県訪問',       cat:'日本',       check: c => c.jp >= 25 },
-  { id:'jp_knt', icon:'🌆', name:'関東制覇',         desc:'関東7都県を全て訪問',  cat:'日本',       check: c => c.kantoOk  },
-  { id:'jp_thk', icon:'🍎', name:'北東北制覇',       desc:'北海道・東北7道県制覇',cat:'日本',       check: c => c.tohokuOk },
-  { id:'jp_all', icon:'🎌', name:'全国制覇！',       desc:'47都道府県を全制覇',   cat:'日本',       check: c => c.jp >= 47 },
-  // 温泉
-  { id:'ons_1',  icon:'♨️', name:'温泉デビュー',     desc:'温泉1か所訪問',        cat:'温泉',       check: c => c.ons >= 1  },
-  { id:'ons_5',  icon:'♨️', name:'温泉5か所',        desc:'5か所達成',            cat:'温泉',       check: c => c.ons >= 5  },
-  { id:'ons_10', icon:'♨️', name:'温泉10か所',       desc:'10か所達成',           cat:'温泉',       check: c => c.ons >= 10 },
-  // 中国
-  { id:'cn_1',   icon:'🇨🇳', name:'中国デビュー',   desc:'中国1省訪問',          cat:'中国',       check: c => c.cn >= 1  },
-  { id:'cn_5',   icon:'🐉', name:'中国5省',          desc:'5省・自治区訪問',      cat:'中国',       check: c => c.cn >= 5  },
-  { id:'cn_10',  icon:'🏯', name:'中国10省',         desc:'10省・自治区訪問',     cat:'中国',       check: c => c.cn >= 10 },
-  // 世界
-  { id:'wld_1',  icon:'✈️', name:'海外デビュー',     desc:'1か国訪問',            cat:'世界',       check: c => c.wld >= 1  },
-  { id:'wld_10', icon:'🌍', name:'10か国',           desc:'10か国訪問',           cat:'世界',       check: c => c.wld >= 10 },
-  { id:'wld_20', icon:'🌎', name:'20か国',           desc:'20か国訪問',           cat:'世界',       check: c => c.wld >= 20 },
-  { id:'wld_50', icon:'🌏', name:'50か国！',         desc:'50か国訪問',           cat:'世界',       check: c => c.wld >= 50 },
-  // 世界遺産
-  { id:'her_1',  icon:'⭐', name:'世界遺産デビュー', desc:'世界遺産1か所訪問',    cat:'世界遺産',   check: c => c.her >= 1  },
-  { id:'her_10', icon:'🌟', name:'世界遺産10か所',   desc:'10か所達成',           cat:'世界遺産',   check: c => c.her >= 10 },
-  { id:'her_20', icon:'💫', name:'世界遺産20か所',   desc:'20か所達成',           cat:'世界遺産',   check: c => c.her >= 20 },
+  // ---- BucketList (12個) ----
+  { id:'bl_1',   icon:'🌱', name:'最初の一歩',      desc:'1つ達成',    cat:'BucketList', check: c => c.doneCount >= 1   },
+  { id:'bl_3',   icon:'🌿', name:'3達成',           desc:'3個達成',    cat:'BucketList', check: c => c.doneCount >= 3   },
+  { id:'bl_5',   icon:'🎯', name:'5達成',           desc:'5個達成',    cat:'BucketList', check: c => c.doneCount >= 5   },
+  { id:'bl_10',  icon:'⭐', name:'10達成',          desc:'10個達成',   cat:'BucketList', check: c => c.doneCount >= 10  },
+  { id:'bl_15',  icon:'🌟', name:'15達成',          desc:'15個達成',   cat:'BucketList', check: c => c.doneCount >= 15  },
+  { id:'bl_20',  icon:'💡', name:'20達成',          desc:'20個達成',   cat:'BucketList', check: c => c.doneCount >= 20  },
+  { id:'bl_25',  icon:'🏆', name:'25達成',          desc:'25個達成',   cat:'BucketList', check: c => c.doneCount >= 25  },
+  { id:'bl_30',  icon:'🔥', name:'30達成',          desc:'30個達成',   cat:'BucketList', check: c => c.doneCount >= 30  },
+  { id:'bl_40',  icon:'🌕', name:'40達成',          desc:'40個達成',   cat:'BucketList', check: c => c.doneCount >= 40  },
+  { id:'bl_50',  icon:'👑', name:'50達成！',        desc:'50個達成',   cat:'BucketList', check: c => c.doneCount >= 50  },
+  { id:'bl_75',  icon:'💎', name:'75達成',          desc:'75個達成',   cat:'BucketList', check: c => c.doneCount >= 75  },
+  { id:'bl_100', icon:'🏅', name:'100達成！',       desc:'100個達成',  cat:'BucketList', check: c => c.doneCount >= 100 },
+  // ---- 日本・都道府県 (10個) ----
+  { id:'jp_1',   icon:'🗾', name:'日本デビュー',    desc:'1都道府県訪問',    cat:'日本', check: c => c.jp >= 1  },
+  { id:'jp_3',   icon:'🚂', name:'3県達成',         desc:'3都道府県訪問',    cat:'日本', check: c => c.jp >= 3  },
+  { id:'jp_5',   icon:'🌸', name:'5県達成',         desc:'5都道府県訪問',    cat:'日本', check: c => c.jp >= 5  },
+  { id:'jp_10',  icon:'🗻', name:'10県達成',        desc:'10都道府県訪問',   cat:'日本', check: c => c.jp >= 10 },
+  { id:'jp_15',  icon:'🌊', name:'15県達成',        desc:'15都道府県訪問',   cat:'日本', check: c => c.jp >= 15 },
+  { id:'jp_20',  icon:'⛩️', name:'20県達成',        desc:'20都道府県訪問',   cat:'日本', check: c => c.jp >= 20 },
+  { id:'jp_25',  icon:'⛰️', name:'25県達成',        desc:'25都道府県訪問',   cat:'日本', check: c => c.jp >= 25 },
+  { id:'jp_30',  icon:'🏯', name:'30県達成',        desc:'30都道府県訪問',   cat:'日本', check: c => c.jp >= 30 },
+  { id:'jp_40',  icon:'🌆', name:'40県達成',        desc:'40都道府県訪問',   cat:'日本', check: c => c.jp >= 40 },
+  { id:'jp_all', icon:'🎌', name:'全国制覇！',      desc:'47都道府県を全制覇',cat:'日本', check: c => c.jp >= 47 },
+  // ---- 日本・地域制覇 (8個) ----
+  { id:'jp_knt',      icon:'🌆', name:'関東制覇',      desc:'関東7都県を全て訪問',     cat:'日本', check: c => c.kantoOk    },
+  { id:'jp_thk',      icon:'🍎', name:'北東北制覇',    desc:'北海道・東北7道県制覇',   cat:'日本', check: c => c.tohokuOk   },
+  { id:'jp_kansai',   icon:'🌸', name:'関西制覇',      desc:'関西6府県を全て訪問',     cat:'日本', check: c => c.kansaiOk   },
+  { id:'jp_kyushu',   icon:'🌺', name:'九州制覇',      desc:'九州7県を全て訪問',       cat:'日本', check: c => c.kyushuOk   },
+  { id:'jp_shikoku',  icon:'🍊', name:'四国制覇',      desc:'四国4県を全て訪問',       cat:'日本', check: c => c.shikokuOk  },
+  { id:'jp_chugoku',  icon:'🏯', name:'中国地方制覇',  desc:'中国地方5県を全て訪問',   cat:'日本', check: c => c.chugokuOk  },
+  { id:'jp_hokuriku', icon:'🏔️', name:'北陸制覇',      desc:'北陸3県を全て訪問',       cat:'日本', check: c => c.hokurikuOk },
+  { id:'jp_tokai',    icon:'🍵', name:'東海制覇',      desc:'東海4県を全て訪問',       cat:'日本', check: c => c.tokaiOk    },
+  // ---- 温泉 (11個) ----
+  { id:'ons_1',   icon:'♨️', name:'温泉デビュー',   desc:'温泉1か所訪問',  cat:'温泉', check: c => c.ons >= 1   },
+  { id:'ons_2',   icon:'♨️', name:'温泉2か所',      desc:'2か所達成',      cat:'温泉', check: c => c.ons >= 2   },
+  { id:'ons_3',   icon:'♨️', name:'温泉3か所',      desc:'3か所達成',      cat:'温泉', check: c => c.ons >= 3   },
+  { id:'ons_5',   icon:'♨️', name:'温泉5か所',      desc:'5か所達成',      cat:'温泉', check: c => c.ons >= 5   },
+  { id:'ons_10',  icon:'♨️', name:'温泉10か所',     desc:'10か所達成',     cat:'温泉', check: c => c.ons >= 10  },
+  { id:'ons_15',  icon:'♨️', name:'温泉15か所',     desc:'15か所達成',     cat:'温泉', check: c => c.ons >= 15  },
+  { id:'ons_20',  icon:'♨️', name:'温泉20か所',     desc:'20か所達成',     cat:'温泉', check: c => c.ons >= 20  },
+  { id:'ons_25',  icon:'♨️', name:'温泉25か所',     desc:'25か所達成',     cat:'温泉', check: c => c.ons >= 25  },
+  { id:'ons_30',  icon:'♨️', name:'温泉30か所',     desc:'30か所達成',     cat:'温泉', check: c => c.ons >= 30  },
+  { id:'ons_50',  icon:'♨️', name:'温泉50か所',     desc:'50か所達成',     cat:'温泉', check: c => c.ons >= 50  },
+  { id:'ons_100', icon:'♨️', name:'温泉100か所！',  desc:'100か所達成',    cat:'温泉', check: c => c.ons >= 100 },
+  // ---- 中国 (10個) ----
+  { id:'cn_1',   icon:'🇨🇳', name:'中国デビュー',   desc:'中国1省訪問',         cat:'中国', check: c => c.cn >= 1  },
+  { id:'cn_3',   icon:'🐼',  name:'中国3省',        desc:'3省・自治区訪問',     cat:'中国', check: c => c.cn >= 3  },
+  { id:'cn_5',   icon:'🐉',  name:'中国5省',        desc:'5省・自治区訪問',     cat:'中国', check: c => c.cn >= 5  },
+  { id:'cn_10',  icon:'🏯',  name:'中国10省',       desc:'10省・自治区訪問',    cat:'中国', check: c => c.cn >= 10 },
+  { id:'cn_15',  icon:'🏮',  name:'中国15省',       desc:'15省・自治区訪問',    cat:'中国', check: c => c.cn >= 15 },
+  { id:'cn_20',  icon:'🎆',  name:'中国20省',       desc:'20省・自治区訪問',    cat:'中国', check: c => c.cn >= 20 },
+  { id:'cn_25',  icon:'🌺',  name:'中国25省',       desc:'25省・自治区訪問',    cat:'中国', check: c => c.cn >= 25 },
+  { id:'cn_28',  icon:'🔴',  name:'中国28省',       desc:'28省・自治区訪問',    cat:'中国', check: c => c.cn >= 28 },
+  { id:'cn_30',  icon:'🌏',  name:'中国30省',       desc:'30省・自治区訪問',    cat:'中国', check: c => c.cn >= 30 },
+  { id:'cn_all', icon:'🐲',  name:'中国全省制覇！', desc:'34省・自治区を全制覇',cat:'中国', check: c => c.cn >= 34 },
+  // ---- 世界 (10個) ----
+  { id:'wld_1',   icon:'✈️',  name:'海外デビュー',  desc:'1か国訪問',     cat:'世界', check: c => c.wld >= 1   },
+  { id:'wld_5',   icon:'🧳',  name:'5か国',         desc:'5か国訪問',     cat:'世界', check: c => c.wld >= 5   },
+  { id:'wld_10',  icon:'🌍',  name:'10か国',        desc:'10か国訪問',    cat:'世界', check: c => c.wld >= 10  },
+  { id:'wld_20',  icon:'🌎',  name:'20か国',        desc:'20か国訪問',    cat:'世界', check: c => c.wld >= 20  },
+  { id:'wld_30',  icon:'🌏',  name:'30か国',        desc:'30か国訪問',    cat:'世界', check: c => c.wld >= 30  },
+  { id:'wld_50',  icon:'🌏',  name:'50か国！',      desc:'50か国訪問',    cat:'世界', check: c => c.wld >= 50  },
+  { id:'wld_75',  icon:'🗺️',  name:'75か国',        desc:'75か国訪問',    cat:'世界', check: c => c.wld >= 75  },
+  { id:'wld_100', icon:'🌐',  name:'100か国！',     desc:'100か国訪問',   cat:'世界', check: c => c.wld >= 100 },
+  { id:'wld_150', icon:'🛫',  name:'150か国',       desc:'150か国訪問',   cat:'世界', check: c => c.wld >= 150 },
+  { id:'wld_all', icon:'🌍',  name:'世界制覇！',    desc:'193か国を制覇', cat:'世界', check: c => c.wld >= 193 },
+  // ---- 世界遺産 (10個) ----
+  { id:'her_1',   icon:'⭐',  name:'世界遺産デビュー',  desc:'世界遺産1か所訪問', cat:'世界遺産', check: c => c.her >= 1   },
+  { id:'her_5',   icon:'🌟',  name:'世界遺産5か所',     desc:'5か所達成',         cat:'世界遺産', check: c => c.her >= 5   },
+  { id:'her_10',  icon:'💫',  name:'世界遺産10か所',    desc:'10か所達成',        cat:'世界遺産', check: c => c.her >= 10  },
+  { id:'her_20',  icon:'✨',  name:'世界遺産20か所',    desc:'20か所達成',        cat:'世界遺産', check: c => c.her >= 20  },
+  { id:'her_30',  icon:'🌠',  name:'世界遺産30か所',    desc:'30か所達成',        cat:'世界遺産', check: c => c.her >= 30  },
+  { id:'her_50',  icon:'🎇',  name:'世界遺産50か所！',  desc:'50か所達成',        cat:'世界遺産', check: c => c.her >= 50  },
+  { id:'her_75',  icon:'🏛️',  name:'世界遺産75か所',    desc:'75か所達成',        cat:'世界遺産', check: c => c.her >= 75  },
+  { id:'her_100', icon:'🌅',  name:'世界遺産100か所！', desc:'100か所達成',       cat:'世界遺産', check: c => c.her >= 100 },
+  { id:'her_150', icon:'💎',  name:'世界遺産150か所',   desc:'150か所達成',       cat:'世界遺産', check: c => c.her >= 150 },
+  { id:'her_200', icon:'👑',  name:'世界遺産200か所！', desc:'200か所達成',       cat:'世界遺産', check: c => c.her >= 200 },
+  // ---- グルメ (15個) ----
+  { id:'grm_1',   icon:'🍱', name:'グルメデビュー',   desc:'グルメ1か所訪問', cat:'グルメ', check: c => c.grm >= 1   },
+  { id:'grm_3',   icon:'🍣', name:'グルメ3か所',      desc:'3か所達成',       cat:'グルメ', check: c => c.grm >= 3   },
+  { id:'grm_5',   icon:'🍛', name:'グルメ5か所',      desc:'5か所達成',       cat:'グルメ', check: c => c.grm >= 5   },
+  { id:'grm_10',  icon:'🍝', name:'グルメ10か所',     desc:'10か所達成',      cat:'グルメ', check: c => c.grm >= 10  },
+  { id:'grm_15',  icon:'🥘', name:'グルメ15か所',     desc:'15か所達成',      cat:'グルメ', check: c => c.grm >= 15  },
+  { id:'grm_20',  icon:'🍲', name:'グルメ20か所',     desc:'20か所達成',      cat:'グルメ', check: c => c.grm >= 20  },
+  { id:'grm_25',  icon:'🥗', name:'グルメ25か所',     desc:'25か所達成',      cat:'グルメ', check: c => c.grm >= 25  },
+  { id:'grm_30',  icon:'🍤', name:'グルメ30か所',     desc:'30か所達成',      cat:'グルメ', check: c => c.grm >= 30  },
+  { id:'grm_40',  icon:'🍗', name:'グルメ40か所',     desc:'40か所達成',      cat:'グルメ', check: c => c.grm >= 40  },
+  { id:'grm_50',  icon:'🍖', name:'グルメ50か所！',   desc:'50か所達成',      cat:'グルメ', check: c => c.grm >= 50  },
+  { id:'grm_75',  icon:'🧁', name:'グルメ75か所',     desc:'75か所達成',      cat:'グルメ', check: c => c.grm >= 75  },
+  { id:'grm_100', icon:'🍰', name:'グルメ100か所！',  desc:'100か所達成',     cat:'グルメ', check: c => c.grm >= 100 },
+  { id:'grm_150', icon:'🎂', name:'グルメ150か所',    desc:'150か所達成',     cat:'グルメ', check: c => c.grm >= 150 },
+  { id:'grm_200', icon:'🍽️', name:'グルメ200か所！',  desc:'200か所達成',     cat:'グルメ', check: c => c.grm >= 200 },
+  { id:'grm_300', icon:'👨‍🍳', name:'グルメ300か所！',  desc:'300か所達成',     cat:'グルメ', check: c => c.grm >= 300 },
+  // ---- ラーメン (14個) ----
+  { id:'ram_1',   icon:'🍜', name:'ラーメンデビュー', desc:'ラーメン1杯',   cat:'ラーメン', check: c => c.ram >= 1   },
+  { id:'ram_3',   icon:'🥢', name:'ラーメン3杯',      desc:'3杯達成',       cat:'ラーメン', check: c => c.ram >= 3   },
+  { id:'ram_5',   icon:'🍥', name:'ラーメン5杯',      desc:'5杯達成',       cat:'ラーメン', check: c => c.ram >= 5   },
+  { id:'ram_10',  icon:'🌶️', name:'ラーメン10杯',     desc:'10杯達成',      cat:'ラーメン', check: c => c.ram >= 10  },
+  { id:'ram_15',  icon:'🧄', name:'ラーメン15杯',     desc:'15杯達成',      cat:'ラーメン', check: c => c.ram >= 15  },
+  { id:'ram_20',  icon:'🥩', name:'ラーメン20杯',     desc:'20杯達成',      cat:'ラーメン', check: c => c.ram >= 20  },
+  { id:'ram_25',  icon:'🐓', name:'ラーメン25杯',     desc:'25杯達成',      cat:'ラーメン', check: c => c.ram >= 25  },
+  { id:'ram_30',  icon:'🥚', name:'ラーメン30杯',     desc:'30杯達成',      cat:'ラーメン', check: c => c.ram >= 30  },
+  { id:'ram_40',  icon:'🫕', name:'ラーメン40杯',     desc:'40杯達成',      cat:'ラーメン', check: c => c.ram >= 40  },
+  { id:'ram_50',  icon:'🍲', name:'ラーメン50杯！',   desc:'50杯達成',      cat:'ラーメン', check: c => c.ram >= 50  },
+  { id:'ram_75',  icon:'🏆', name:'ラーメン75杯',     desc:'75杯達成',      cat:'ラーメン', check: c => c.ram >= 75  },
+  { id:'ram_100', icon:'👑', name:'ラーメン100杯！',  desc:'100杯達成',     cat:'ラーメン', check: c => c.ram >= 100 },
+  { id:'ram_150', icon:'💎', name:'ラーメン150杯',    desc:'150杯達成',     cat:'ラーメン', check: c => c.ram >= 150 },
+  { id:'ram_200', icon:'🏅', name:'ラーメン200杯！',  desc:'200杯達成',     cat:'ラーメン', check: c => c.ram >= 200 },
 ];
 
 // ==========================================
