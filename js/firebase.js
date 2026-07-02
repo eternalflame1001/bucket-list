@@ -69,7 +69,14 @@ const FB = {
     const es  = new EventSource(url);
     es.addEventListener("put", e => {
       const msg = JSON.parse(e.data);
-      if (msg.data !== null) callback(msg.data);
+      const p = (msg.path || '/').replace(/^\//, '');
+      if (!p) {
+        // ルートへのput = 全体置換
+        if (msg.data !== null) callback(msg.data);
+      } else if (!p.includes('/')) {
+        // 子キーへのput（他端末の削除等）はpatch扱いに正規化（null = 削除）
+        callback(null, { [p]: msg.data });
+      }
     });
     es.addEventListener("patch", e => {
       const msg = JSON.parse(e.data);

@@ -16,12 +16,14 @@ const searchEl = $("search-input");
 
 function score(item) { return (SCORE_MAP[item.urg]||1) + (SCORE_MAP[item.prio]||1); }
 function toZen(n)    { return String(n).replace(/[0-9]/g, c => String.fromCharCode(c.charCodeAt(0)+0xFEE0)); }
-function esc(str)    { return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function esc(str)    { return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function showLoading(show) { $("loading").classList.toggle("hidden", !show); }
+let _toastTimer = null;
 function toast(msg, type="ok") {
   const el = $("toast"); el.textContent = msg;
   el.className = `toast-${type}`; el.classList.remove("hidden");
-  setTimeout(() => el.classList.add("hidden"), 2500);
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.add("hidden"), 2500);
 }
 
 // --- 初期化 ---
@@ -270,7 +272,7 @@ async function addItem() {
 // --- ゴミ箱へ ---
 async function moveToTrash(key) {
   const item = state.bucket[key];
-  if (!item || !confirm(`「${item.text}」を削除しますか？\nこの操作は元に戻せません。`)) return;
+  if (!item || !confirm(`「${item.text}」をゴミ箱に移動しますか？\n（ゴミ箱🗑️からいつでも復元できます）`)) return;
   showLoading(true);
   try {
     await FB.patch(`${FB.endpoints.trash}/${key}`, { ...item, deletedAt: Date.now() });
@@ -334,7 +336,14 @@ function openEdit(key) {
   $("edit-text").value  = item.text;
   $("edit-urg").value   = item.urg  || "中";
   $("edit-prio").value  = item.prio || "中";
-  $("edit-cat").value   = item.cat  || "";
+  // カスタムカテゴリ（選択肢にないもの）は動的にoptionを追加して保持
+  const catSel = $("edit-cat");
+  if (item.cat && !Array.from(catSel.options).some(o => o.value === item.cat)) {
+    const opt = document.createElement("option");
+    opt.value = item.cat; opt.textContent = item.cat;
+    catSel.appendChild(opt);
+  }
+  catSel.value = item.cat || "";
   $("edit-save").dataset.key = key;
   editModal.classList.remove("hidden");
 }
@@ -513,6 +522,8 @@ function startListener() {
     if (patch) {
       Object.entries(patch).forEach(([k, v]) => {
         if (v === null) delete state.bucket[k];
+        // 部分更新（例: 他端末のdoneトグル）は既存アイテムにマージ（丸ごと置換すると他フィールドが消える）
+        else if (v && typeof v === 'object' && state.bucket[k]) state.bucket[k] = { ...state.bucket[k], ...v };
         else state.bucket[k] = v;
       });
       renderBucket();
