@@ -10,7 +10,7 @@ function _getBadgeCounts() {
   const bucket = s.bucket || {};
   const visit  = s.visit  || {};
 
-  const bItems    = Object.values(bucket);
+  const bItems    = Object.values(bucket).filter(v => v != null); // 削除済みキーのnull穴を除去
   const doneCount = bItems.filter(i => i.done).length;
 
   const jp  = Object.values(visit.japan    || {}).filter(v => !!v).length;
@@ -214,7 +214,7 @@ function renderStats() {
     <div class="stats-sec-title">📊 進捗グラフ</div>`;
 
   // バケツリストカテゴリ別
-  const bItems = Object.values(bucket);
+  const bItems = Object.values(bucket).filter(v => v != null); // 削除済みキーのnull穴を除去
   const bTotal = bItems.length;
   const bDone  = bItems.filter(i => i.done).length;
 
